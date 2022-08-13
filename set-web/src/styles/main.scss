@@ -1,5 +1,5 @@
 html, body, #root, .app {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -26,4 +26,12 @@ body {
 
 .card-renderer{
   padding: 2rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  grid-template-columns: repeat(9, 1fr);
+  width: fit-content;
 }
