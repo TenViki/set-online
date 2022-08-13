@@ -5,11 +5,36 @@
   aspect-ratio: 2/3;
   width: $card-width;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: .5rem;
 
   transition: .3s background;
+
+  svg {
+    width: calc($card-width * 6 / 10);
+
+    &:not(:last-child) {
+      margin-bottom: calc($card-width * 1.5 * 1 / 15);
+    }
+  }
+
+  @for $i from 1 through 3 {
+    &.color-#{$i}{
+      .shape {
+        transition: .2s stroke, .2s fill;
+      }
+
+      &:not(.fill-2) .shape{
+        stroke: var(--card-color-#{$i}) !important;
+      }
+
+      &:not(.fill-1) .shape{
+        fill: var(--card-color-#{$i}) !important;
+      }
+    }
+  }
 }
 
 .dark .card {
