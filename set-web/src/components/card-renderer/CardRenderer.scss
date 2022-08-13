@@ -1,0 +1,19 @@
+.card {
+  $card-width: 12rem;
+  
+  background-color: #d6d4d4;
+  aspect-ratio: 2/3;
+  width: $card-width;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: .5rem;
+
+  transition: .3s background;
+}
+
+.dark .card {
+  background-color: #292929;
+  color: #fff;
+  transition: .3s background, .3s color;
+}
