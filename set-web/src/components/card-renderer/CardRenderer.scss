@@ -1,5 +1,5 @@
 .card {
-  $card-width: 12rem;
+  $card-width: 8rem;
   
   background-color: #f1f1f1;
   aspect-ratio: 2/3;
@@ -16,7 +16,7 @@
     width: calc($card-width * 6 / 10);
 
     &:not(:last-child) {
-      margin-bottom: calc($card-width * 1.5 * 1 / 15);
+      margin-bottom: calc($card-width * 1.5 * .5 / 15);
     }
   }
 
