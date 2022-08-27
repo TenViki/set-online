@@ -20,29 +20,25 @@ export class AuthService {
 
     let user: User;
 
-    switch (signupDto.loginType) {
-      case LoginType.PASSWORD:
-        if (!signupDto.password || !signupDto.email) {
-          throw new BadRequestException("Password and email are required");
-        }
-
-        const passwordLogin = await this.passwordLoginService.create(
-          signupDto.email,
-          signupDto.password,
-        );
-        user = await this.userService.createUser({
-          passwordLogin,
-          username: signupDto.username,
-        });
-
-        break;
-      default:
-        throw new BadRequestException("Invalid login type");
+    if (!signupDto.password || !signupDto.email) {
+      throw new BadRequestException("Password and email are required");
     }
+
+    if (await this.userService.getUser({ email: signupDto.email }))
+      throw new BadRequestException("Email already exists");
+
+    const passwordLogin = await this.passwordLoginService.create(
+      signupDto.email,
+      signupDto.password,
+    );
+    user = await this.userService.createUser({
+      passwordLogin,
+      username: signupDto.username,
+    });
 
     const session = await this.sessionService.createSession(
       user,
-      signupDto.loginType,
+      LoginType.PASSWORD,
       userAgent,
       ip,
       signupDto.rememberMe,

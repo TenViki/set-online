@@ -8,9 +8,6 @@ import {
 import { LoginType } from "../types/login.type";
 
 export class SignupDto {
-  @IsEnum(LoginType)
-  loginType: LoginType;
-
   @IsOptional()
   @IsString()
   password?: string;

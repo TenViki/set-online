@@ -17,6 +17,9 @@ export class User {
   @Column({ unique: true })
   username: string;
 
+  @Column({ unique: true })
+  email: string;
+
   @OneToMany(() => Session, (session) => session.user, {
     onDelete: "CASCADE",
   })
