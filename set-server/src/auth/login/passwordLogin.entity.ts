@@ -12,6 +12,8 @@ export class PasswordLogin {
   @Column()
   email: string;
 
-  @OneToOne(() => User, (user) => user.passwordLogin)
+  @OneToOne(() => User, (user) => user.passwordLogin, {
+    onDelete: "CASCADE",
+  })
   user: User;
 }

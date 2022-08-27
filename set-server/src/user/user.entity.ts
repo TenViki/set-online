@@ -23,7 +23,7 @@ export class User {
   sessions: Session[];
 
   @OneToOne(() => PasswordLogin, (passwordLogin) => passwordLogin.user, {
-    onDelete: "CASCADE",
+    onDelete: "SET NULL",
   })
   @JoinColumn()
   passwordLogin: PasswordLogin;
