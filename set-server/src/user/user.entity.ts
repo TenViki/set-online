@@ -3,6 +3,7 @@ import { Session } from "src/auth/session.entity";
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -20,5 +21,6 @@ export class User {
   sessions: Session[];
 
   @OneToOne(() => PasswordLogin, (passwordLogin) => passwordLogin.user)
+  @JoinColumn()
   passwordLogin: PasswordLogin;
 }

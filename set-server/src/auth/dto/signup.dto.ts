@@ -1,5 +1,5 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
-import { LoginType } from "../types/login";
+import { IsEnum, IsOptional, IsString, IsEmail } from "class-validator";
+import { LoginType } from "../types/login.type";
 
 export class SignupDto {
   @IsEnum(LoginType)
@@ -10,6 +10,9 @@ export class SignupDto {
   password?: string;
 
   @IsOptional()
-  @IsString()
+  @IsEmail()
   email?: string;
+
+  @IsString()
+  username: string;
 }
