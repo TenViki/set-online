@@ -6,6 +6,7 @@ import { PasswordLoginService } from "./login/passwordLogin.service";
 import { User } from "src/user/user.entity";
 import { SessionService } from "./session.service";
 import { LoginType } from "./types/login.type";
+import { LoginDto } from "./dto/login.dto";
 
 @Injectable()
 export class AuthService {
@@ -24,26 +25,43 @@ export class AuthService {
       throw new BadRequestException("Password and email are required");
     }
 
-    if (await this.userService.getUser({ email: signupDto.email }))
-      throw new BadRequestException("Email already exists");
+    if (await this.userService.getUser({ email: signupDto.email })) throw new BadRequestException("Email already exists");
 
-    const passwordLogin = await this.passwordLoginService.create(
-      signupDto.email,
-      signupDto.password,
-    );
+    const passwordLogin = await this.passwordLoginService.create(signupDto.email, signupDto.password);
     user = await this.userService.createUser({
       passwordLogin,
       username: signupDto.username,
+      email: signupDto.email,
     });
 
-    const session = await this.sessionService.createSession(
-      user,
-      LoginType.PASSWORD,
-      userAgent,
-      ip,
-      signupDto.rememberMe,
-    );
+    const session = await this.sessionService.createSession(user, LoginType.PASSWORD, userAgent, ip, signupDto.rememberMe);
 
+    const token = this.sessionService.createToken(session);
+
+    return {
+      token,
+      user,
+    };
+  }
+
+  async login(loginDto: LoginDto, ip: string, userAgent: string) {
+    let user: User;
+    switch (loginDto.loginType) {
+      case LoginType.PASSWORD:
+        if (!loginDto.username || !loginDto.password || loginDto.rememberMe === undefined)
+          throw new BadRequestException("Username, password and rememberMe are required");
+
+        user = await this.userService.getUser({ email: loginDto.username });
+        if (!user) user = await this.userService.getUser({ username: loginDto.username });
+        if (!user) throw new BadRequestException("User witch such username or email doesn't exist");
+
+        const isPasswordValid = await this.passwordLoginService.verify(user, loginDto.password);
+        if (!isPasswordValid) throw new BadRequestException("Invalid password");
+
+        break;
+    }
+
+    const session = await this.sessionService.createSession(user, loginDto.loginType, userAgent, ip, loginDto.rememberMe);
     const token = this.sessionService.createToken(session);
 
     return {

@@ -3,6 +3,7 @@ import { Repository } from "typeorm";
 import { PasswordLogin } from "./passwordLogin.entity";
 import { BadRequestException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
+import { User } from "src/user/user.entity";
 
 export class PasswordLoginService {
   constructor(
@@ -24,5 +25,15 @@ export class PasswordLoginService {
     });
 
     return this.passwordLoginRepository.save(passwordLogin);
+  }
+
+  async verify(user: User, password: string) {
+    const passwordLogin = await this.passwordLoginRepository.findOne({
+      where: { user },
+    });
+
+    if (!passwordLogin) return false;
+
+    return bcrypt.compare(password, passwordLogin.password);
   }
 }
