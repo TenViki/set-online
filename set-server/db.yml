@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    restart: on-failure
+
+    environment:
+      POSTGRES_USER: "set-db"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "set-online"
+
+    ports:
+      - "5432:5432"
