@@ -1,10 +1,11 @@
-import { Body, Controller, Post, Request } from "@nestjs/common";
+import { Body, Controller, Post, Request, Get, UseGuards } from "@nestjs/common";
 import { Request as Req } from "express";
 import { User } from "src/user/user.entity";
-import { UserService } from "src/user/user.service";
+import { CurrentUser } from "src/utils/decorators/current-user.decorator";
+import { AuthGuard } from "src/utils/guards/auth.guard";
 import { Serialize } from "src/utils/interceptors/serialize.interceptor";
 import { AuthService } from "./auth.service";
-import { AuthDto } from "./dto/auth.dto";
+import { AuthDto, UserDto } from "./dto/auth.dto";
 import { LoginDto } from "./dto/login.dto";
 import { SignupDto } from "./dto/signup.dto";
 
@@ -22,5 +23,12 @@ export class AuthController {
   @Serialize(AuthDto)
   async login(@Body() loginDto: LoginDto, @Request() req: Req) {
     return this.authService.login(loginDto, req.ip, req.headers["user-agent"]);
+  }
+
+  @Get("me")
+  @Serialize(UserDto)
+  @UseGuards(AuthGuard)
+  async getUserInfo(@CurrentUser() user: User) {
+    return user;
   }
 }
