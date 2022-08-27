@@ -17,10 +17,14 @@ export class User {
   @Column({ unique: true })
   username: string;
 
-  @OneToMany(() => Session, (session) => session.user)
+  @OneToMany(() => Session, (session) => session.user, {
+    onDelete: "CASCADE",
+  })
   sessions: Session[];
 
-  @OneToOne(() => PasswordLogin, (passwordLogin) => passwordLogin.user)
+  @OneToOne(() => PasswordLogin, (passwordLogin) => passwordLogin.user, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   passwordLogin: PasswordLogin;
 }

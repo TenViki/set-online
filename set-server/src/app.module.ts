@@ -7,6 +7,7 @@ import { UserModule } from "./user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ValidationPipeCheck } from "./utils/validation.pipe";
 import { APP_PIPE } from "@nestjs/core";
+import { Session } from "./auth/session.entity";
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { APP_PIPE } from "@nestjs/core";
         database: config.get("DB_NAME"),
         synchronize: process.env.NODE_ENV === "development",
         logging: true,
-        entities: [__dirname + "/**/*.entity{.ts,.js}"],
+        entities: [__dirname + "/**/*.entity{.ts,.js}", Session],
       }),
     }),
   ],

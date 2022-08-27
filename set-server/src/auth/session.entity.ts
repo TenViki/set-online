@@ -6,7 +6,9 @@ export class Session {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => User, (user) => user.sessions)
+  @ManyToOne(() => User, (user) => user.sessions, {
+    onDelete: "CASCADE",
+  })
   user: User;
 
   @Column()
@@ -18,12 +20,18 @@ export class Session {
   @Column()
   ip: string;
 
-  @Column()
+  @Column({
+    default: () => "CURRENT_TIMESTAMP",
+  })
   createdAt: Date;
 
-  @Column()
-  updatedAt: Date;
+  @Column({
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  lastUsed: Date;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   expiresAt: Date;
 }
