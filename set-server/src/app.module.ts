@@ -5,6 +5,8 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { ValidationPipeCheck } from "./utils/validation.pipe";
+import { APP_PIPE } from "@nestjs/core";
 
 @Module({
   imports: [
@@ -31,6 +33,15 @@ import { TypeOrmModule } from "@nestjs/typeorm";
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipeCheck({
+        whitelist: true,
+        stopAtFirstError: true,
+      }),
+    },
+  ],
 })
 export class AppModule {}
