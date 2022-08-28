@@ -26,9 +26,7 @@ const SideMenu = () => {
       </div>
 
       <div className="side-menu-actions">
-        <div className="dark-mode">
-          <DarkModeSwitch />
-        </div>
+        <DarkModeSwitch />
       </div>
     </div>
   );

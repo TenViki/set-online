@@ -4,10 +4,13 @@
   background-color: #f1f1f1;
   padding: 1rem;
   transition: $darkModeTransition background-color;
+  display: flex;
+  flex-direction: column;
 
   &-links {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 
     .side-menu-link {
       &:not(:last-child) {

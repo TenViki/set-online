@@ -10,7 +10,7 @@
   overflow: hidden;
   transition: 0.3s;
 
-  $link-width: 10rem;
+  $link-width: 12rem;
   $link-height: 2.5rem;
 
   width: $link-width;
@@ -49,7 +49,7 @@
     z-index: 0;
     opacity: 0.1;
     border-radius: 50%;
-    transition: 0.3s;
+    transition: 0.4s;
   }
 
   @each $name, $color in $availableColors {
