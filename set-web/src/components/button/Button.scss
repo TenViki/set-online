@@ -11,6 +11,7 @@
   height: 2.5rem;
   position: relative;
   overflow: hidden;
+  font-size: 1rem;
 
   $icon-size: 1.5rem;
   svg {
@@ -21,6 +22,12 @@
 
   &-text {
     z-index: 1;
+
+    &:first-child {
+      margin-left: 0.5rem;
+    }
+
+    margin-right: 0.5rem;
   }
 
   &-left-icon,
@@ -33,10 +40,6 @@
 
   &:not(.button-left-icon) .button-left-icon-svg {
     margin-right: 0.5rem;
-  }
-
-  &:not(.button-right-icon).text .button-right-icon-svg {
-    margin-left: 0.5rem;
   }
 
   @each $name, $color in $availableColors {
@@ -64,13 +67,18 @@
     }
   }
 
-  &:hover {
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(.disabled) {
     .button-overlay {
       opacity: 0.1;
     }
   }
 
-  &:active {
+  &:active:not(.disabled) {
     .button-overlay {
       opacity: 0.2;
     }
