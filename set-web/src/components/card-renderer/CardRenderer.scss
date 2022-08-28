@@ -1,38 +1,48 @@
+$sizes: (
+  "small": 7rem,
+  "medium": 10rem,
+  "large": 12rem,
+);
+
 .card {
-  $card-width: 7rem;
+  @each $name, $size in $sizes {
+    &.#{$name} {
+      $card-width: $size;
 
-  background-color: #f1f1f1;
-  aspect-ratio: 2/3;
-  width: $card-width;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: calc($card-width * 1.5 * 0.4 / 15);
+      background-color: #f1f1f1;
+      aspect-ratio: 2/3;
+      width: $card-width;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: calc($card-width * 1.5 * 0.4 / 15);
 
-  transition: 0.3s background;
+      transition: 0.3s background;
 
-  svg {
-    width: calc($card-width * 30 / 50);
-    height: calc($card-width * 15 / 50);
+      svg {
+        width: calc($card-width * 30 / 50);
+        height: calc($card-width * 15 / 50);
 
-    &:not(:last-child) {
-      margin-bottom: calc($card-width * 5 / 50);
-    }
-  }
-
-  @for $i from 1 through 3 {
-    &.color-#{$i} {
-      .shape {
-        transition: 0.2s stroke, 0.2s fill;
+        &:not(:last-child) {
+          margin-bottom: calc($card-width * 5 / 50);
+        }
       }
 
-      &:not(.fill-2) .shape {
-        stroke: var(--card-color-#{$i}) !important;
-      }
+      @for $i from 1 through 3 {
+        &.color-#{$i} {
+          .shape {
+            transition: 0.2s stroke, 0.2s fill;
+          }
 
-      &:not(.fill-1) .shape {
-        fill: var(--card-color-#{$i}) !important;
+          &:not(.fill-2) .shape {
+            stroke: var(--card-color-#{$i}) !important;
+          }
+
+          &:not(.fill-1) .shape {
+            fill: var(--card-color-#{$i}) !important;
+          }
+        }
       }
     }
   }

@@ -12,9 +12,10 @@ import {
 
 interface CardRendererProps {
   props: CardProps;
+  size?: "small" | "medium" | "large";
 }
 
-const CardRenderer: React.FC<CardRendererProps> = ({ props }) => {
+const CardRenderer: React.FC<CardRendererProps> = ({ props, size }) => {
   let SelectedShape: any;
 
   switch (props.shape) {
@@ -32,7 +33,11 @@ const CardRenderer: React.FC<CardRendererProps> = ({ props }) => {
   if (!SelectedShape) return <div className="card"></div>;
 
   return (
-    <div className={`card color-${props.color} fill-${props.fill}`}>
+    <div
+      className={`card ${size ? size : "small"} color-${props.color} fill-${
+        props.fill
+      }`}
+    >
       {[...Array(props.count)].map(() => (
         <SelectedShape />
       ))}
