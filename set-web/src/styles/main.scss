@@ -22,8 +22,12 @@ body {
   --gray: #7f8c8d;
 }
 
+.text {
+  transition: $darkModeTransition color;
+}
+
 .app {
-  transition: $darkModeTransition background-color, $darkModeTransition color;
+  transition: $darkModeTransition background-color;
   display: flex;
   overflow: hidden;
 

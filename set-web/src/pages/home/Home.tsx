@@ -8,9 +8,11 @@ import HeroStat from "./components/HeroStat";
 import "./Home.scss";
 import { FiChevronRight } from "react-icons/fi";
 import { IoGameControllerOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [cards, setCards] = React.useState<CardProps[]>(genrateRandomSet());
+  const navigate = useNavigate();
 
   return (
     <Page>
@@ -20,9 +22,9 @@ const Home = () => {
             <CardRenderer key={index} props={card} size="large" />
           ))}
         </div>
-        <div className="home-hero-text">
+        <div className="home-hero-text text">
           <h1>
-            Play SET! Online <br />
+            Play SET Online <br />
             on the #1 Site!
           </h1>
 
@@ -32,7 +34,11 @@ const Home = () => {
           </div>
 
           <div className="home-hero-buttons">
-            <Button text={"Log in"} color="gray" />
+            <Button
+              text={"Log in"}
+              color="gray"
+              onClick={() => navigate("/login")}
+            />
             <Button
               leftIcon={IoGameControllerOutline}
               rightIcon={FiChevronRight}
