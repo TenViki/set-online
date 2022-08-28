@@ -49,3 +49,23 @@
     }
   }
 }
+
+.login-slider {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  .login-item {
+    width: 25rem;
+    height: 30rem;
+    border-radius: 0.5rem;
+    transition: 0.5s;
+    opacity: 0;
+
+    transform: translateX(calc(var(--offset) * -25rem + 25rem));
+
+    &.active {
+      opacity: 1;
+    }
+  }
+}

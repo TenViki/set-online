@@ -1,5 +1,7 @@
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 import "./Login.scss";
+import "./components/Form.scss";
+import LoginForm from "./components/LoginForm";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -7,9 +9,12 @@ interface LoginProps {
 
 const Login: FC<LoginProps> = ({ defaultState }) => {
   const [state, setState] = useState(defaultState);
-  const [selectState, setSelectState] = useState({
-    width: 0,
-    left: 0,
+  const [selectState, setSelectState] = useState<{
+    width: number | null;
+    left: number | null;
+  }>({
+    width: null,
+    left: null,
   });
 
   const loginLabel = useRef<HTMLDivElement>(null);
@@ -27,6 +32,10 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
         left: signupLabel.current?.offsetLeft || 0,
       });
   }, [state]);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   return (
     <div className="login-page">
@@ -51,7 +60,16 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
         />
       </div>
 
-      <div className="login-slider">heh</div>
+      <div className="login-slider" style={{ "--offset": state } as CSSProperties}>
+        <div className={`login-item ${state === 0 ? "active" : ""}`}>Forgot password</div>
+        <div className={`login-item ${state === 1 ? "active" : ""}`}>
+          <LoginForm password={password} setPassword={setPassword} setUsername={setUsername} username={username} error={error} />
+        </div>
+        <div className={`login-item ${state === 2 ? "active" : ""}`}>Sign up</div>
+      </div>
+
+      <div onClick={() => setState(0)}>Forgot?</div>
+      <div onClick={() => setError("Username nein lmao")}>Trigger error</div>
     </div>
   );
 };

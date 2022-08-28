@@ -1,0 +1,81 @@
+@import "../../styles/theme.scss";
+
+.textfield {
+  display: flex;
+  background-color: #f1f1f1;
+  height: 2.5rem;
+  border-radius: 0.3rem;
+  transition: $darkModeTransition background-color;
+
+  .textfield-icon {
+    height: 2rem;
+    width: 2rem;
+    margin: 0.25rem;
+    border-radius: 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $darkModeTransition background-color;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: #000;
+      transition: $darkModeTransition color;
+    }
+  }
+
+  @each $name, $color in $availableColors {
+    &.#{$name}.focused {
+      .textfield-icon {
+        background-color: var(#{$color}-opacity);
+
+        svg {
+          color: var(#{$color});
+        }
+      }
+    }
+  }
+
+  input {
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    transition: $darkModeTransition color;
+    font-size: 1rem;
+  }
+
+  &-error {
+    color: var(--danger);
+    animation: error-appear 0.3s ease-in-out;
+    margin-top: 0.25rem;
+  }
+}
+
+.dark {
+  .textfield {
+    background-color: #292929;
+
+    input {
+      color: #fff;
+    }
+
+    .textfield-icon {
+      svg {
+        color: #fff;
+      }
+    }
+  }
+}
+
+@keyframes error-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
