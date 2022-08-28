@@ -5,7 +5,7 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<>henlo</>} />
-      <Route path="/lel" element={<>lel</>} />
+      <Route path="/settings" element={<>lel</>} />
     </Routes>
   );
 };

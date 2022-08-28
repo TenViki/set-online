@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Routes } from "react-router";
 import CardRenderer from "./components/card-renderer/CardRenderer";
+import SideMenu from "./components/sidemenu/SideMenu";
 import Router from "./Router";
 import { CardProps } from "./types/CardType";
 import { createDeck } from "./utils/deck.util";
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <div className={`app ${darkMode ? "dark" : ""}`}>
+      <SideMenu />
       <Router />
     </div>
   );

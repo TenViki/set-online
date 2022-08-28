@@ -1,4 +1,7 @@
-html, body, #root, .app {
+html,
+body,
+#root,
+.app {
   min-height: 100%;
 }
 
@@ -8,11 +11,17 @@ body {
   --card-color-1: #c0392b;
   --card-color-2: #8e44ad;
   --card-color-3: #27ae60;
+  --main: #2980b9;
+  --main-dark: #1c567a;
+  --danger: #c0392b;
+  --danger-dark: #a33428;
+  --success: #27ae60;
+  --success-dark: #1f864a;
 }
 
 .app {
-  transition: .3s background-color, .3s color;
-  
+  transition: 0.3s background-color, 0.3s color;
+
   &.dark {
     background-color: #1e1e1e;
     color: #fff;
@@ -24,7 +33,7 @@ body {
   margin: 0;
 }
 
-.card-renderer{
+.card-renderer {
   padding: 2rem;
 }
 
