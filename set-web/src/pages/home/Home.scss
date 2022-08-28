@@ -35,5 +35,9 @@
     display: flex;
     justify-content: center;
     margin-top: 1.5rem;
+
+    .button:not(:last-child) {
+      margin-right: 1rem;
+    }
   }
 }

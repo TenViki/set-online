@@ -32,6 +32,7 @@ const Home = () => {
           </div>
 
           <div className="home-hero-buttons">
+            <Button text={"Log in"} color="gray" />
             <Button
               leftIcon={IoGameControllerOutline}
               rightIcon={FiChevronRight}

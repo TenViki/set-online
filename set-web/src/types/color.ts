@@ -5,6 +5,7 @@ export const colors = {
   main: "var(--main)",
   danger: "var(--danger)",
   success: "var(--success)",
+  gray: "var(--gray)",
 };
 
 export type ColorType = keyof typeof colors;
