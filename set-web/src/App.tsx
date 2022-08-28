@@ -23,7 +23,6 @@ function App() {
   const [darkMode, setDarkMode] = useState(getDefaultDarkmodeSetting());
 
   useEffect(() => {
-    console.log("Dark mode changed");
     localStorage.setItem("color-setting", darkMode ? "dark" : "light");
   }, [darkMode]);
 
