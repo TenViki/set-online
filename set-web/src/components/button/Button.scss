@@ -1,0 +1,92 @@
+@import "../../styles/theme.scss";
+
+.button {
+  outline: 0;
+  border: 0;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  position: relative;
+  overflow: hidden;
+
+  $icon-size: 1.5rem;
+  svg {
+    width: $icon-size;
+    height: $icon-size;
+    z-index: 1;
+  }
+
+  &-text {
+    z-index: 1;
+  }
+
+  &-left-icon,
+  &-right-icon {
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:not(.button-left-icon) .button-left-icon-svg {
+    margin-right: 0.5rem;
+  }
+
+  &:not(.button-right-icon).text .button-right-icon-svg {
+    margin-left: 0.5rem;
+  }
+
+  @each $name, $color in $availableColors {
+    &.#{$name} {
+      background-color: var(#{$color});
+      color: #fff;
+
+      &.variant-outlined {
+        background-color: transparent;
+        border: 1px solid var(#{$color});
+        color: var(#{$color});
+      }
+
+      &.variant-text {
+        background-color: transparent;
+        color: var(#{$color});
+      }
+
+      &.variant-outlined,
+      &.variant-text {
+        .button-overlay {
+          background-color: var(#{$color});
+        }
+      }
+    }
+  }
+
+  &:hover {
+    .button-overlay {
+      opacity: 0.1;
+    }
+  }
+
+  &:active {
+    .button-overlay {
+      opacity: 0.2;
+    }
+
+    transform: scale(0.95);
+  }
+
+  .button-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    transition: 0.3s;
+    background-color: #000;
+    opacity: 0;
+  }
+}
