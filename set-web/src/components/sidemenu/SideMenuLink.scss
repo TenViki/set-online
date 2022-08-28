@@ -1,0 +1,63 @@
+.side-menu-link {
+  display: flex;
+  padding: 0.7rem 1rem;
+  border-radius: 0.3rem;
+  align-items: center;
+  overflow: hidden;
+  transition: 0.3s;
+
+  $link-width: 10rem;
+  $link-height: 2.5rem;
+
+  width: $link-width;
+  height: $link-height;
+
+  $icon-size: 1.5rem;
+
+  &-icon {
+    margin-right: 0.5rem;
+    z-index: 1;
+
+    width: $icon-size;
+    height: $icon-size;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &-text {
+    z-index: 1;
+  }
+
+  text-decoration: none;
+  color: #000;
+  position: relative;
+
+  $ripple-padding: 0.3rem;
+
+  &-ripple {
+    position: absolute;
+    top: ($link-height / 2 - $icon-size / 2) - $ripple-padding;
+    left: 1rem - $ripple-padding;
+    width: 1.5rem + $ripple-padding * 2;
+    height: 1.5rem + $ripple-padding * 2;
+    background-color: var(--main);
+    z-index: 0;
+    opacity: 0.1;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+
+  &:hover {
+    color: var(--main);
+
+    .side-menu-link-ripple {
+      left: -$ripple-padding;
+      top: -$link-width / 2 - $ripple-padding + $link-height / 2;
+      width: $link-width + $ripple-padding * 2;
+      height: $link-width + $ripple-padding * 2;
+    }
+  }
+}

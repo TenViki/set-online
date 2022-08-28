@@ -1,18 +1,19 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import SideMenuLink from "./SideMenuLink";
 import { FiHome, FiSettings } from "react-icons/fi";
+import SideMenuLink from "./SideMenuLink";
+import "./SideMenu.scss";
 
 const SideMenu = () => {
   return (
     <div className="side-menu">
-      <SideMenuLink icon={FiHome} iconColor="red" text="Home" to="/" />
-      <SideMenuLink
-        icon={FiSettings}
-        iconColor="red"
-        text="Settings"
-        to="/settings"
-      />
+      <div className="side-menu-links">
+        <SideMenuLink icon={FiHome} iconColor="main" text="Home" to="/" />
+        <SideMenuLink
+          icon={FiSettings}
+          iconColor="main"
+          text="Settings"
+          to="/settings"
+        />
+      </div>
     </div>
   );
 };

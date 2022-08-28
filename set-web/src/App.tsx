@@ -21,7 +21,9 @@ function App() {
   return (
     <div className={`app ${darkMode ? "dark" : ""}`}>
       <SideMenu />
-      <Router />
+      <main>
+        <Router />
+      </main>
     </div>
   );
 }

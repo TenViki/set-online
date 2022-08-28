@@ -2,7 +2,7 @@ html,
 body,
 #root,
 .app {
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
@@ -21,6 +21,11 @@ body {
 
 .app {
   transition: 0.3s background-color, 0.3s color;
+  display: flex;
+
+  main {
+    flex-grow: 1;
+  }
 
   &.dark {
     background-color: #1e1e1e;
