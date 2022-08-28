@@ -1,3 +1,7 @@
+@use "sass:math";
+@use "sass:meta";
+@import "../../styles/theme.scss";
+
 .side-menu-link {
   display: flex;
   padding: 0.7rem 1rem;
@@ -32,32 +36,53 @@
   }
 
   text-decoration: none;
-  color: #000;
   position: relative;
 
   $ripple-padding: 0.3rem;
 
   &-ripple {
     position: absolute;
-    top: ($link-height / 2 - $icon-size / 2) - $ripple-padding;
+    top: (math.div($link-height, 2) - math.div($icon-size, 2)) - $ripple-padding;
     left: 1rem - $ripple-padding;
     width: 1.5rem + $ripple-padding * 2;
     height: 1.5rem + $ripple-padding * 2;
-    background-color: var(--main);
     z-index: 0;
     opacity: 0.1;
     border-radius: 50%;
     transition: 0.3s;
   }
 
-  &:hover {
-    color: var(--main);
+  @each $name, $color in $availableColors {
+    &.#{$name} {
+      color: var(#{$color});
 
+      &.active {
+        color: #fff;
+
+        .side-menu-link-ripple {
+          opacity: 1;
+        }
+      }
+
+      .side-menu-link-ripple {
+        background-color: var(#{$color});
+      }
+    }
+  }
+
+  &.active,
+  &:hover {
     .side-menu-link-ripple {
       left: -$ripple-padding;
-      top: -$link-width / 2 - $ripple-padding + $link-height / 2;
+      top: -(math.div($link-width, 2)) - $ripple-padding + math.div($link-height, 2);
       width: $link-width + $ripple-padding * 2;
       height: $link-width + $ripple-padding * 2;
+    }
+  }
+
+  &:active {
+    .side-menu-link-ripple {
+      opacity: 0.2;
     }
   }
 }

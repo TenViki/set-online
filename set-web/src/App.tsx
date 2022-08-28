@@ -14,8 +14,6 @@ function App() {
     fill: 1,
   });
 
-  const [deck, setDEck] = useState<CardProps[]>(createDeck());
-
   const [darkMode, setDarkMode] = useState(false);
 
   return (

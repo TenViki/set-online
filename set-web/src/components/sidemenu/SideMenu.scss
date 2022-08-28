@@ -1,4 +1,15 @@
 .side-menu {
   background-color: #ddd;
   padding: 1rem;
+
+  &-links {
+    display: flex;
+    flex-direction: column;
+
+    .side-menu-link {
+      &:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
 }

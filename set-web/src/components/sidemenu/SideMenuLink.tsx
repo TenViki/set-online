@@ -18,9 +18,14 @@ const SideMenuLink: FC<SideMenuLinkProps> = ({
   to,
 }) => {
   return (
-    <NavLink className="side-menu-link" to={to}>
+    <NavLink
+      className={({ isActive }) =>
+        `side-menu-link ${iconColor} ${isActive ? "active" : ""}`
+      }
+      to={to}
+    >
       <div className="side-menu-link-icon">
-        <Icon color={colors[iconColor]} />
+        <Icon />
       </div>
       <span className="side-menu-link-ripple" />
       <div className="side-menu-link-text">{text}</div>
