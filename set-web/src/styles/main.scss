@@ -25,6 +25,7 @@ body {
 .app {
   transition: $darkModeTransition background-color, $darkModeTransition color;
   display: flex;
+  overflow: hidden;
 
   main {
     flex-grow: 1;
