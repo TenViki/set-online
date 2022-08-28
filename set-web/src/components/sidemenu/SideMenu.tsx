@@ -2,6 +2,9 @@ import { FiHome, FiSettings } from "react-icons/fi";
 import { IoGameControllerOutline } from "react-icons/io5";
 import SideMenuLink from "./SideMenuLink";
 import "./SideMenu.scss";
+import { DarkModeContext } from "../../App";
+import React from "react";
+import DarkModeSwitch from "./DarkModeSwitch";
 
 const SideMenu = () => {
   return (
@@ -20,6 +23,12 @@ const SideMenu = () => {
           text="Settings"
           to="/settings"
         />
+      </div>
+
+      <div className="side-menu-actions">
+        <div className="dark-mode">
+          <DarkModeSwitch />
+        </div>
       </div>
     </div>
   );

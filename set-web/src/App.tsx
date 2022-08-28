@@ -1,10 +1,15 @@
-import { useState } from "react";
-import { Routes } from "react-router";
-import CardRenderer from "./components/card-renderer/CardRenderer";
+import React, { useState } from "react";
 import SideMenu from "./components/sidemenu/SideMenu";
 import Router from "./Router";
 import { CardProps } from "./types/CardType";
-import { createDeck } from "./utils/deck.util";
+
+export const DarkModeContext = React.createContext<{
+  darkMode: boolean;
+  setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+  darkMode: false,
+  setDarkMode: () => {},
+});
 
 function App() {
   const [cardProps, setCardProps] = useState<CardProps>({
@@ -17,12 +22,14 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div className={`app ${darkMode ? "dark" : ""}`}>
-      <SideMenu />
-      <main>
-        <Router />
-      </main>
-    </div>
+    <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
+      <div className={`app ${darkMode ? "dark" : ""}`}>
+        <SideMenu />
+        <main>
+          <Router />
+        </main>
+      </div>
+    </DarkModeContext.Provider>
   );
 }
 
