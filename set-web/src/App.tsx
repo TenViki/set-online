@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenu from "./components/sidemenu/SideMenu";
 import Router from "./Router";
 import { CardProps } from "./types/CardType";
+import { getDefaultDarkmodeSetting } from "./utils/darkomode.util";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -19,7 +20,12 @@ function App() {
     fill: 1,
   });
 
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(getDefaultDarkmodeSetting());
+
+  useEffect(() => {
+    console.log("Dark mode changed");
+    localStorage.setItem("color-setting", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
