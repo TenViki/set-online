@@ -11,7 +11,7 @@
   transition: 0.3s;
 
   $link-width: 12rem;
-  $link-height: 2.5rem;
+  $link-height: 3rem;
 
   width: $link-width;
   height: $link-height;
@@ -19,7 +19,7 @@
   $icon-size: 1.5rem;
 
   &-icon {
-    margin-right: 0.5rem;
+    margin-right: 1rem;
     z-index: 1;
 
     width: $icon-size;
@@ -38,7 +38,7 @@
   text-decoration: none;
   position: relative;
 
-  $ripple-padding: 0.3rem;
+  $ripple-padding: 0.5rem;
 
   &-ripple {
     position: absolute;
