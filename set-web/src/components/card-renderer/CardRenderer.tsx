@@ -38,8 +38,8 @@ const CardRenderer: React.FC<CardRendererProps> = ({ props, size }) => {
         props.fill
       }`}
     >
-      {[...Array(props.count)].map(() => (
-        <SelectedShape />
+      {[...Array(props.count)].map((_, i) => (
+        <SelectedShape key={i} />
       ))}
     </div>
   );
