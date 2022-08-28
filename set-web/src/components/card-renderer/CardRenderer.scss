@@ -1,3 +1,5 @@
+@import "../../styles/theme.scss";
+
 $sizes: (
   "small": 7rem,
   "medium": 10rem,
@@ -18,7 +20,7 @@ $sizes: (
       justify-content: center;
       border-radius: calc($card-width * 1.5 * 0.4 / 15);
 
-      transition: 0.3s background;
+      transition: $darkModeTransition background;
 
       svg {
         width: calc($card-width * 30 / 50);
@@ -51,5 +53,5 @@ $sizes: (
 .dark .card {
   background-color: #292929;
   color: #fff;
-  transition: 0.3s background, 0.3s color;
+  transition: $darkModeTransition background, $darkModeTransition color;
 }

@@ -1,6 +1,9 @@
+@import "../../styles/theme.scss";
+
 .side-menu {
-  background-color: #ddd;
+  background-color: #f1f1f1;
   padding: 1rem;
+  transition: $darkModeTransition background-color;
 
   &-links {
     display: flex;
@@ -12,4 +15,8 @@
       }
     }
   }
+}
+
+.dark .side-menu {
+  background-color: #292929;
 }
