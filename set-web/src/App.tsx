@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Routes } from "react-router";
 import CardRenderer from "./components/card-renderer/CardRenderer";
+import Router from "./Router";
 import { CardProps } from "./types/CardType";
 import { createDeck } from "./utils/deck.util";
 
@@ -17,15 +19,7 @@ function App() {
 
   return (
     <div className={`app ${darkMode ? "dark" : ""}`}>
-      <div className="grid">
-        {deck.map((cardProps) => (
-          <CardRenderer props={cardProps} />
-        ))}
-      </div>
-
-      <button onClick={() => setDarkMode(!darkMode)}>
-        Toggle dark mode: {darkMode ? "dark" : "light"}
-      </button>
+      <Router />
     </div>
   );
 }
