@@ -12,6 +12,7 @@ import discord from "../../assets/logos/discord.svg";
 import google from "../../assets/logos/google.svg";
 import { ApiError } from "../../types/Api.type";
 import { toast } from "react-toastify";
+import { useUser } from "../../utils/useUser";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -63,14 +64,16 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   const [wrapperHeight, setWrapperHeight] = useState<number | undefined>(undefined);
 
+  const user = useUser();
+
   const loginMutation = useMutation(loginRequest, {
     onError: (error: ApiError) => {
       if (error.response?.data?.error.message) setError(error.response.data.error.message);
       else toast.error("Something wennt wrong");
     },
     onSuccess: (data: AuthResponse) => {
-      console.log(data);
       toast.success("Successfully logged in");
+      user.setUser(data.user);
     },
   });
 
