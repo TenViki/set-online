@@ -1,0 +1,49 @@
+@import "../../styles/theme.scss";
+
+.link {
+  transition: 0.2s color;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+
+  @each $name, $color in $availableColors {
+    &.#{$name} {
+      color: var(#{$color});
+    }
+
+    &.#{$name}::after {
+      background-color: var(#{$color});
+    }
+
+    &.#{$name}:active {
+      color: var(#{$color}) !important;
+    }
+  }
+
+  &:hover {
+    color: #000;
+
+    &::after {
+      width: 100%;
+    }
+  }
+
+  &::after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    border-radius: 1px;
+    transition: width 0.2s, height 0.2s;
+    z-index: -1;
+  }
+}
+
+.dark .link {
+  &:hover {
+    color: #fff;
+  }
+}

@@ -4,6 +4,10 @@ import "./components/Form.scss";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import ResetForm from "./components/ResetForm";
+import LoginButton from "./components/LoginButton";
+
+import google from "../../assets/logos/google.svg";
+import discord from "../../assets/logos/discord.svg";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -43,11 +47,11 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [wrapperHeight, setWrapperHeight] = useState(0);
+  const [wrapperHeight, setWrapperHeight] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    setWrapperHeight(forms.current[state]?.offsetHeight || 0);
-  }, [state, forms]);
+    setWrapperHeight(forms.current[state]?.offsetHeight);
+  }, [state, forms, error]);
 
   return (
     <div className="login-page">
@@ -85,6 +89,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             error={error}
             rememberMe={rememberMe}
             setRememberMe={setRememberMe}
+            setState={setState}
           />
         </div>
         <div className={`login-item ${state === 2 ? "active" : ""}`} ref={(ref) => (forms.current[2] = ref)}>
@@ -102,10 +107,16 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
         </div>
       </div>
 
-      <div className="login-alternatives">OR {wrapperHeight}</div>
+      <div className="login-alternatives">
+        <div className="login-separator text">OR</div>
+        <div className="login-buttons">
+          <LoginButton image={google} color="#34A853" onClick={() => {}} text={"Login with Google"} />
+          <LoginButton image={discord} color="#5865F2" onClick={() => {}} text={"Login with Discord"} />
+        </div>
+      </div>
 
       <div onClick={() => setState(0)}>Forgot?</div>
-      <div onClick={() => setError("Username nein lmao")}>Trigger error</div>
+      <div onClick={() => setError(error ? "" : "Username not found")}>Trigger error</div>
     </div>
   );
 };

@@ -3,7 +3,8 @@ import TextField from "../../../components/fields/TextField";
 import { FiUser, FiLock } from "react-icons/fi";
 import Button from "../../../components/button/Button";
 import { FiChevronRight } from "react-icons/fi";
-import Checkbox from "../../../components/fields/CheckBox";
+import Checkbox from "../../../components/fields/Checkbox";
+import Link from "../../../components/link/Link";
 
 interface LoginFormProps {
   username: string;
@@ -13,9 +14,19 @@ interface LoginFormProps {
   error?: string;
   rememberMe: boolean;
   setRememberMe: (rememberMe: boolean) => void;
+  setState: (state: 0 | 1 | 2) => void;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ username, setUsername, password, setPassword, error, rememberMe, setRememberMe }) => {
+const LoginForm: FC<LoginFormProps> = ({
+  username,
+  setUsername,
+  password,
+  setPassword,
+  error,
+  rememberMe,
+  setRememberMe,
+  setState,
+}) => {
   return (
     <form className="login-form">
       <TextField
@@ -40,6 +51,8 @@ const LoginForm: FC<LoginFormProps> = ({ username, setUsername, password, setPas
       <Checkbox checked={rememberMe} onChange={setRememberMe} label="Remember me" />
 
       <Button text="Log in" rightIcon={FiChevronRight} fullwidth submit />
+
+      <Link color="main" onClick={() => setState(0)} text="Forgot password?" />
     </form>
   );
 };
