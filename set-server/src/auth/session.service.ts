@@ -41,4 +41,8 @@ export class SessionService {
       },
     });
   }
+
+  async updateSession(session: Session) {
+    return this.sessionRepo.save(session);
+  }
 }

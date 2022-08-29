@@ -48,6 +48,11 @@ export class CurrentUserMiddleware implements NestMiddleware {
     }
 
     req.user = session.user;
+
+    session.lastUsed = new Date();
+    if (session.expiresAt) session.expiresAt = new Date(Date.now() + +this.configService.get("JWT_SESSION_TIME") * 1000);
+    await this.sessionService.updateSession(session);
+
     req.session = session;
     next();
   }
