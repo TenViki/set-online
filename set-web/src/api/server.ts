@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TokenManager } from "../utils/tokenManager";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
@@ -25,6 +26,7 @@ export const httpRequest = async <ReturnType>(
     data: options?.data,
     headers: {
       "Content-Type": "application/json",
+      ...(options?.useToken && { Authorization: TokenManager.getToken() || undefined }),
     },
   });
   return response.data;

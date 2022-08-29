@@ -6,6 +6,7 @@ import { getDefaultDarkmodeSetting } from "./utils/darkomode.util";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserType } from "./types/User.type";
+import { TokenManager } from "./utils/tokenManager";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -37,6 +38,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem("color-setting", darkMode ? "dark" : "light");
   }, [darkMode]);
+
+  useEffect(() => {
+    TokenManager.loadToken();
+  }, []);
 
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>

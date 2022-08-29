@@ -13,6 +13,7 @@ import google from "../../assets/logos/google.svg";
 import { ApiError } from "../../types/Api.type";
 import { toast } from "react-toastify";
 import { useUser } from "../../utils/useUser";
+import { TokenManager } from "../../utils/tokenManager";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -73,6 +74,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     },
     onSuccess: (data: AuthResponse) => {
       toast.success("Successfully logged in");
+      TokenManager.saveToken(data.token);
       user.setUser(data.user);
     },
   });
