@@ -22,6 +22,8 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const loginLabel = useRef<HTMLDivElement>(null);
   const signupLabel = useRef<HTMLDivElement>(null);
 
+  const forms = useRef<(HTMLDivElement | null)[]>([]);
+
   useEffect(() => {
     if (state === 1)
       setSelectState({
@@ -40,6 +42,12 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
+  const [wrapperHeight, setWrapperHeight] = useState(0);
+
+  useEffect(() => {
+    setWrapperHeight(forms.current[state]?.offsetHeight || 0);
+  }, [state, forms]);
 
   return (
     <div className="login-page">
@@ -65,10 +73,10 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
       </div>
 
       <div className="login-slider" style={{ "--offset": state } as CSSProperties}>
-        <div className={`login-item ${state === 0 ? "active" : ""}`}>
+        <div className={`login-item ${state === 0 ? "active" : ""}`} ref={(ref) => (forms.current[0] = ref)}>
           <ResetForm email={email} setEmail={setEmail} error={error} />
         </div>
-        <div className={`login-item ${state === 1 ? "active" : ""}`}>
+        <div className={`login-item ${state === 1 ? "active" : ""}`} ref={(ref) => (forms.current[1] = ref)}>
           <LoginForm
             password={password}
             setPassword={setPassword}
@@ -79,7 +87,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             setRememberMe={setRememberMe}
           />
         </div>
-        <div className={`login-item ${state === 2 ? "active" : ""}`}>
+        <div className={`login-item ${state === 2 ? "active" : ""}`} ref={(ref) => (forms.current[2] = ref)}>
           <SignupForm
             email={email}
             password={password}
@@ -93,6 +101,8 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
           />
         </div>
       </div>
+
+      <div className="login-alternatives">OR {wrapperHeight}</div>
 
       <div onClick={() => setState(0)}>Forgot?</div>
       <div onClick={() => setError("Username nein lmao")}>Trigger error</div>
