@@ -1,6 +1,7 @@
 .login-page {
   margin-top: 1rem;
   overflow-x: hidden;
+  flex-grow: 1;
 
   .login-select {
     display: flex;
@@ -57,6 +58,9 @@
   margin: 0 auto;
   margin-top: 1rem;
   width: 25rem;
+  align-items: flex-start;
+  height: calc(var(--height) * 1px);
+  transition: 0.5s height;
 
   .login-item {
     width: 25rem;
@@ -71,4 +75,9 @@
       opacity: 1;
     }
   }
+}
+
+.login-alternatives {
+  margin: 0 auto;
+  width: 24rem;
 }

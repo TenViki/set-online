@@ -72,7 +72,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
         />
       </div>
 
-      <div className="login-slider" style={{ "--offset": state } as CSSProperties}>
+      <div className="login-slider" style={{ "--offset": state, "--height": wrapperHeight } as CSSProperties}>
         <div className={`login-item ${state === 0 ? "active" : ""}`} ref={(ref) => (forms.current[0] = ref)}>
           <ResetForm email={email} setEmail={setEmail} error={error} />
         </div>
