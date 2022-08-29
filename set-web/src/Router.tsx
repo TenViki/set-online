@@ -8,6 +8,8 @@ const Router = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login defaultState={1} />} />
+      <Route path="/signup" element={<Login defaultState={2} />} />
+      <Route path="/recover-account" element={<Login defaultState={0} />} />
     </Routes>
   );
 };

@@ -34,16 +34,13 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   useEffect(() => {
     window.addEventListener("resize", updateSelectState);
-    console.log("Adding resize event listener");
 
     return () => {
-      console.log("Removing resize event listener");
       window.removeEventListener("resize", updateSelectState);
     };
   }, []);
 
   const updateSelectState = () => {
-    console.log("Resize");
     if (state === 1)
       setSelectState({
         width: loginLabel.current?.offsetWidth || 0,
