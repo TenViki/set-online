@@ -33,6 +33,17 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const forms = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
+    window.addEventListener("resize", updateSelectState);
+    console.log("Adding resize event listener");
+
+    return () => {
+      console.log("Removing resize event listener");
+      window.removeEventListener("resize", updateSelectState);
+    };
+  }, []);
+
+  const updateSelectState = () => {
+    console.log("Resize");
     if (state === 1)
       setSelectState({
         width: loginLabel.current?.offsetWidth || 0,
@@ -43,7 +54,9 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
         width: signupLabel.current?.offsetWidth || 0,
         left: signupLabel.current?.offsetLeft || 0,
       });
-  }, [state]);
+  };
+
+  useEffect(updateSelectState, [state]);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
