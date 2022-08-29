@@ -112,7 +112,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
         <div className="login-buttons">
           <LoginButton
             image={google}
-            color="linear-gradient(110deg, #EA4335 0% 25%, #4285F4 25% 50%, #34A853 50% 75%, #FBBC05 75% 100%)"
+            color="linear-gradient(110deg, #EA4335 0% 24.5%, #4285F4 25% 50%, #34A853 50.5% 75%, #FBBC05 75.5% 100%)"
             onClick={() => {}}
             text={"Login with Google"}
           />
