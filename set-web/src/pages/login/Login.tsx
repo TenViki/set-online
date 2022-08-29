@@ -1,17 +1,17 @@
 import { CSSProperties, FC, FormEvent, useEffect, useRef, useState } from "react";
-import "./Login.scss";
 import "./components/Form.scss";
-import LoginForm from "./components/LoginForm";
-import SignupForm from "./components/SignupForm";
-import ResetForm from "./components/ResetForm";
 import LoginButton from "./components/LoginButton";
+import LoginForm from "./components/LoginForm";
+import ResetForm from "./components/ResetForm";
+import SignupForm from "./components/SignupForm";
+import "./Login.scss";
 
-import google from "../../assets/logos/google.svg";
-import discord from "../../assets/logos/discord.svg";
 import { useMutation } from "react-query";
 import { AuthResponse, loginRequest } from "../../api/auth";
-import { AxiosError } from "axios";
+import discord from "../../assets/logos/discord.svg";
+import google from "../../assets/logos/google.svg";
 import { ApiError } from "../../types/Api.type";
+import { toast } from "react-toastify";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -56,10 +56,11 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const loginMutation = useMutation(loginRequest, {
     onError: (error: ApiError) => {
       if (error.response?.data?.error.message) setError(error.response.data.error.message);
-      else alert("Something went wrong");
+      else toast.error("Something wennt wrong");
     },
     onSuccess: (data: AuthResponse) => {
       console.log(data);
+      toast.success("Successfully logged in");
     },
   });
 
@@ -70,6 +71,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const handlePasswordLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    if (!username || !password) return toast.error("Please fill in all fields");
     loginMutation.mutate({ loginType: "PASSWORD", username, password, rememberMe });
   };
 

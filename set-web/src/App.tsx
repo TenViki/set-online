@@ -3,6 +3,8 @@ import SideMenu from "./components/sidemenu/SideMenu";
 import Router from "./Router";
 import { CardProps } from "./types/CardType";
 import { getDefaultDarkmodeSetting } from "./utils/darkomode.util";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -33,6 +35,7 @@ function App() {
         <main>
           <Router />
         </main>
+        <ToastContainer theme={darkMode ? "dark" : "light"} />
       </div>
     </DarkModeContext.Provider>
   );
