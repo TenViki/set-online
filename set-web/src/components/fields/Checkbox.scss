@@ -85,9 +85,13 @@
     }
   }
 
-  &.active .checkbox-squere {
-    border-color: var(--main);
-    background-color: var(--main);
+  @each $name, $color in $availableColors {
+    &.#{$name} {
+      &.active .checkbox-squere {
+        background-color: var(#{$color});
+        border-color: var(#{$color});
+      }
+    }
   }
 
   &.active .stick {
