@@ -3,6 +3,7 @@ import "./Login.scss";
 import "./components/Form.scss";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
+import ResetForm from "./components/ResetForm";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -64,7 +65,9 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
       </div>
 
       <div className="login-slider" style={{ "--offset": state } as CSSProperties}>
-        <div className={`login-item ${state === 0 ? "active" : ""}`}>Forgot password</div>
+        <div className={`login-item ${state === 0 ? "active" : ""}`}>
+          <ResetForm email={email} setEmail={setEmail} error={error} />
+        </div>
         <div className={`login-item ${state === 1 ? "active" : ""}`}>
           <LoginForm
             password={password}
