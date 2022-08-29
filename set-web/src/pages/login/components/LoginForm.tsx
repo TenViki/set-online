@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, FormEvent } from "react";
 import TextField from "../../../components/fields/TextField";
 import { FiUser, FiLock } from "react-icons/fi";
 import Button from "../../../components/button/Button";
@@ -15,6 +15,7 @@ interface LoginFormProps {
   rememberMe: boolean;
   setRememberMe: (rememberMe: boolean) => void;
   setState: (state: 0 | 1 | 2) => void;
+  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 }
 
 const LoginForm: FC<LoginFormProps> = ({
@@ -26,9 +27,10 @@ const LoginForm: FC<LoginFormProps> = ({
   rememberMe,
   setRememberMe,
   setState,
+  onSubmit,
 }) => {
   return (
-    <form className="login-form">
+    <form className="login-form" onSubmit={onSubmit}>
       <TextField
         icon={FiUser}
         onChange={setUsername}

@@ -7,13 +7,22 @@ export const api = axios.create({
   },
 });
 
+console.log(import.meta.env.VITE_BACKEND_URL);
+
 type HttpMethod = "get" | "post" | "put" | "delete" | "patch";
 
-export const httpRequest = async (url: string, method: HttpMethod, data?: object) => {
-  const response = await api.request({
+export const httpRequest = async <ReturnType>(
+  url: string,
+  method: HttpMethod,
+  options?: {
+    useToken?: boolean;
+    data?: any;
+  }
+) => {
+  const response = await api.request<ReturnType>({
     url,
     method,
-    data,
+    data: options?.data,
     headers: {
       "Content-Type": "application/json",
     },

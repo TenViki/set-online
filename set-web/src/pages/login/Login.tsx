@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useEffect, useRef, useState } from "react";
+import { CSSProperties, FC, FormEvent, useEffect, useRef, useState } from "react";
 import "./Login.scss";
 import "./components/Form.scss";
 import LoginForm from "./components/LoginForm";
@@ -8,6 +8,10 @@ import LoginButton from "./components/LoginButton";
 
 import google from "../../assets/logos/google.svg";
 import discord from "../../assets/logos/discord.svg";
+import { useMutation } from "react-query";
+import { AuthResponse, loginRequest } from "../../api/auth";
+import { AxiosError } from "axios";
+import { ApiError } from "../../types/Api.type";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -49,9 +53,25 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   const [wrapperHeight, setWrapperHeight] = useState<number | undefined>(undefined);
 
+  const loginMutation = useMutation(loginRequest, {
+    onError: (error: ApiError) => {
+      if (error.response?.data?.error.message) setError(error.response.data.error.message);
+      else alert("Something went wrong");
+    },
+    onSuccess: (data: AuthResponse) => {
+      console.log(data);
+    },
+  });
+
   useEffect(() => {
     setWrapperHeight(forms.current[state]?.offsetHeight);
   }, [state, forms, error]);
+
+  const handlePasswordLogin = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    loginMutation.mutate({ loginType: "PASSWORD", username, password, rememberMe });
+  };
 
   return (
     <div className="login-page">
@@ -90,6 +110,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             rememberMe={rememberMe}
             setRememberMe={setRememberMe}
             setState={setState}
+            onSubmit={handlePasswordLogin}
           />
         </div>
         <div className={`login-item ${state === 2 ? "active" : ""}`} ref={(ref) => (forms.current[2] = ref)}>
