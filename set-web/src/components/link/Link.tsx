@@ -16,9 +16,9 @@ const Link: FC<LinkProps> = ({ color, onClick, text, to }) => {
       {text}
     </RouterLink>
   ) : (
-    <span className={`link ${color ? color : "main"}`} onClick={onClick}>
+    <button type="button" className={`link ${color ? color : "main"}`} onClick={onClick}>
       {text}
-    </span>
+    </button>
   );
 };
 

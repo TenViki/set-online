@@ -11,15 +11,18 @@ interface CheckboxProps {
 
 const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange, label, color }) => {
   return (
-    <div className={`checkbox ${checked ? "active" : ""} ${color ? color : "main"}`} onClick={() => onChange(!checked)}>
+    <button
+      type="button"
+      className={`checkbox ${checked ? "active" : ""} ${color ? color : "main"}`}
+      onClick={() => onChange(!checked)}
+    >
       <div className={`checkbox-squere`}>
         <span className="stick a" />
         <span className="stick b" />
         <span className="checkbox-overlay" />
       </div>
-
       {label && <div className="checkbox-label">{label}</div>}
-    </div>
+    </button>
   );
 };
 

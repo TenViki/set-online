@@ -5,6 +5,11 @@
   cursor: pointer;
   display: inline-block;
   position: relative;
+  outline: 0;
+  border: 0;
+  font-size: 1rem;
+  padding: 0;
+  background-color: transparent;
 
   @each $name, $color in $availableColors {
     &.#{$name} {
@@ -20,6 +25,7 @@
     }
   }
 
+  &:focus-visible,
   &:hover {
     color: #000;
 
@@ -43,6 +49,7 @@
 }
 
 .dark .link {
+  &:focus-visible,
   &:hover {
     color: #fff;
   }

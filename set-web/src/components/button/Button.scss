@@ -84,6 +84,7 @@
     }
   }
 
+  &:focus-visible,
   &:active:not(.disabled) {
     .button-overlay {
       opacity: 0.2;

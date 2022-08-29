@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { FiAtSign, FiChevronRight, FiLock, FiUser } from "react-icons/fi";
 import Button from "../../../components/button/Button";
-import Checkbox from "../../../components/fields/CheckBox";
+import Checkbox from "../../../components/fields/Checkbox";
 import TextField from "../../../components/fields/TextField";
 
 interface SignupFormProps {
