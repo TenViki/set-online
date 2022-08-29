@@ -11,7 +11,7 @@ interface LoginButtonProps {
 
 const LoginButton: FC<LoginButtonProps> = ({ color, image, text, onClick }) => {
   return (
-    <button className="login-button" style={{ backgroundColor: color }}>
+    <button className="login-button" style={{ background: color }}>
       <img src={image} alt={text} />
       <span className="login-button-text">{text}</span>
       <FiChevronRight />

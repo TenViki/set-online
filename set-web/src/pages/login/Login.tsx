@@ -110,7 +110,12 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
       <div className="login-alternatives">
         <div className="login-separator text">OR</div>
         <div className="login-buttons">
-          <LoginButton image={google} color="#34A853" onClick={() => {}} text={"Login with Google"} />
+          <LoginButton
+            image={google}
+            color="linear-gradient(110deg, #EA4335 0% 25%, #4285F4 25% 50%, #34A853 50% 75%, #FBBC05 75% 100%)"
+            onClick={() => {}}
+            text={"Login with Google"}
+          />
           <LoginButton image={discord} color="#5865F2" onClick={() => {}} text={"Login with Discord"} />
         </div>
       </div>
