@@ -70,11 +70,13 @@
     transition: 0.5s;
     opacity: 0;
     flex-shrink: 0;
+    visibility: hidden;
 
     transform: translateX(calc(var(--offset) * -25rem + 25rem));
 
     &.active {
       opacity: 1;
+      visibility: visible;
     }
   }
 }
