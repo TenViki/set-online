@@ -6,8 +6,9 @@ import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ValidationPipeCheck } from "./utils/validation.pipe";
-import { APP_PIPE } from "@nestjs/core";
+import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 import { Session } from "./auth/session.entity";
+import { HttpExceptionFilter } from "./utils/filters/http-exception.filter";
 
 @Module({
   imports: [
@@ -41,6 +42,10 @@ import { Session } from "./auth/session.entity";
         whitelist: true,
         stopAtFirstError: true,
       }),
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
   ],
 })
