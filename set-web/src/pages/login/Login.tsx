@@ -2,6 +2,7 @@ import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 import "./Login.scss";
 import "./components/Form.scss";
 import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -35,6 +36,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -74,7 +76,19 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             setRememberMe={setRememberMe}
           />
         </div>
-        <div className={`login-item ${state === 2 ? "active" : ""}`}>Sign up</div>
+        <div className={`login-item ${state === 2 ? "active" : ""}`}>
+          <SignupForm
+            email={email}
+            password={password}
+            rememberMe={rememberMe}
+            setEmail={setEmail}
+            setPassword={setPassword}
+            setUsername={setUsername}
+            setRememberMe={setRememberMe}
+            username={username}
+            error={error}
+          />
+        </div>
       </div>
 
       <div onClick={() => setState(0)}>Forgot?</div>
