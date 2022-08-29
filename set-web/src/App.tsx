@@ -7,6 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserType } from "./types/User.type";
 import { TokenManager } from "./utils/tokenManager";
+import { useQuery } from "react-query";
+import { getUser } from "./api/auth";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -25,6 +27,13 @@ export const UserContext = React.createContext<{
 });
 
 function App() {
+  const userQuery = useQuery(["user"], getUser, {
+    enabled: false,
+    onSuccess: (data) => {
+      setUser(data);
+    },
+  });
+
   const [cardProps, setCardProps] = useState<CardProps>({
     color: 1,
     shape: 1,
@@ -41,6 +50,9 @@ function App() {
 
   useEffect(() => {
     TokenManager.loadToken();
+    if (TokenManager.getToken()) {
+      userQuery.refetch();
+    }
   }, []);
 
   return (
