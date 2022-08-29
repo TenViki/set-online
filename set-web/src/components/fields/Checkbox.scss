@@ -1,0 +1,130 @@
+@import "../../styles/theme.scss";
+
+.checkbox {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+
+  &-label {
+    margin-left: 0.5rem;
+    color: #777;
+    transition: 0.2s;
+    flex-grow: 1;
+
+    &:hover {
+      color: #000;
+    }
+
+    &:active {
+      color: #777;
+    }
+  }
+
+  &.active .checkbox-label {
+    color: #000;
+
+    &:active {
+      color: #777;
+    }
+  }
+
+  &-squere {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.3rem;
+    transition: 0.2s;
+    position: relative;
+    overflow: hidden;
+    background-color: #f1f1f1f1;
+
+    &:hover {
+      .checkbox-overlay {
+        opacity: 0.1;
+      }
+    }
+
+    &:active {
+      .checkbox-overlay {
+        opacity: 0.2;
+      }
+    }
+
+    .checkbox-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      background-color: #000;
+      opacity: 0;
+      z-index: 0;
+      transition: 0.2s opacity;
+    }
+
+    .stick {
+      position: absolute;
+      background-color: #fff;
+      width: 0.1rem;
+      transition: 0.1s transform;
+
+      &.a {
+        height: 0.6rem;
+        transform: translate(0.1rem, 0.7rem) rotate(-45deg) scaleY(0);
+        transform-origin: 50% 0;
+        transition-delay: 0.1s;
+      }
+
+      &.b {
+        height: 1rem;
+        transform: translate(0.5rem, 0.1rem) rotate(45deg) scaleY(0);
+        transform-origin: 50% 100%;
+        transition-delay: 0ms;
+      }
+    }
+  }
+
+  &.active .checkbox-squere {
+    border-color: var(--main);
+    background-color: var(--main);
+  }
+
+  &.active .stick {
+    &.a {
+      transform: translate(0.1rem, 0.7rem) rotate(-45deg) scaleY(1);
+      transition-delay: 0ms;
+    }
+
+    &.b {
+      transform: translate(0.5rem, 0.1rem) rotate(45deg) scaleY(1);
+      transition-delay: 0.1s;
+    }
+  }
+}
+
+.dark .checkbox {
+  &-squere {
+    background-color: #292929;
+  }
+
+  &-label {
+    color: #ccc;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &:active {
+      color: #ccc;
+    }
+  }
+
+  &.active .checkbox-label {
+    color: #fff;
+
+    &:active {
+      color: #ccc;
+    }
+  }
+}

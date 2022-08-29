@@ -18,8 +18,8 @@
     transition: $darkModeTransition background-color;
 
     svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1.3rem;
+      height: 1.3rem;
       color: #000;
       transition: $darkModeTransition color;
     }
@@ -43,6 +43,7 @@
     outline: 0;
     transition: $darkModeTransition color;
     font-size: 1rem;
+    flex-grow: 1;
   }
 
   &-error {

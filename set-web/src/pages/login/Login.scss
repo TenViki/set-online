@@ -1,5 +1,6 @@
 .login-page {
   margin-top: 1rem;
+  overflow-x: hidden;
 
   .login-select {
     display: flex;
@@ -53,14 +54,16 @@
 .login-slider {
   display: flex;
   justify-content: center;
+  margin: 0 auto;
   margin-top: 1rem;
+  width: 25rem;
 
   .login-item {
     width: 25rem;
-    height: 30rem;
     border-radius: 0.5rem;
     transition: 0.5s;
     opacity: 0;
+    flex-shrink: 0;
 
     transform: translateX(calc(var(--offset) * -25rem + 25rem));
 

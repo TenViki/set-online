@@ -36,6 +36,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   return (
     <div className="login-page">
@@ -63,7 +64,15 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
       <div className="login-slider" style={{ "--offset": state } as CSSProperties}>
         <div className={`login-item ${state === 0 ? "active" : ""}`}>Forgot password</div>
         <div className={`login-item ${state === 1 ? "active" : ""}`}>
-          <LoginForm password={password} setPassword={setPassword} setUsername={setUsername} username={username} error={error} />
+          <LoginForm
+            password={password}
+            setPassword={setPassword}
+            setUsername={setUsername}
+            username={username}
+            error={error}
+            rememberMe={rememberMe}
+            setRememberMe={setRememberMe}
+          />
         </div>
         <div className={`login-item ${state === 2 ? "active" : ""}`}>Sign up</div>
       </div>
