@@ -10,21 +10,25 @@
   color: #fff;
   font-size: 1rem;
   position: relative;
+  transition: 0.2s transform;
 
   &-text {
     flex-grow: 1;
     text-align: left;
+    z-index: 1;
   }
 
   img {
     width: 1.5rem;
     height: 1.5rem;
     margin-right: 0.5rem;
+    z-index: 1;
   }
 
   svg {
     width: 1.5rem;
     height: 1.5rem;
+    z-index: 1;
   }
 
   &-overlay {
@@ -38,13 +42,18 @@
     opacity: 0;
     transition: 0.2s opacity;
     transition: 0.2s;
+    z-index: 0;
   }
 
   &:hover .login-button-overlay {
     opacity: 0.1;
   }
 
-  &:active .login-button-overlay {
-    opacity: 0.2;
+  &:active {
+    transform: scale(0.95);
+
+    .login-button-overlay {
+      opacity: 0.2;
+    }
   }
 }

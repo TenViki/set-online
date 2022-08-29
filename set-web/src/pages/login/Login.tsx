@@ -114,9 +114,6 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
           <LoginButton image={discord} color="#5865F2" onClick={() => {}} text={"Login with Discord"} />
         </div>
       </div>
-
-      <div onClick={() => setState(0)}>Forgot?</div>
-      <div onClick={() => setError(error ? "" : "Username not found")}>Trigger error</div>
     </div>
   );
 };
