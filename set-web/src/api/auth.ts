@@ -21,3 +21,7 @@ export const getUser = () => {
 export const reuqestRecovery = (data: { email: string }) => {
   return httpRequest("/auth/recovery", "post", { data });
 };
+
+export const recoverAccount = (data: { token: string; password: string; selector: string }) => {
+  return httpRequest(`/auth/recovery/${data.selector}`, "post", { data });
+};
