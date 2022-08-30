@@ -7,7 +7,7 @@ import SignupForm from "./components/SignupForm";
 import "./Login.scss";
 
 import { useMutation } from "react-query";
-import { AuthResponse, loginRequest, signUpRequest } from "../../api/auth";
+import { AuthResponse, loginRequest, reuqestRecovery, signUpRequest } from "../../api/auth";
 import discord from "../../assets/logos/discord.svg";
 import google from "../../assets/logos/google.svg";
 import { ApiError } from "../../types/Api.type";
@@ -80,7 +80,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const loginMutation = useMutation(loginRequest, {
     onError: (error: ApiError) => {
       if (error.response?.data?.error.message) setError(error.response.data.error.message);
-      else toast.error("Something wennt wrong");
+      else toast.error("Something went wrong");
     },
     onSuccess: (data) => handleSuccessfulLogin(data, false),
   });
@@ -88,11 +88,13 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const signupMutation = useMutation(signUpRequest, {
     onError: (error: ApiError) => {
       if (error.response?.data?.error.message) setError(error.response.data.error.message);
-      else toast.error("Something wennt wrong");
+      else toast.error("Something went wrong");
     },
 
     onSuccess: (data) => handleSuccessfulLogin(data, true),
   });
+
+  const recoveryMutation = useMutation(reuqestRecovery);
 
   useEffect(() => {
     setWrapperHeight(forms.current[state]?.offsetHeight);
@@ -108,6 +110,34 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const handleSignup = () => {
     if (!username || !password || !email) return toast.error("Please fill in all fields");
     signupMutation.mutate({ email, password, rememberMe, username });
+  };
+
+  const handleRequestRecovery = async () => {
+    if (!email) return toast.error("Please fill in all fields");
+
+    const t = toast.loading("Sending recovery email...");
+    try {
+      await recoveryMutation.mutateAsync({ email });
+
+      toast.update(t, {
+        render: "Recovery email sent!",
+        type: toast.TYPE.SUCCESS,
+        autoClose: 5000,
+        draggable: true,
+        isLoading: false,
+      });
+    } catch (error) {
+      const err = error as ApiError;
+      setTimeout(() => {
+        toast.update(t, {
+          render: err.response?.data.error.message || "Something went wrong",
+          type: "error",
+          autoClose: 5000,
+          draggable: true,
+          isLoading: false,
+        });
+      }, 300);
+    }
   };
 
   return (
@@ -135,7 +165,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
       <div className="login-slider" style={{ "--offset": state, "--height": wrapperHeight } as CSSProperties}>
         <div className={`login-item ${state === 0 ? "active" : ""}`} ref={(ref) => (forms.current[0] = ref)}>
-          <ResetForm email={email} setEmail={setEmail} error={error} />
+          <ResetForm email={email} setEmail={setEmail} error={error} onSubmit={handleRequestRecovery} />
         </div>
         <div className={`login-item ${state === 1 ? "active" : ""}`} ref={(ref) => (forms.current[1] = ref)}>
           <LoginForm

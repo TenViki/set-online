@@ -7,11 +7,18 @@ interface ResetFormProps {
   email: string;
   setEmail: (email: string) => void;
   error?: string;
+  onSubmit: () => void;
 }
 
-const ResetForm: FC<ResetFormProps> = ({ email, setEmail, error }) => {
+const ResetForm: FC<ResetFormProps> = ({ email, setEmail, error, onSubmit }) => {
   return (
-    <form className="login-form">
+    <form
+      className="login-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
       <TextField
         icon={FiAtSign}
         onChange={setEmail}

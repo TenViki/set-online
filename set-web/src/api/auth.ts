@@ -17,3 +17,7 @@ export const signUpRequest = (data: { username: string; password: string; email:
 export const getUser = () => {
   return httpRequest<UserType>("/auth/me", "get", { useToken: true });
 };
+
+export const reuqestRecovery = (data: { email: string }) => {
+  return httpRequest("/auth/recovery", "post", { data });
+};
