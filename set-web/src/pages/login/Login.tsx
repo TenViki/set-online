@@ -14,6 +14,7 @@ import { ApiError } from "../../types/Api.type";
 import { toast } from "react-toastify";
 import { useUser } from "../../utils/useUser";
 import { TokenManager } from "../../utils/tokenManager";
+import { useNavigate } from "react-router";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -28,6 +29,8 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     width: null,
     left: null,
   });
+
+  const navigate = useNavigate();
 
   const loginLabel = useRef<HTMLDivElement>(null);
   const signupLabel = useRef<HTMLDivElement>(null);
@@ -76,6 +79,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
       toast.success("Successfully logged in");
       TokenManager.saveToken(data.token);
       user.setUser(data.user);
+      navigate("/profile");
     },
   });
 

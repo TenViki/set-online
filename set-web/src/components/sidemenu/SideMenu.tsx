@@ -1,4 +1,4 @@
-import { FiHome, FiSettings } from "react-icons/fi";
+import { FiHome, FiLogIn, FiSettings, FiUser } from "react-icons/fi";
 import { IoGameControllerOutline } from "react-icons/io5";
 import SideMenuLink from "./SideMenuLink";
 import "./SideMenu.scss";
@@ -19,7 +19,12 @@ const SideMenu = () => {
       </div>
 
       <div className="side-menu-actions">
-        Current user state: {user.isLoggedIn ? user.username : "Not logged in"}
+        {user.isLoggedIn ? (
+          <SideMenuLink icon={FiUser} iconColor="gray" text={user.username} to="/profile" />
+        ) : (
+          <SideMenuLink icon={FiLogIn} iconColor="gray" text="Login" to="/login" />
+        )}
+
         <DarkModeSwitch />
       </div>
     </div>
