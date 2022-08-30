@@ -46,6 +46,7 @@ import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
             pass: config.get("EMAIL_PASS"),
           },
         },
+        preview: true,
         defaults: {
           from: config.get("EMAIL_FROM"),
         },

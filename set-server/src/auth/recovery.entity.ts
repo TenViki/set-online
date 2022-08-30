@@ -12,7 +12,10 @@ export class Recovery {
   user: User;
 
   @Column()
-  code: string;
+  token: string;
+
+  @Column()
+  selector: string;
 
   @Column()
   expiresAt: Date;

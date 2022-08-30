@@ -9,11 +9,12 @@ import { CurrentUserMiddleware } from "./middleware/current-user.middleware";
 import { Session } from "./session.entity";
 import { SessionService } from "./session.service";
 import { MiddlewareConsumer } from "@nestjs/common";
+import { RecoveryService } from "./recovery.service";
 
 @Module({
   controllers: [AuthController],
   imports: [UserModule, TypeOrmModule.forFeature([PasswordLogin, Session])],
-  providers: [AuthService, PasswordLoginService, SessionService],
+  providers: [AuthService, PasswordLoginService, SessionService, RecoveryService],
 })
 export class AuthModule {
   configure(consumer: MiddlewareConsumer) {

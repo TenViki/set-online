@@ -10,16 +10,4 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  @Get("/test")
-  async test() {
-    await this.mailerService.sendMail({
-      to: "viktorkomarek28@gmail.com",
-      subject: "Test",
-      template: "reset-password",
-      context: {
-        message: new Date().toDateString(),
-      },
-    });
-  }
 }
