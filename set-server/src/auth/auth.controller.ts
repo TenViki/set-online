@@ -8,10 +8,11 @@ import { AuthService } from "./auth.service";
 import { AuthDto, UserDto } from "./dto/auth.dto";
 import { LoginDto } from "./dto/login.dto";
 import { SignupDto } from "./dto/signup.dto";
+import { RecoveryService } from "./recovery.service";
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private recoveryService: RecoveryService) {}
 
   @Post("login/signup")
   @Serialize(AuthDto)
@@ -30,5 +31,11 @@ export class AuthController {
   @UseGuards(AuthGuard)
   async getUserInfo(@CurrentUser() user: User) {
     return user;
+  }
+
+  @Post("/recovery")
+  @Serialize(AuthDto)
+  async recoverAccount(@Body() recoveryDto: AuthDto) {
+    return this.recoveryService.recoverAccount(recoveryDto);
   }
 }
