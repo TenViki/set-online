@@ -6,6 +6,7 @@ import { Recovery } from "./recovery.entity";
 import { randomBytes } from "crypto";
 import * as bc from "bcrypt";
 import { MailerService } from "@nestjs-modules/mailer";
+import { PasswordLoginService } from "./login/passwordLogin.service";
 
 @Injectable()
 export class RecoveryService {
@@ -13,6 +14,7 @@ export class RecoveryService {
     @InjectRepository(Recovery) private recoveryRepo: Repository<Recovery>,
     private userService: UserService,
     private mailerService: MailerService,
+    private passwordLoginService: PasswordLoginService,
   ) {}
 
   async createRecovery(email: string) {
@@ -46,6 +48,20 @@ export class RecoveryService {
         expires: expires.toLocaleDateString() + " " + expires.toLocaleTimeString(),
       },
     });
+  }
+
+  async verifyRecovery(selector: string, token: string, password: string) {
+    const recovery = await this.recoveryRepo.findOne({ where: { selector }, relations: ["user"] });
+    if (!recovery) throw new NotFoundException("Recovery not found");
+
+    if (recovery.expiresAt < new Date()) throw new NotFoundException("Recovery expired");
+
+    const isTokenValid = await bc.compare(Buffer.from(token, "hex"), recovery.token);
+    if (!isTokenValid) throw new NotFoundException("Invalid token");
+
+    await this.passwordLoginService.update(recovery.user, password);
+
+    return recovery.user;
   }
 
   async generateSelector() {

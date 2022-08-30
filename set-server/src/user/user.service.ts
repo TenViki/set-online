@@ -19,4 +19,11 @@ export class UserService {
       relations,
     });
   }
+
+  async updateUser(where: Partial<User>, options: Partial<User>) {
+    const user = await this.userRepo.findOne({ where });
+    if (!user) throw new Error("User not found");
+    Object.assign(user, options);
+    return this.userRepo.save(user);
+  }
 }

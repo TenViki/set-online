@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, Get, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, Request, Get, UseGuards, Param } from "@nestjs/common";
 import { Request as Req } from "express";
 import { User } from "src/user/user.entity";
 import { CurrentUser } from "src/utils/decorators/current-user.decorator";
@@ -7,7 +7,7 @@ import { Serialize } from "src/utils/interceptors/serialize.interceptor";
 import { AuthService } from "./auth.service";
 import { AuthDto, UserDto } from "./dto/auth.dto";
 import { LoginDto } from "./dto/login.dto";
-import { RecoveryDto } from "./dto/recovery.dto";
+import { RecoverAccountDto, RecoveryDto } from "./dto/recovery.dto";
 import { SignupDto } from "./dto/signup.dto";
 import { RecoveryService } from "./recovery.service";
 
@@ -36,7 +36,13 @@ export class AuthController {
 
   @Post("/recovery")
   @Serialize(AuthDto)
-  async recoverAccount(@Body() recoveryDto: RecoveryDto) {
+  async requestRecovery(@Body() recoveryDto: RecoveryDto) {
     await this.recoveryService.createRecovery(recoveryDto.email);
+  }
+
+  @Post("/recovery/:selector/")
+  @Serialize(AuthDto)
+  async recoverAccount(@Body() body: RecoverAccountDto, @Param("selector") selector: string) {
+    await this.recoveryService.verifyRecovery(selector, body.token, body.password);
   }
 }

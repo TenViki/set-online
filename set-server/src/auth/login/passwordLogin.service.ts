@@ -36,4 +36,19 @@ export class PasswordLoginService {
 
     return bcrypt.compare(password, passwordLogin.password);
   }
+
+  async update(user: User, password: string) {
+    const passwordLogin = await this.passwordLoginRepository.findOne({
+      where: { user },
+    });
+
+    if (!passwordLogin) throw new BadRequestException("Password login not found");
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    passwordLogin.password = hashedPassword;
+
+    return this.passwordLoginRepository.save(passwordLogin);
+  }
 }
