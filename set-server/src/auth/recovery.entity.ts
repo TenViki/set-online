@@ -1,5 +1,5 @@
 import { User } from "src/user/user.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Recovery {
@@ -9,6 +9,7 @@ export class Recovery {
   @OneToOne(() => User, {
     onDelete: "CASCADE",
   })
+  @JoinColumn()
   user: User;
 
   @Column()
