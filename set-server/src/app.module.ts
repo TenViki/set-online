@@ -29,7 +29,7 @@ import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
         username: config.get("DB_USER"),
         password: config.get("DB_PASS"),
         database: config.get("DB_NAME"),
-        synchronize: process.env.NODE_ENV === "development",
+        synchronize: process.env.NODE_ENV === "dev",
         logging: true,
         entities: [__dirname + "/**/*.entity{.ts,.js}", Session],
       }),

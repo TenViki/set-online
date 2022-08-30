@@ -36,6 +36,6 @@ export class AuthController {
   @Post("/recovery")
   @Serialize(AuthDto)
   async recoverAccount(@Body() recoveryDto: AuthDto) {
-    return this.recoveryService.recoverAccount(recoveryDto);
+    // return this.recoveryService.recoverAccount(recoveryDto);
   }
 }
