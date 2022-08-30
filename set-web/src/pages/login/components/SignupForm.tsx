@@ -14,6 +14,7 @@ interface SignupFormProps {
   error?: string;
   rememberMe: boolean;
   setRememberMe: (rememberMe: boolean) => void;
+  onSubmit: () => void;
 }
 
 const SignupForm: FC<SignupFormProps> = ({
@@ -26,9 +27,16 @@ const SignupForm: FC<SignupFormProps> = ({
   setUsername,
   setRememberMe,
   error,
+  onSubmit,
 }) => {
   return (
-    <form className="login-form">
+    <form
+      className="login-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
       <TextField
         icon={FiUser}
         onChange={setUsername}

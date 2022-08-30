@@ -7,7 +7,7 @@ import SignupForm from "./components/SignupForm";
 import "./Login.scss";
 
 import { useMutation } from "react-query";
-import { AuthResponse, loginRequest } from "../../api/auth";
+import { AuthResponse, loginRequest, signUpRequest } from "../../api/auth";
 import discord from "../../assets/logos/discord.svg";
 import google from "../../assets/logos/google.svg";
 import { ApiError } from "../../types/Api.type";
@@ -70,17 +70,28 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   const user = useUser();
 
+  const handleSuccessfulLogin = (data: AuthResponse, signup: boolean) => {
+    toast.success(signup ? "Successfuly signed up" : "Successfully logged in");
+    TokenManager.saveToken(data.token);
+    user.setUser(data.user);
+    navigate("/profile");
+  };
+
   const loginMutation = useMutation(loginRequest, {
     onError: (error: ApiError) => {
       if (error.response?.data?.error.message) setError(error.response.data.error.message);
       else toast.error("Something wennt wrong");
     },
-    onSuccess: (data: AuthResponse) => {
-      toast.success("Successfully logged in");
-      TokenManager.saveToken(data.token);
-      user.setUser(data.user);
-      navigate("/profile");
+    onSuccess: (data) => handleSuccessfulLogin(data, false),
+  });
+
+  const signupMutation = useMutation(signUpRequest, {
+    onError: (error: ApiError) => {
+      if (error.response?.data?.error.message) setError(error.response.data.error.message);
+      else toast.error("Something wennt wrong");
     },
+
+    onSuccess: (data) => handleSuccessfulLogin(data, true),
   });
 
   useEffect(() => {
@@ -92,6 +103,11 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     setError("");
     if (!username || !password) return toast.error("Please fill in all fields");
     loginMutation.mutate({ loginType: "PASSWORD", username, password, rememberMe });
+  };
+
+  const handleSignup = () => {
+    if (!username || !password || !email) return toast.error("Please fill in all fields");
+    signupMutation.mutate({ email, password, rememberMe, username });
   };
 
   return (
@@ -145,6 +161,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             setRememberMe={setRememberMe}
             username={username}
             error={error}
+            onSubmit={handleSignup}
           />
         </div>
       </div>

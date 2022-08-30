@@ -10,6 +10,10 @@ export const loginRequest = (data: { loginType: "PASSWORD"; username?: string; p
   return httpRequest<AuthResponse>("/auth/login", "post", { data });
 };
 
+export const signUpRequest = (data: { username: string; password: string; email: string; rememberMe: boolean }) => {
+  return httpRequest<AuthResponse>("/auth/login/signup", "post", { data });
+};
+
 export const getUser = () => {
   return httpRequest<UserType>("/auth/me", "get", { useToken: true });
 };
