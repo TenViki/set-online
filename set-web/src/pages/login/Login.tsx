@@ -70,6 +70,10 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   const user = useUser();
 
+  useEffect(() => {
+    if (user.isLoggedIn) navigate("/profile");
+  }, [user]);
+
   const handleSuccessfulLogin = (data: AuthResponse, signup: boolean) => {
     toast.success(signup ? "Successfuly signed up" : "Successfully logged in");
     TokenManager.saveToken(data.token);
