@@ -138,7 +138,7 @@ export class DiscordLoginService {
           return {
             success: false,
             message: "Username required",
-            identifier: discordUser.id,
+            identifier: discordLogin.id,
             suggestedUsername: discordUser.username,
           };
         }
@@ -153,7 +153,7 @@ export class DiscordLoginService {
         accessToken: tokenResponse.access_token,
         refreshToken: tokenResponse.refresh_token,
         expiresAt: new Date(Date.now() + tokenResponse.expires_in * 1000),
-        discordId: discordUser.id,
+        discordId: discordLogin.id,
         user: null,
       });
 

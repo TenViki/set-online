@@ -12,23 +12,41 @@ const DiscordRedirect = () => {
   const code = new URLSearchParams(window.location.search).get("code");
   const state = new URLSearchParams(window.location.search).get("state");
 
-  const [current, setCurrent] = useState(0);
+  const [status, setStatus] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
 
   const loginMutation = useMutation(loginRequest, {
     onSuccess: (data) => {
       if (data.success) {
         localStorage.setItem("token", data.token);
-        setCurrent(1);
+        setStatus(1);
       } else {
         console.log(data);
-        setCurrent(3);
+        setStatus(3);
         setUsername(data.suggestedUsername);
+        setIdentifier(data.identifier);
       }
     },
     onError: (error: ApiError) => {
-      setCurrent(2);
+      setStatus(2);
+      console.error(error);
+      setError(error.response?.data.error.message || "Something went wrong");
+    },
+  });
+
+  const completeLoginMutation = useMutation(loginRequest, {
+    onSuccess: (data) => {
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        setStatus(1);
+      } else {
+        setError(data.message);
+      }
+    },
+    onError: (error: ApiError) => {
+      setStatus(2);
       console.error(error);
       setError(error.response?.data.error.message || "Something went wrong");
     },
@@ -56,21 +74,24 @@ const DiscordRedirect = () => {
 
   return (
     <div className="redirect-page">
-      {current === 0 && (
+      {status === 0 && (
         <div className="loading-text">
           <Loading size={3} />
           <span>Logging in...</span>
         </div>
       )}
 
-      {current === 1 && (
+      {status === 1 && (
         <div className="redirect-success">
           <FiCheckCircle />
-          <span>Logged in successfully</span>
+          <div className="success-text">
+            <div className="success-name">Logged in successfuly!</div>
+            <div className="success-content">You can now close this window</div>
+          </div>
         </div>
       )}
 
-      {current === 2 && (
+      {status === 2 && (
         <div className="redirect-error">
           <FiAlertTriangle />
 
@@ -81,12 +102,18 @@ const DiscordRedirect = () => {
         </div>
       )}
 
-      {current === 3 && (
+      {status === 3 && (
         <div className="redirect-complete">
           <div className="redirect-complete-title">To create your account</div>
           <div className="redirect-complete-text">choose your username</div>
 
-          <form className="login-form">
+          <form
+            className="login-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              completeLoginMutation.mutate({ loginType: "DISCORD_COMPLETE", state: state || undefined, username, identifier });
+            }}
+          >
             <TextField
               color="main"
               placeholder="Choose a username"
@@ -96,7 +123,14 @@ const DiscordRedirect = () => {
               value={username}
             />
 
-            <Button text="Sign up" color="main" submit fullwidth rightIcon={FiChevronRight} />
+            <Button
+              text="Sign up"
+              color="main"
+              submit
+              fullwidth
+              rightIcon={FiChevronRight}
+              loading={completeLoginMutation.isLoading}
+            />
           </form>
         </div>
       )}

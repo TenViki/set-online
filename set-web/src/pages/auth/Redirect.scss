@@ -33,16 +33,18 @@
     margin-right: 1rem;
   }
 
+  .success-name,
   .error-name {
     font-size: 1.5rem;
     font-weight: 100;
   }
 
+  .success-content,
   .error-content {
     color: #000;
   }
 }
-
+.dark .redirect-success .success-content,
 .dark .redirect-error .error-content {
   color: #fff;
 }
