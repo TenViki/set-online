@@ -1,5 +1,6 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
 import { Socket, Server } from "socket.io";
+import { User } from "src/user/user.entity";
 
 @WebSocketGateway({ namespace: "auth", cors: true })
 export class AuthGateway {
@@ -9,5 +10,12 @@ export class AuthGateway {
   listen(@MessageBody("state") state: string, @ConnectedSocket() client: Socket) {
     this.clients.set(state, client);
     console.log(state);
+  }
+
+  sendLoginSuccess(state: string, user: User) {
+    const client = this.clients.get(state);
+    if (client) {
+      client.emit("login-success", user);
+    }
   }
 }

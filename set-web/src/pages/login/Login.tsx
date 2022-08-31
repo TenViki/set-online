@@ -1,4 +1,4 @@
-import { CSSProperties, FC, FormEvent, useEffect, useRef, useState } from "react";
+import { CSSProperties, FC, FormEvent, useEffect, useRef, useState, useTransition } from "react";
 import "./components/Form.scss";
 import LoginButton from "./components/LoginButton";
 import LoginForm from "./components/LoginForm";
@@ -18,6 +18,7 @@ import { TokenManager } from "../../utils/tokenManager";
 import { useNavigate } from "react-router";
 import Loading from "../../components/loading/Loading";
 import { getDiscordLogin } from "../../api/discord";
+import { UserType } from "../../types/User.type";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -33,10 +34,14 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     left: null,
   });
 
+  const user = useUser();
+
   const navigate = useNavigate();
 
   const loginLabel = useRef<HTMLDivElement>(null);
   const signupLabel = useRef<HTMLDivElement>(null);
+
+  const loginWindow = useRef<Window | null>(null);
 
   const forms = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -55,7 +60,14 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     setSocket(socket);
 
     socket.on("connect", () => {
-      console.log("Connected to auth socket");
+      console.log("Connected with auth socket");
+    });
+
+    socket.on("login-success", (usr: UserType) => {
+      setTimeout(() => {
+        user.setUser(usr);
+        loginWindow.current?.close();
+      }, 1000);
     });
 
     return () => {
@@ -85,8 +97,6 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const [wrapperHeight, setWrapperHeight] = useState<number | undefined>(undefined);
-
-  const user = useUser();
 
   useEffect(() => {
     if (user.isLoggedIn) navigate("/profile");
@@ -173,7 +183,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
       socket?.emit("discord-login-listen", {
         state: data.state,
       });
-      window.open(`${data.url}&state=${data.state}`, "", "width=450, height=900");
+      loginWindow.current = window.open(`${data.url}&state=${data.state}`, "", "width=450, height=900");
     },
   });
 

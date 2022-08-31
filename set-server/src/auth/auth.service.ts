@@ -8,6 +8,7 @@ import { SessionService } from "./session.service";
 import { LoginType } from "./types/login.type";
 import { LoginDto } from "./dto/login.dto";
 import { DiscordLoginService } from "./login/discordLogin/discordLogin.service";
+import { AuthGateway } from "./auth.gateway";
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
     private passwordLoginService: PasswordLoginService,
     private sessionService: SessionService,
     private discordLoginService: DiscordLoginService,
+    private authGateway: AuthGateway,
   ) {}
   async signup(signupDto: SignupDto, ip: string, userAgent: string) {
     if (await this.userService.getUser({ username: signupDto.username }))
@@ -79,6 +81,8 @@ export class AuthService {
 
     const session = await this.sessionService.createSession(user, loginDto.loginType, userAgent, ip, loginDto.rememberMe);
     const token = this.sessionService.createToken(session);
+
+    this.authGateway.sendLoginSuccess(loginDto.state, user);
 
     return {
       token,
