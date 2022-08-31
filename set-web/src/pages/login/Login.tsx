@@ -189,6 +189,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             setRememberMe={setRememberMe}
             setState={setState}
             onSubmit={handlePasswordLogin}
+            loading={loginMutation.isLoading}
           />
         </div>
         <div className={`login-item ${state === 2 ? "active" : ""}`} ref={(ref) => (forms.current[2] = ref)}>
@@ -203,6 +204,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             username={username}
             error={error}
             onSubmit={handleSignup}
+            loading={signupMutation.isLoading}
           />
         </div>
       </div>

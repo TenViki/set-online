@@ -16,6 +16,7 @@ interface LoginFormProps {
   setRememberMe: (rememberMe: boolean) => void;
   setState: (state: 0 | 1 | 2) => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  loading?: boolean;
 }
 
 const LoginForm: FC<LoginFormProps> = ({
@@ -28,6 +29,7 @@ const LoginForm: FC<LoginFormProps> = ({
   setRememberMe,
   setState,
   onSubmit,
+  loading,
 }) => {
   return (
     <form className="login-form" onSubmit={onSubmit}>
@@ -52,7 +54,7 @@ const LoginForm: FC<LoginFormProps> = ({
 
       <Checkbox checked={rememberMe} onChange={setRememberMe} label="Remember me" />
 
-      <Button text="Log in" rightIcon={FiChevronRight} fullwidth submit />
+      <Button text="Log in" rightIcon={FiChevronRight} fullwidth submit loading={loading} />
 
       <Link color="main" onClick={() => setState(0)} text="Forgot password?" />
     </form>

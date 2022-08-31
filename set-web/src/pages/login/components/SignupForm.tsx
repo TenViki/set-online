@@ -15,6 +15,7 @@ interface SignupFormProps {
   rememberMe: boolean;
   setRememberMe: (rememberMe: boolean) => void;
   onSubmit: () => void;
+  loading?: boolean;
 }
 
 const SignupForm: FC<SignupFormProps> = ({
@@ -28,6 +29,7 @@ const SignupForm: FC<SignupFormProps> = ({
   setRememberMe,
   error,
   onSubmit,
+  loading,
 }) => {
   return (
     <form
@@ -66,7 +68,7 @@ const SignupForm: FC<SignupFormProps> = ({
       />
 
       <Checkbox checked={rememberMe} onChange={setRememberMe} label="Remember me" color="success" />
-      <Button text="Sign up" rightIcon={FiChevronRight} fullwidth submit color="success" />
+      <Button text="Sign up" rightIcon={FiChevronRight} fullwidth submit color="success" loading={loading} />
     </form>
   );
 };
