@@ -27,4 +27,8 @@ export class LoginDto {
   @IsString()
   @IsOptional()
   state?: string;
+
+  @IsString()
+  @IsOptional()
+  identifier?: string;
 }

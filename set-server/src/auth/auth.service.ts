@@ -60,8 +60,8 @@ export class AuthService {
 
         const isPasswordValid = await this.passwordLoginService.verify(user, loginDto.password);
         if (!isPasswordValid) throw new BadRequestException("Invalid password");
-
         break;
+
       case LoginType.DISCORD:
         if (!loginDto.code) throw new BadRequestException("Code is required");
 
@@ -69,6 +69,12 @@ export class AuthService {
         if (!discordLoginResult.success) return discordLoginResult;
 
         user = discordLoginResult.user;
+        break;
+
+      case LoginType.DISCORD_COMPLETE:
+        if (!loginDto.username || !loginDto.identifier) throw new BadRequestException("Username and email are required");
+
+        user = await this.discordLoginService.completeLogin(loginDto.username, loginDto.identifier, loginDto.state);
     }
 
     const session = await this.sessionService.createSession(user, loginDto.loginType, userAgent, ip, loginDto.rememberMe);

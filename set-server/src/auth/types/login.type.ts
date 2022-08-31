@@ -1,4 +1,5 @@
 export enum LoginType {
   PASSWORD = "PASSWORD",
   DISCORD = "DISCORD",
+  DISCORD_COMPLETE = "DISCORD_COMPLETE",
 }

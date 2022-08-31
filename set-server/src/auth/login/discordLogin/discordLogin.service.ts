@@ -84,6 +84,19 @@ export class DiscordLoginService {
     } catch (error) {}
   }
 
+  async completeLogin(username: string, identifier: string, state?: string) {
+    const discordLogin = await this.discordLoginRepo.findOne({ where: { id: identifier }, relations: ["user"] });
+    if (!discordLogin) throw new BadRequestException("Invalid identifier");
+
+    let user = await this.userService.getUser({ username });
+    if (user || discordLogin.user) throw new BadRequestException("Username already taken");
+
+    const discordUser = await this.getUser(discordLogin);
+
+    user = await this.userService.createUser({ username, discordLogin, email: discordUser.email });
+    return user;
+  }
+
   async login(
     code: string,
     state?: string,

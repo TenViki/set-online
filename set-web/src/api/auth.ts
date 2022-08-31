@@ -14,7 +14,7 @@ export type AuthResponse =
       suggestedUsername: string;
     };
 
-type LoginType = "PASSWORD" | "DISCORD";
+type LoginType = "PASSWORD" | "DISCORD" | "DISCORD_COMPLETE";
 interface LoginPayload {
   loginType: LoginType;
   password?: string;
@@ -22,6 +22,7 @@ interface LoginPayload {
   username?: string;
   code?: string;
   state?: string;
+  identifier?: string;
 }
 
 export const loginRequest = (data: LoginPayload) => {

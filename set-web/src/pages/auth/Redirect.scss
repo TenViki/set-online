@@ -16,6 +16,7 @@
   }
 }
 
+.redirect-success,
 .redirect-error {
   display: flex;
   width: 100%;
@@ -44,4 +45,27 @@
 
 .dark .redirect-error .error-content {
   color: #fff;
+}
+
+.redirect-success {
+  background-color: var(--success-opacity);
+  color: var(--success);
+}
+
+.redirect-complete {
+  width: 100%;
+  margin: 0 0.5rem;
+
+  &-title {
+    font-size: 1.5rem;
+    font-weight: 100;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  &-text {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--gray);
+  }
 }

@@ -21,4 +21,13 @@ export class AuthDto {
 
   @Expose()
   success: boolean;
+
+  @Expose()
+  message: string;
+
+  @Expose()
+  identifier: string;
+
+  @Expose()
+  suggestedUsername: string;
 }
