@@ -1,18 +1,21 @@
 import { useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import { UserContext } from "../App";
 import { queryClient } from "../main";
 import { UserType } from "../types/User.type";
+import { TokenManager } from "./tokenManager";
 
 export const useUser = ():
   | (UserType & {
-      setUser: (user: UserType) => void;
+      setUser: (user: UserType | null) => void;
       isLoggedIn: true;
     })
   | {
       isLoggedIn: false;
       isLoading: boolean;
-      setUser: (user: UserType) => void;
+      setUser: (user: UserType | null) => void;
     } => {
   const user = useContext(UserContext);
   const queryClient = useQueryClient();
@@ -29,5 +32,19 @@ export const useUser = ():
     isLoggedIn: false,
     setUser: user.setUser,
     isLoading: userData?.isFetching || false,
+  };
+};
+
+export const useLogout = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const user = useUser();
+
+  return () => {
+    queryClient.removeQueries("user");
+    TokenManager.removeToken();
+    toast.success("Logged out successfully");
+    user.setUser(null);
+    navigate("/login");
   };
 };
