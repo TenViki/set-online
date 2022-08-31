@@ -18,4 +18,7 @@ export class AuthDto {
   @Type(() => UserDto)
   @Expose()
   user: UserDto;
+
+  @Expose()
+  success: boolean;
 }

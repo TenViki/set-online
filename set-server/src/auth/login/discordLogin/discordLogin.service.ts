@@ -39,7 +39,7 @@ export class DiscordLoginService {
       return response.data;
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.response.data.error);
+      throw new BadRequestException(error.response.data.error_description);
     }
   }
 
@@ -66,7 +66,7 @@ export class DiscordLoginService {
       this.discordLoginRepo.save(discordLogin);
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error.response.data.error);
+      throw new BadRequestException(error.response.data.error_description);
     }
   }
 

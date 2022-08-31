@@ -1,0 +1,47 @@
+.redirect-page {
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  justify-content: center;
+
+  .loading-spinner {
+    margin-right: 1rem;
+  }
+}
+
+.redirect-error {
+  display: flex;
+  width: 100%;
+  margin: 0 1rem;
+  background-color: var(--danger-opacity);
+  border-radius: 0.3rem;
+  color: var(--danger);
+  padding: 1rem;
+  align-items: center;
+
+  svg {
+    height: 2rem;
+    width: 2rem;
+    margin-right: 1rem;
+  }
+
+  .error-name {
+    font-size: 1.5rem;
+    font-weight: 100;
+  }
+
+  .error-content {
+    color: #000;
+  }
+}
+
+.dark .redirect-error .error-content {
+  color: #fff;
+}
