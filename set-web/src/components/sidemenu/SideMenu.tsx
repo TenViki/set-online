@@ -1,5 +1,6 @@
 import { FiHome, FiLogIn, FiSettings, FiUser } from "react-icons/fi";
 import { IoGameControllerOutline } from "react-icons/io5";
+import { useLocation } from "react-router";
 import { useUser } from "../../utils/useUser";
 import DarkModeSwitch from "./DarkModeSwitch";
 import "./SideMenu.scss";
@@ -7,6 +8,13 @@ import SideMenuLink from "./SideMenuLink";
 
 const SideMenu = () => {
   const user = useUser();
+
+  const blacklistedPages = ["/auth/redirect"];
+
+  const location = useLocation();
+  const isBlacklisted = blacklistedPages.some((page) => location.pathname.includes(page));
+
+  if (isBlacklisted) return null;
 
   return (
     <div className="side-menu">
