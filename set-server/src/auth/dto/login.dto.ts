@@ -5,6 +5,8 @@ export class LoginDto {
   @IsEnum(LoginType)
   loginType: LoginType;
 
+  // Password login fields
+
   @IsString()
   @IsOptional()
   password?: string;
@@ -16,4 +18,13 @@ export class LoginDto {
   @IsBoolean()
   @IsOptional()
   rememberMe?: boolean;
+
+  // Discord login fields
+  @IsString()
+  @IsOptional()
+  code?: string;
+
+  @IsString()
+  @IsOptional()
+  state?: string;
 }

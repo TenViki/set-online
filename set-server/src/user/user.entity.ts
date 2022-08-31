@@ -1,13 +1,7 @@
+import { DiscordLogin } from "src/auth/login/discordLogin/discordLogin.entity";
 import { PasswordLogin } from "src/auth/login/passwordLogin.entity";
 import { Session } from "src/auth/session.entity";
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -25,9 +19,11 @@ export class User {
   })
   sessions: Session[];
 
-  @OneToOne(() => PasswordLogin, (passwordLogin) => passwordLogin.user, {
-    onDelete: "SET NULL",
-  })
   @JoinColumn()
+  @OneToOne(() => PasswordLogin, (passwordLogin) => passwordLogin.user, { onDelete: "SET NULL" })
   passwordLogin: PasswordLogin;
+
+  @JoinColumn()
+  @OneToOne(() => DiscordLogin, (discordLogin) => discordLogin.user, { onDelete: "SET NULL" })
+  discordLogin: DiscordLogin;
 }

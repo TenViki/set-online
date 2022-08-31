@@ -7,6 +7,7 @@ import { User } from "src/user/user.entity";
 import { SessionService } from "./session.service";
 import { LoginType } from "./types/login.type";
 import { LoginDto } from "./dto/login.dto";
+import { DiscordLoginService } from "./login/discordLogin/discordLogin.service";
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     private userService: UserService,
     private passwordLoginService: PasswordLoginService,
     private sessionService: SessionService,
+    private discordLoginService: DiscordLoginService,
   ) {}
   async signup(signupDto: SignupDto, ip: string, userAgent: string) {
     if (await this.userService.getUser({ username: signupDto.username }))
@@ -59,6 +61,13 @@ export class AuthService {
         if (!isPasswordValid) throw new BadRequestException("Invalid password");
 
         break;
+      case LoginType.DISCORD:
+        if (!loginDto.code) throw new BadRequestException("Code is required");
+
+        const discordLoginResult = await this.discordLoginService.login(loginDto.code);
+        if (!discordLoginResult.success) return discordLoginResult;
+
+        user = discordLoginResult.user;
     }
 
     const session = await this.sessionService.createSession(user, loginDto.loginType, userAgent, ip, loginDto.rememberMe);
@@ -67,6 +76,7 @@ export class AuthService {
     return {
       token,
       user,
+      success: true,
     };
   }
 }
