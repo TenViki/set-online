@@ -12,7 +12,7 @@ const ProfileSideMenu = () => {
         <ProfileSideMenuLink to="/profile/devices" icon={FiMonitor} text="Devices" />
       </div>
 
-      <ProfileSideMenuLink onClick={() => alert("logout")} icon={FiLogOut} text="Logout" />
+      <ProfileSideMenuLink onClick={() => alert("logout")} icon={FiLogOut} text="Logout" color="danger" />
     </div>
   );
 };
