@@ -29,6 +29,7 @@ export const UserContext = React.createContext<{
 function App() {
   const userQuery = useQuery(["user"], getUser, {
     enabled: false,
+    retry: false,
     onSuccess: (data) => {
       setUser(data);
     },

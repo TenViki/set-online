@@ -54,6 +54,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   }, []);
 
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [overlayActive, setOverlayActive] = useState(false);
 
   useEffect(() => {
     const socket = io("http://localhost:7000/auth");
@@ -64,10 +65,12 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     });
 
     socket.on("login-success", (usr: UserType) => {
+      setOverlayActive(true);
       setTimeout(() => {
         user.setUser(usr);
         loginWindow.current?.close();
-      }, 1000);
+        setOverlayActive(false);
+      }, 2000);
     });
 
     return () => {
@@ -189,6 +192,9 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   return (
     <div className="login-page">
+      <div className={`loading-overlay ${overlayActive ? "active" : ""}`}>
+        <Loading size={3} /> Loading...
+      </div>
       <div className="login-select">
         <div
           className={`login-select-option text ${state === 1 ? "active" : ""} login text`}
