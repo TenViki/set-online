@@ -5,41 +5,47 @@
 
   $animationDuration: 4s;
 
+  $squereSize: calc(var(--size) * 1rem / 2.2);
+
   &-a {
     position: absolute;
     top: 0;
     left: 0;
-    width: 50%;
-    height: 50%;
+    width: $squereSize;
+    height: $squereSize;
     background-color: var(--color-a);
     animation: loading-a $animationDuration infinite;
+    border-radius: 15%;
   }
 
   &-b {
     position: absolute;
     top: 0;
     left: 0;
-    width: 50%;
-    height: 50%;
+    width: $squereSize;
+    height: $squereSize;
     animation: loading-b $animationDuration infinite;
+    border-radius: 15%;
   }
 
   &-c {
     position: absolute;
     top: 0;
     left: 0;
-    width: 50%;
-    height: 50%;
+    width: $squereSize;
+    height: $squereSize;
     animation: loading-c $animationDuration infinite;
+    border-radius: 15%;
   }
 
   &-d {
     position: absolute;
     top: 0;
     left: 0;
-    width: 50%;
-    height: 50%;
+    width: $squereSize;
+    height: $squereSize;
     animation: loading-d $animationDuration infinite;
+    border-radius: 15%;
   }
 }
 
@@ -51,19 +57,19 @@
   }
   25%,
   41.6% {
-    transform: translateX(100%) rotate(90deg);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) rotate(90deg);
     background-color: var(--color-b);
   }
 
   50%,
   66.6% {
-    transform: translateX(100%) translateY(100%) rotate(180deg);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) rotate(180deg);
     background-color: var(--color-c);
   }
 
   75%,
   91.6% {
-    transform: translateY(100%) rotate(270deg);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) rotate(270deg);
     background-color: var(--color-d);
   }
 
@@ -75,12 +81,12 @@
 
 @keyframes loading-b {
   0% {
-    transform: translateX(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-a);
   }
 
   8.3% {
-    transform: translateX(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   16.6% {
@@ -94,35 +100,35 @@
   }
 
   25% {
-    transform: translateX(100%) translateY(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-b);
   }
 
   33.3% {
-    transform: translateX(100%) translateY(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   41.6% {
-    transform: translateX(100%) translateY(0) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(0) scale(1);
   }
 
   41.7%,
   49.9% {
-    transform: translateX(100%) translateY(0) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(0) scale(0);
     background-color: var(--color-b);
   }
 
   50% {
-    transform: translateY(100%) scale(0);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-c);
   }
 
   58.3% {
-    transform: translateY(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   66.6% {
-    transform: translateY(100%) translateX(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) translateX(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   66.7%,
@@ -141,24 +147,24 @@
   }
 
   91.6% {
-    transform: translateY(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   91.7%,
   100% {
-    transform: translateY(100%) scale(0);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-d);
   }
 }
 
 @keyframes loading-c {
   0% {
-    transform: translateY(100%) translateX(100%) scale(0);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) translateX(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-a);
   }
 
   8.3% {
-    transform: translateY(100%) translateX(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) translateX(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   16.6% {
@@ -172,21 +178,21 @@
   }
 
   25% {
-    transform: translateY(100%) scale(0);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-b);
   }
 
   33.3% {
-    transform: translateY(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   41.6% {
-    transform: translateX(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   41.7%,
   49.9% {
-    transform: translateX(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-b);
   }
 
@@ -200,43 +206,43 @@
   }
 
   66.6% {
-    transform: translateX(100%) translateY(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   66.7%,
   74.9% {
-    transform: translateX(100%) translateY(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-c);
   }
 
   75% {
-    transform: translateX(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-d);
   }
 
   83.3% {
-    transform: translateX(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   91.6% {
-    transform: translateY(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   91.7%,
   100% {
-    transform: translateY(100%) scale(0);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-d);
   }
 }
 
 @keyframes loading-d {
   0% {
-    transform: translateY(100%) scale(0);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-a);
   }
 
   8.3% {
-    transform: translateY(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   16.6% {
@@ -259,50 +265,50 @@
   }
 
   41.6% {
-    transform: translateX(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   41.7%,
   49.9% {
-    transform: translateX(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-b);
   }
 
   50% {
-    transform: translateX(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-c);
   }
 
   58.3% {
-    transform: translateX(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   66.6% {
-    transform: translateX(100%) translateY(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   66.7%,
   74.9% {
-    transform: translateX(100%) translateY(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-c);
   }
 
   75% {
-    transform: translateX(100%) translateY(100%) scale(0);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-d);
   }
 
   83.3% {
-    transform: translateX(100%) translateY(100%) scale(1);
+    transform: translateX(calc(var(--size) * 1rem / 1.85)) translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   91.6% {
-    transform: translateY(100%) scale(1);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(1);
   }
 
   91.7%,
   100% {
-    transform: translateY(100%) scale(0);
+    transform: translateY(calc(var(--size) * 1rem / 1.85)) scale(0);
     background-color: var(--color-d);
   }
 }

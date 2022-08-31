@@ -8,9 +8,10 @@ interface ResetFormProps {
   setEmail: (email: string) => void;
   error?: string;
   onSubmit: () => void;
+  loading: boolean;
 }
 
-const ResetForm: FC<ResetFormProps> = ({ email, setEmail, error, onSubmit }) => {
+const ResetForm: FC<ResetFormProps> = ({ email, setEmail, error, onSubmit, loading }) => {
   return (
     <form
       className="login-form"
@@ -27,7 +28,7 @@ const ResetForm: FC<ResetFormProps> = ({ email, setEmail, error, onSubmit }) => 
         error={error?.toLowerCase().includes("email") ? error : ""}
         color="danger"
       />
-      <Button text="Recover account" rightIcon={FiChevronRight} fullwidth submit color="danger" />
+      <Button text="Recover account" rightIcon={FiChevronRight} fullwidth submit color="danger" loading={loading} />
     </form>
   );
 };

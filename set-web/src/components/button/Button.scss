@@ -104,4 +104,17 @@
     background-color: #000;
     opacity: 0;
   }
+
+  &.loading {
+    transform: scale(0.9);
+    pointer-events: none;
+
+    .loading-spinner {
+      z-index: 1;
+    }
+
+    .button-overlay {
+      opacity: 0.3;
+    }
+  }
 }
