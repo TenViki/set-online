@@ -1,11 +1,9 @@
 import { FiHome, FiLogIn, FiSettings, FiUser } from "react-icons/fi";
 import { IoGameControllerOutline } from "react-icons/io5";
-import SideMenuLink from "./SideMenuLink";
-import "./SideMenu.scss";
-import { DarkModeContext } from "../../App";
-import React from "react";
-import DarkModeSwitch from "./DarkModeSwitch";
 import { useUser } from "../../utils/useUser";
+import DarkModeSwitch from "./DarkModeSwitch";
+import "./SideMenu.scss";
+import SideMenuLink from "./SideMenuLink";
 
 const SideMenu = () => {
   const user = useUser();

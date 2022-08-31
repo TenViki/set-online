@@ -15,7 +15,7 @@ const Router = () => {
       <Route path="/recover-account" element={<Login defaultState={0} />} />
       <Route path="/recovery" element={<Recovery />} />
 
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/*" element={<Profile />} />
     </Routes>
   );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import Page from "../../components/page/Page";
 import { useUser } from "../../utils/useUser";
+import ProfileSideMenu from "./components/ProfileSideMenu";
 
 const Profile = () => {
   const user = useUser();
@@ -12,8 +13,7 @@ const Profile = () => {
 
   return (
     <Page>
-      <h1>Profile</h1>
-      Logged in as:
+      <ProfileSideMenu />
     </Page>
   );
 };
