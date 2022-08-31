@@ -12,12 +12,12 @@ import { MiddlewareConsumer } from "@nestjs/common";
 import { RecoveryService } from "./recovery.service";
 import { Recovery } from "./recovery.entity";
 import { DiscordLoginController } from "./login/discordLogin/discordLogin.controller";
-import { DiscordLoginGateway } from "./login/discordLogin/discordLogin.gateway";
+import { AuthGateway } from "./auth.gateway";
 
 @Module({
   controllers: [AuthController, DiscordLoginController],
   imports: [UserModule, TypeOrmModule.forFeature([PasswordLogin, Session, Recovery])],
-  providers: [AuthService, PasswordLoginService, SessionService, RecoveryService, DiscordLoginGateway],
+  providers: [AuthService, PasswordLoginService, SessionService, RecoveryService, AuthGateway],
 })
 export class AuthModule {
   configure(consumer: MiddlewareConsumer) {

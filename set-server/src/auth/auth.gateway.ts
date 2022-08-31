@@ -1,8 +1,8 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from "@nestjs/websockets";
 import { Socket, Server } from "socket.io";
 
-@WebSocketGateway({ namespace: "discord-login" })
-export class DiscordLoginGateway {
+@WebSocketGateway({ namespace: "auth", cors: true })
+export class AuthGateway {
   private clients = new Map<string, Socket>();
 
   @SubscribeMessage("discord-login-listen")

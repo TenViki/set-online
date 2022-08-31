@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm";
 import ResetForm from "./components/ResetForm";
 import SignupForm from "./components/SignupForm";
 import "./Login.scss";
+import { Socket, io } from "socket.io-client";
 
 import { useMutation } from "react-query";
 import { AuthResponse, loginRequest, reuqestRecovery, signUpRequest } from "../../api/auth";
@@ -44,6 +45,21 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
     return () => {
       window.removeEventListener("resize", updateSelectState);
+    };
+  }, []);
+
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  useEffect(() => {
+    const socket = io("http://localhost:7000/auth");
+    setSocket(socket);
+
+    socket.on("connect", () => {
+      console.log("Connected to auth socket");
+    });
+
+    return () => {
+      socket.disconnect();
     };
   }, []);
 
@@ -151,6 +167,9 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
       toast.error(error.response?.data.error.message || "Something went wrong");
     },
     onSuccess: (data) => {
+      socket?.emit("discord-login-listen", {
+        state: data.state,
+      });
       window.open(`${data.url}&state=${data.state}`, "", "width=450, height=900");
     },
   });
