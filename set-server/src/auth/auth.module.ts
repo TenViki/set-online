@@ -11,9 +11,10 @@ import { SessionService } from "./session.service";
 import { MiddlewareConsumer } from "@nestjs/common";
 import { RecoveryService } from "./recovery.service";
 import { Recovery } from "./recovery.entity";
+import { DiscordLoginController } from "./login/discordLogin/discordLogin.controller";
 
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthController, DiscordLoginController],
   imports: [UserModule, TypeOrmModule.forFeature([PasswordLogin, Session, Recovery])],
   providers: [AuthService, PasswordLoginService, SessionService, RecoveryService],
 })
