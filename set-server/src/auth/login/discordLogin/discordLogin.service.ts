@@ -8,6 +8,7 @@ import { UserService } from "src/user/user.service";
 import { DiscordTokenResponse, DiscordUserResponse } from "src/utils/types/discord.types";
 import { Repository } from "typeorm";
 import { DiscordLogin } from "./discordLogin.entity";
+import { URLSearchParams } from "url";
 
 @Injectable()
 export class DiscordLoginService {
@@ -19,35 +20,53 @@ export class DiscordLoginService {
 
   async exchangeCodeForToken(code: string) {
     try {
-      const response = await axios.post<DiscordTokenResponse>(`https://discordapp.com/api/v10/oauth2/token`, {
-        client_id: process.env.DISCORD_CLIENT_ID,
-        client_secret: process.env.DISCORD_CLIENT_SECRET,
-        grant_type: "authorization_code",
-        code,
-        redirect_uri: process.env.DISCORD_REDIRECT_URI,
-      });
+      const response = await axios.post<DiscordTokenResponse>(
+        `https://discordapp.com/api/oauth2/token`,
+        new URLSearchParams({
+          client_id: process.env.DISCORD_CLIENT_ID,
+          client_secret: process.env.DISCORD_CLIENT_SECRET,
+          grant_type: "authorization_code",
+          code,
+          redirect_uri: process.env.DISCORD_REDIRECT_URI,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        },
+      );
 
       return response.data;
     } catch (error) {
       console.error(error);
+      throw new BadRequestException(error.response.data.error);
     }
   }
 
   async refreshToken(discordLogin: DiscordLogin) {
     if (discordLogin.expiresAt > new Date()) return;
     try {
-      const response = await axios.post<DiscordTokenResponse>(`https://discordapp.com/api/v10/oauth2/token`, {
-        client_id: process.env.DISCORD_CLIENT_ID,
-        client_secret: process.env.DISCORD_CLIENT_SECRET,
-        grant_type: "refresh_token",
-        refresh_token: discordLogin.refreshToken,
-        redirect_uri: process.env.DISCORD_REDIRECT_URI,
-      });
+      const response = await axios.post<DiscordTokenResponse>(
+        `https://discordapp.com/api/oauth2/token`,
+        new URLSearchParams({
+          client_id: process.env.DISCORD_CLIENT_ID,
+          client_secret: process.env.DISCORD_CLIENT_SECRET,
+          grant_type: "refresh_token",
+          refresh_token: discordLogin.refreshToken,
+          redirect_uri: process.env.DISCORD_REDIRECT_URI,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        },
+      );
 
       discordLogin.accessToken = response.data.access_token;
       this.discordLoginRepo.save(discordLogin);
     } catch (error) {
       console.error(error);
+      throw new BadRequestException(error.response.data.error);
     }
   }
 
@@ -55,7 +74,7 @@ export class DiscordLoginService {
     if (typeof discordLogin !== "string") await this.refreshToken(discordLogin);
 
     try {
-      const response = await axios.get<DiscordUserResponse>(`https://discordapp.com/api/v10/users/@me`, {
+      const response = await axios.get<DiscordUserResponse>(`https://discordapp.com/api/users/@me`, {
         headers: {
           Authorization: `Bearer ${typeof discordLogin === "string" ? discordLogin : discordLogin.accessToken}`,
         },

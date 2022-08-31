@@ -94,9 +94,12 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
 
   const handleSuccessfulLogin = (data: AuthResponse, signup: boolean) => {
     toast.success(signup ? "Successfuly signed up" : "Successfully logged in");
-    TokenManager.saveToken(data.token);
-    user.setUser(data.user);
-    navigate("/profile");
+    if (!data.success) toast.error(data.message);
+    else {
+      TokenManager.saveToken(data.token);
+      user.setUser(data.user);
+      navigate("/profile");
+    }
   };
 
   const loginMutation = useMutation(loginRequest, {
