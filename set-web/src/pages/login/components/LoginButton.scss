@@ -57,4 +57,13 @@
       opacity: 0.2;
     }
   }
+
+  &.loading {
+    transform: scale(0.9);
+    cursor: context-menu;
+
+    .login-button-overlay {
+      opacity: 0.2;
+    }
+  }
 }

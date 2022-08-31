@@ -16,6 +16,7 @@ import { useUser } from "../../utils/useUser";
 import { TokenManager } from "../../utils/tokenManager";
 import { useNavigate } from "react-router";
 import Loading from "../../components/loading/Loading";
+import { getDiscordLogin } from "../../api/discord";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -145,6 +146,15 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     }
   };
 
+  const getDiscordLoginMutation = useMutation(getDiscordLogin, {
+    onError: (error: ApiError) => {
+      toast.error(error.response?.data.error.message || "Something went wrong");
+    },
+    onSuccess: (data) => {
+      window.open(`${data.url}&state=${data.state}`, "", "width=450, height=900");
+    },
+  });
+
   return (
     <div className="login-page">
       <div className="login-select">
@@ -218,7 +228,13 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
             onClick={() => {}}
             text={"Login with Google"}
           />
-          <LoginButton image={discord} color="#5865F2" onClick={() => {}} text={"Login with Discord"} />
+          <LoginButton
+            image={discord}
+            color="#5865F2"
+            onClick={() => getDiscordLoginMutation.mutate()}
+            text={"Login with Discord"}
+            loading={getDiscordLoginMutation.isLoading}
+          />
         </div>
       </div>
     </div>
