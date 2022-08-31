@@ -73,6 +73,7 @@ export class DiscordLoginService {
         success: false;
         message: string;
         identifier: string;
+        suggestedUsername: string;
       }
     | {
         success: true;
@@ -92,12 +93,24 @@ export class DiscordLoginService {
       this.discordLoginRepo.save(discordLogin);
 
       const user = await this.userService.getUser({ discordLogin });
-      if (!user)
-        return {
-          success: false,
-          message: "Username required",
-          identifier: discordUser.id,
-        };
+      if (!user) {
+        const user = await this.userService.getUser({ email: discordUser.email });
+        if (user) {
+          user.discordLogin = discordLogin;
+          this.userService.saveUser(user);
+          return {
+            success: true,
+            user,
+          };
+        } else {
+          return {
+            success: false,
+            message: "Username required",
+            identifier: discordUser.id,
+            suggestedUsername: discordUser.username,
+          };
+        }
+      }
 
       return {
         success: true,
@@ -118,6 +131,7 @@ export class DiscordLoginService {
         success: false,
         message: "Username required",
         identifier: savedDiscordLogin.id,
+        suggestedUsername: discordUser.username,
       };
     }
   }

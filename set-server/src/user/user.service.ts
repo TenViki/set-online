@@ -26,4 +26,8 @@ export class UserService {
     Object.assign(user, options);
     return this.userRepo.save(user);
   }
+
+  async saveUser(user: User) {
+    return this.userRepo.save(user);
+  }
 }
