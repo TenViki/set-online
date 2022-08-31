@@ -1,12 +1,30 @@
 import { UserType } from "../types/User.type";
 import { httpRequest } from "./server";
 
-export interface AuthResponse {
-  token: string;
-  user: UserType;
+export type AuthResponse =
+  | {
+      token: string;
+      user: UserType;
+      success: true;
+    }
+  | {
+      success: false;
+      message: string;
+      identifier: string;
+      suggestedUsername: string;
+    };
+
+type LoginType = "PASSWORD" | "DISCORD";
+interface LoginPayload {
+  loginType: LoginType;
+  password?: string;
+  rememberMe?: boolean;
+  username?: string;
+  code?: string;
+  state?: string;
 }
 
-export const loginRequest = (data: { loginType: "PASSWORD"; username?: string; password?: string; rememberMe?: boolean }) => {
+export const loginRequest = (data: LoginPayload) => {
   return httpRequest<AuthResponse>("/auth/login", "post", { data });
 };
 
