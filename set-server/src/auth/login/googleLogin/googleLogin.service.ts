@@ -42,21 +42,26 @@ export class GoogleLoginService {
     return data;
   }
 
-  completeLogin = async (identifier: string, username: string) => {
-    const googleLogin = await this.googleLoginRepo.findOne({ where: { googleId: identifier }, relations: ["user"] });
+  async completeLogin(username: string, identifier: string) {
+    console.log(identifier, username);
+    const googleLogin = await this.googleLoginRepo.findOne({ where: { id: identifier }, relations: ["user"] });
     if (!googleLogin) throw new BadRequestException("Google login not found");
 
+    console.log("Google Login: ", googleLogin.googleId);
+
     const user = await this.userService.getUser({ username });
+    console.log("User: ", user);
     if (user || googleLogin.user) throw new BadRequestException("Username already taken");
 
     const userInfo = await this.getUser(googleLogin);
     const newUser = this.userService.createUser({
       username,
       email: userInfo.email,
+      googleLogin,
     });
 
     return newUser;
-  };
+  }
 
   async login(code: string): Promise<
     | {
@@ -115,7 +120,7 @@ export class GoogleLoginService {
         return {
           success: false,
           message: "Username required",
-          identifier: data.email,
+          identifier: googleLogin.id,
           suggestedUsername: data.name,
         };
       }
