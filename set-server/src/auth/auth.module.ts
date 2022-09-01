@@ -17,10 +17,11 @@ import { DiscordLoginService } from "./login/discordLogin/discordLogin.service";
 import { DiscordLogin } from "./login/discordLogin/discordLogin.entity";
 import { GoogleLoginService } from "./login/googleLogin/googleLogin.service";
 import { GoogleLoginController } from "./login/googleLogin/googleLogin.controller";
+import { GoogleLogin } from "./login/googleLogin/googleLogin.entity";
 
 @Module({
   controllers: [AuthController, DiscordLoginController, GoogleLoginController],
-  imports: [UserModule, TypeOrmModule.forFeature([PasswordLogin, Session, Recovery, DiscordLogin])],
+  imports: [UserModule, TypeOrmModule.forFeature([PasswordLogin, Session, Recovery, DiscordLogin, GoogleLogin])],
   providers: [
     AuthService,
     PasswordLoginService,

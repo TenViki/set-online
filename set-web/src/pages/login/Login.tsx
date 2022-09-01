@@ -17,7 +17,7 @@ import { useUser } from "../../utils/useUser";
 import { TokenManager } from "../../utils/tokenManager";
 import { useNavigate } from "react-router";
 import Loading from "../../components/loading/Loading";
-import { getDiscordLogin } from "../../api/discord";
+import { getOauthLink } from "../../api/oauth";
 import { UserType } from "../../types/User.type";
 
 interface LoginProps {
@@ -178,15 +178,15 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     }
   };
 
-  const getDiscordLoginMutation = useMutation(getDiscordLogin, {
+  const getDiscordLoginMutation = useMutation(getOauthLink, {
     onError: (error: ApiError) => {
       toast.error(error.response?.data.error.message || "Something went wrong");
     },
     onSuccess: (data) => {
-      socket?.emit("discord-login-listen", {
+      socket?.emit("login-listen", {
         state: data.state,
       });
-      loginWindow.current = window.open(`${data.url}&state=${data.state}`, "", "width=450, height=900");
+      loginWindow.current = window.open(data.url, "", "width=450, height=900");
     },
   });
 
@@ -263,13 +263,13 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
           <LoginButton
             image={google}
             color="linear-gradient(110deg, #EA4335 0% 24.5%, #4285F4 25% 50%, #34A853 50.5% 75%, #FBBC05 75.5% 100%)"
-            onClick={() => {}}
+            onClick={() => getDiscordLoginMutation.mutate("google")}
             text={"Login with Google"}
           />
           <LoginButton
             image={discord}
             color="#5865F2"
-            onClick={() => getDiscordLoginMutation.mutate()}
+            onClick={() => getDiscordLoginMutation.mutate("discord")}
             text={"Login with Discord"}
             loading={getDiscordLoginMutation.isLoading}
           />
