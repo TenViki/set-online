@@ -8,6 +8,7 @@ import { User } from "src/user/user.entity";
 import { GoogleUserResponse } from "src/utils/types/google.types";
 import { BadRequestException } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
+import { Credentials } from "google-auth-library/build/src/auth/credentials";
 
 @Injectable()
 export class GoogleLoginService {
@@ -23,7 +24,7 @@ export class GoogleLoginService {
 
   getAuthUrl(state: string) {
     return this.googleAuth.generateAuthUrl({
-      access_type: "online",
+      access_type: "offline",
       scope: ["profile", "email"],
       state,
     });
@@ -69,7 +70,15 @@ export class GoogleLoginService {
         user: User;
       }
   > {
-    const { tokens } = await this.googleAuth.getToken(code);
+    let tokens: Credentials;
+
+    try {
+      const response = await this.googleAuth.getToken(code);
+      tokens = response.tokens;
+    } catch (error) {
+      throw new BadRequestException("Invalid code");
+    }
+
     this.googleAuth.setCredentials(tokens);
     const { data } = await this.googleAuth.request<GoogleUserResponse>({
       url: "https://www.googleapis.com/oauth2/v1/userinfo",
@@ -90,6 +99,7 @@ export class GoogleLoginService {
 
       // Try to find user with the google login
       let user = await this.userService.getUser({ googleLogin });
+
       if (!user) {
         // If User is not find, try to find user with the email
         user = await this.userService.getUser({ email: data.email });
@@ -122,6 +132,13 @@ export class GoogleLoginService {
     });
 
     const savedGoogleLogin = await this.googleLoginRepo.save(newGoogleLogin);
+
+    const user = await this.userService.getUser({ email: data.email });
+    if (user) {
+      user.googleLogin = savedGoogleLogin;
+      await this.userService.saveUser(user);
+      return { success: true, user };
+    }
 
     return {
       success: false,

@@ -156,6 +156,13 @@ export class DiscordLoginService {
 
       const savedDiscordLogin = await this.discordLoginRepo.save(newDiscordLogin);
 
+      const user = await this.userService.getUser({ email: discordUser.email });
+      if (user) {
+        user.discordLogin = savedDiscordLogin;
+        await this.userService.saveUser(user);
+        return { success: true, user };
+      }
+
       return {
         success: false,
         message: "Username required",
