@@ -15,11 +15,21 @@ import { DiscordLoginController } from "./login/discordLogin/discordLogin.contro
 import { AuthGateway } from "./auth.gateway";
 import { DiscordLoginService } from "./login/discordLogin/discordLogin.service";
 import { DiscordLogin } from "./login/discordLogin/discordLogin.entity";
+import { GoogleLoginService } from "./login/googleLogin/googleLogin.service";
+import { GoogleLoginController } from "./login/googleLogin/googleLogin.controller";
 
 @Module({
-  controllers: [AuthController, DiscordLoginController],
+  controllers: [AuthController, DiscordLoginController, GoogleLoginController],
   imports: [UserModule, TypeOrmModule.forFeature([PasswordLogin, Session, Recovery, DiscordLogin])],
-  providers: [AuthService, PasswordLoginService, SessionService, RecoveryService, AuthGateway, DiscordLoginService],
+  providers: [
+    AuthService,
+    PasswordLoginService,
+    SessionService,
+    RecoveryService,
+    AuthGateway,
+    DiscordLoginService,
+    GoogleLoginService,
+  ],
 })
 export class AuthModule {
   configure(consumer: MiddlewareConsumer) {

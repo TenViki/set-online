@@ -97,10 +97,7 @@ export class DiscordLoginService {
     return user;
   }
 
-  async login(
-    code: string,
-    state?: string,
-  ): Promise<
+  async login(code: string): Promise<
     | {
         success: false;
         message: string;
