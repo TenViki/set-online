@@ -14,6 +14,7 @@ const DiscordRedirect = () => {
 
   const [status, setStatus] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [inputError, setInputError] = useState<string>();
   const [username, setUsername] = useState("");
   const [identifier, setIdentifier] = useState("");
 
@@ -46,6 +47,9 @@ const DiscordRedirect = () => {
       }
     },
     onError: (error: ApiError) => {
+      if (error.response?.data.error.message.toLowerCase().includes("username"))
+        return setInputError(error.response?.data.error.message);
+
       setStatus(2);
       console.error(error);
       setError(error.response?.data.error.message || "Something went wrong");
@@ -117,7 +121,7 @@ const DiscordRedirect = () => {
             <TextField
               color="main"
               placeholder="Choose a username"
-              error={error?.toLocaleLowerCase().includes("username") ? error : undefined}
+              error={inputError}
               icon={FiUser}
               onChange={setUsername}
               value={username}
