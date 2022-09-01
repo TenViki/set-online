@@ -84,7 +84,7 @@ export class DiscordLoginService {
     } catch (error) {}
   }
 
-  async completeLogin(username: string, identifier: string, state?: string) {
+  async completeLogin(username: string, identifier: string) {
     const discordLogin = await this.discordLoginRepo.findOne({ where: { id: identifier }, relations: ["user"] });
     if (!discordLogin) throw new BadRequestException("Invalid identifier");
 

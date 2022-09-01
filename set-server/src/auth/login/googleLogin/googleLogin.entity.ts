@@ -6,6 +6,9 @@ export class GoogleLogin {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column()
+  googleId: string;
+
   @OneToOne(() => User, (user) => user.discordLogin, { nullable: true })
   user?: User;
 

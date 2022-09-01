@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router";
 import DiscordRedirect from "./pages/auth/DiscordRedirect";
+import GoogleRedirect from "./pages/auth/GoogleRedirect";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
@@ -17,7 +18,9 @@ const Router = () => {
       <Route path="/recovery" element={<Recovery />} />
 
       <Route path="/profile/*" element={<Profile />} />
+
       <Route path="/auth/redirect/discord" element={<DiscordRedirect />} />
+      <Route path="/auth/redirect/google" element={<GoogleRedirect />} />
     </Routes>
   );
 };

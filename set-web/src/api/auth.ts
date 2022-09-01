@@ -14,7 +14,7 @@ export type AuthResponse =
       suggestedUsername: string;
     };
 
-type LoginType = "PASSWORD" | "DISCORD" | "DISCORD_COMPLETE";
+type LoginType = "PASSWORD" | "DISCORD" | "DISCORD_COMPLETE" | "GOOGLE" | "GOOGLE_COMPLETE";
 interface LoginPayload {
   loginType: LoginType;
   password?: string;

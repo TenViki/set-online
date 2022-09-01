@@ -178,14 +178,18 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     }
   };
 
-  const getDiscordLoginMutation = useMutation(getOauthLink, {
+  const [loading, setLoading] = useState<string | null>(null);
+  const getOauthLinkMutation = useMutation(getOauthLink, {
     onError: (error: ApiError) => {
       toast.error(error.response?.data.error.message || "Something went wrong");
+      setLoading(null);
     },
+    onMutate: setLoading,
     onSuccess: (data) => {
       socket?.emit("login-listen", {
         state: data.state,
       });
+      setLoading(null);
       loginWindow.current = window.open(data.url, "", "width=450, height=900");
     },
   });
@@ -263,15 +267,16 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
           <LoginButton
             image={google}
             color="linear-gradient(110deg, #EA4335 0% 24.5%, #4285F4 25% 50%, #34A853 50.5% 75%, #FBBC05 75.5% 100%)"
-            onClick={() => getDiscordLoginMutation.mutate("google")}
+            onClick={() => getOauthLinkMutation.mutate("google")}
             text={"Login with Google"}
+            loading={loading === "google"}
           />
           <LoginButton
             image={discord}
             color="#5865F2"
-            onClick={() => getDiscordLoginMutation.mutate("discord")}
+            onClick={() => getOauthLinkMutation.mutate("discord")}
             text={"Login with Discord"}
-            loading={getDiscordLoginMutation.isLoading}
+            loading={loading === "discord"}
           />
         </div>
       </div>

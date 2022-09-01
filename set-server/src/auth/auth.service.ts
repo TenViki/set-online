@@ -9,6 +9,8 @@ import { LoginType } from "./types/login.type";
 import { LoginDto } from "./dto/login.dto";
 import { DiscordLoginService } from "./login/discordLogin/discordLogin.service";
 import { AuthGateway } from "./auth.gateway";
+import { GoogleLoginService } from "./login/googleLogin/googleLogin.service";
+import { NotImplementedException } from "@nestjs/common/exceptions";
 
 @Injectable()
 export class AuthService {
@@ -17,6 +19,7 @@ export class AuthService {
     private passwordLoginService: PasswordLoginService,
     private sessionService: SessionService,
     private discordLoginService: DiscordLoginService,
+    private googleLoginService: GoogleLoginService,
     private authGateway: AuthGateway,
   ) {}
   async signup(signupDto: SignupDto, ip: string, userAgent: string) {
@@ -52,6 +55,7 @@ export class AuthService {
   async login(loginDto: LoginDto, ip: string, userAgent: string) {
     let user: User;
     switch (loginDto.loginType) {
+      // Login with password
       case LoginType.PASSWORD:
         if (!loginDto.username || !loginDto.password || loginDto.rememberMe === undefined)
           throw new BadRequestException("Username, password and rememberMe are required");
@@ -64,6 +68,7 @@ export class AuthService {
         if (!isPasswordValid) throw new BadRequestException("Invalid password");
         break;
 
+      // Login with discord
       case LoginType.DISCORD:
         if (!loginDto.code) throw new BadRequestException("Code is required");
 
@@ -73,10 +78,29 @@ export class AuthService {
         user = discordLoginResult.user;
         break;
 
+      // Complete discord login
       case LoginType.DISCORD_COMPLETE:
         if (!loginDto.username || !loginDto.identifier) throw new BadRequestException("Username and email are required");
 
-        user = await this.discordLoginService.completeLogin(loginDto.username, loginDto.identifier, loginDto.state);
+        user = await this.discordLoginService.completeLogin(loginDto.username, loginDto.identifier);
+        break;
+
+      // Login with google
+      case LoginType.GOOGLE:
+        if (!loginDto.code) throw new BadRequestException("Code is required");
+
+        const googleLoginResult = await this.googleLoginService.login(loginDto.code);
+        if (!googleLoginResult.success) return googleLoginResult;
+
+        user = googleLoginResult.user;
+        break;
+
+      // Complete google logina
+      case LoginType.GOOGLE_COMPLETE:
+        if (!loginDto.username || !loginDto.identifier) throw new BadRequestException("Username and email are required");
+
+        user = await this.googleLoginService.completeLogin(loginDto.username, loginDto.identifier);
+        break;
     }
 
     const session = await this.sessionService.createSession(user, loginDto.loginType, userAgent, ip, loginDto.rememberMe);
