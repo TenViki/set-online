@@ -150,7 +150,7 @@ export class DiscordLoginService {
         accessToken: tokenResponse.access_token,
         refreshToken: tokenResponse.refresh_token,
         expiresAt: new Date(Date.now() + tokenResponse.expires_in * 1000),
-        discordId: discordLogin.id,
+        discordId: discordUser.id,
         user: null,
       });
 
