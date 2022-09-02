@@ -1,0 +1,38 @@
+.new-game {
+  width: min(25rem, 100%);
+
+  &-header {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 100;
+    margin-bottom: 1rem;
+  }
+
+  &-wrapper {
+    height: 0;
+    transition: 0.4s height;
+    overflow: hidden;
+  }
+
+  &.opened &-wrapper {
+    height: calc(var(--height) * 1px);
+  }
+
+  &-field {
+    display: flex;
+    align-items: center;
+    height: 2.5rem;
+
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+
+    &-text {
+      flex-grow: 1;
+    }
+  }
+
+  &-content {
+    padding-bottom: 1rem;
+  }
+}
