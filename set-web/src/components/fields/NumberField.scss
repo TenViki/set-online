@@ -1,3 +1,5 @@
+@import "../../styles/theme.scss";
+
 .numberfield {
   display: flex;
 
@@ -17,6 +19,7 @@
     appearance: none;
     -moz-appearance: textfield;
     width: 4rem;
+    transition: $darkModeTransition background-color, $darkModeTransition color;
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
