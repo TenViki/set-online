@@ -2,7 +2,8 @@ import { DiscordLogin } from "src/auth/login/discordLogin/discordLogin.entity";
 import { GoogleLogin } from "src/auth/login/googleLogin/googleLogin.entity";
 import { PasswordLogin } from "src/auth/login/passwordLogin.entity";
 import { Session } from "src/auth/session.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Game } from "src/games/entities/Game.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -31,4 +32,11 @@ export class User {
   @JoinColumn()
   @OneToOne(() => GoogleLogin, (googleLogin) => googleLogin.user, { onDelete: "SET NULL" })
   googleLogin: GoogleLogin;
+
+  @ManyToOne(() => Game, (game) => game.players, { onDelete: "SET NULL" })
+  game: Game;
+
+  @JoinColumn()
+  @OneToOne(() => Game, (game) => game.host, { onDelete: "SET NULL" })
+  hosting: Game;
 }
