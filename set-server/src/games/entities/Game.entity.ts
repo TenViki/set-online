@@ -1,5 +1,5 @@
 import { User } from "src/user/user.entity";
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export enum GameStatus {
   NOT_STARTED = "NOT_STARTED",
@@ -18,8 +18,8 @@ export class Game {
   @Column()
   status: string;
 
-  @Column()
-  winner: string;
+  @ManyToOne(() => User, { nullable: true })
+  winner: User;
 
   @Column({ default: () => "CURRENT_TIMESTAMP" })
   created: Date;
