@@ -1,0 +1,34 @@
+.numberfield {
+  display: flex;
+
+  & > *:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  height: 2.5rem;
+
+  input {
+    background-color: #f1f1f1;
+    outline: 0;
+    border: 0;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    text-align: center;
+    appearance: none;
+    -moz-appearance: textfield;
+    width: 4rem;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.dark {
+  .numberfield input {
+    background-color: #292929;
+    color: #fff;
+  }
+}
