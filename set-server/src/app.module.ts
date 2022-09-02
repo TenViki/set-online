@@ -11,6 +11,8 @@ import { Session } from "./auth/session.entity";
 import { HttpExceptionFilter } from "./utils/filters/http-exception.filter";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
+import { GamesModule } from "./games/games.module";
+import { GamesGateway } from "./games/games.gateway";
 
 @Module({
   imports: [
@@ -58,6 +60,7 @@ import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
         },
       }),
     }),
+    GamesModule,
   ],
   controllers: [AppController],
   providers: [
@@ -73,6 +76,7 @@ import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
+    GamesGateway,
   ],
 })
 export class AppModule {}
