@@ -30,7 +30,7 @@ const NewGame = () => {
       setGame(data);
       toast.success("Game created");
       setNewGameMenuOpened(false);
-      navigate(`/games/${data.id}`);
+      navigate(`/game`);
     },
   });
 

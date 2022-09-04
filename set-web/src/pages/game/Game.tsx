@@ -3,10 +3,7 @@ import { useParams } from "react-router";
 import { useGame } from "../../utils/useGame";
 
 const Game = () => {
-  const id = useParams().id;
-
-  const s = useGame(id);
-  console.log(s);
+  const s = useGame();
 
   return <div>{s.game?.limit}</div>;
 };

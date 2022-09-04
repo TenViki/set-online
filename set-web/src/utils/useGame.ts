@@ -1,15 +1,23 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useQuery } from "react-query";
-import { getGameById } from "../api/game";
-import { GameContext } from "../App";
+import { getGameByUser } from "../api/game";
+import { GameContext, UserContext } from "../App";
 import { ApiError } from "../types/Api.type";
+import { useUser } from "./useUser";
 
-export const useGame = (id?: string) => {
+export const useGame = () => {
   const game = useContext(GameContext);
+  const user = useUser();
 
-  const fetchedGame = useQuery(["game", id], () => getGameById(id!), {
-    enabled: !!id && !game.game,
+  const fetchedGame = useQuery(["game"], getGameByUser, {
+    enabled: !game.game && user.isLoggedIn,
   });
+
+  useEffect(() => {
+    if (!game.game && fetchedGame.data) {
+      game.setGame(fetchedGame.data);
+    }
+  }, [game, fetchedGame]);
 
   return {
     loading: game.game ? false : fetchedGame.isLoading,

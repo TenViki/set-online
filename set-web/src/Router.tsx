@@ -20,7 +20,7 @@ const Router = () => {
       <Route path="/recovery" element={<Recovery />} />
 
       <Route path="/play" element={<GamesPage />} />
-      <Route path="/games/:id" element={<Game />} />
+      <Route path="/game" element={<Game />} />
 
       <Route path="/profile/*" element={<Profile />} />
 

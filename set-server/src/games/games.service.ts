@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
@@ -32,5 +32,16 @@ export class GamesService {
     });
 
     return this.gameRepo.save(game);
+  }
+
+  async getGameByUser(user: User) {
+    // Find a game where the user is a player
+    const game = await this.gameRepo.findOne({
+      where: { players: { id: user.id } },
+    });
+
+    if (!game) throw new NotFoundException("Game not found");
+
+    return game;
   }
 }

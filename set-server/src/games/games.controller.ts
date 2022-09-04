@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { User } from "src/user/user.entity";
 import { CurrentUser } from "src/utils/decorators/current-user.decorator";
 import { AuthGuard } from "src/utils/guards/auth.guard";
@@ -16,5 +16,12 @@ export class GamesController {
   @UseGuards(AuthGuard)
   async create(@Body() body: NewGameDto, @CurrentUser() user: User) {
     return this.gamesService.create(user, body.limit, body.public);
+  }
+
+  @Get("/")
+  @Serialize(GameDto)
+  @UseGuards(AuthGuard)
+  async get(@CurrentUser() user: User) {
+    return this.gamesService.getGameByUser(user);
   }
 }
