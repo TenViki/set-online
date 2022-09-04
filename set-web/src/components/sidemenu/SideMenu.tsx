@@ -1,6 +1,7 @@
 import { FiHome, FiLogIn, FiSettings, FiUser } from "react-icons/fi";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { useLocation } from "react-router";
+import { useGame } from "../../utils/useGame";
 import { useUser } from "../../utils/useUser";
 import DarkModeSwitch from "./DarkModeSwitch";
 import "./SideMenu.scss";
@@ -8,6 +9,7 @@ import SideMenuLink from "./SideMenuLink";
 
 const SideMenu = () => {
   const user = useUser();
+  const game = useGame();
 
   const blacklistedPages = ["/auth/redirect"];
 
@@ -20,7 +22,11 @@ const SideMenu = () => {
     <div className="side-menu">
       <div className="side-menu-links">
         <SideMenuLink icon={FiHome} iconColor="main" text="Home" to="/" />
-        <SideMenuLink icon={IoGameControllerOutline} iconColor="success" text="Play!" to="/play" />
+        {game.game ? (
+          <SideMenuLink icon={IoGameControllerOutline} iconColor="success" text="Current game" to="/game" />
+        ) : (
+          <SideMenuLink icon={IoGameControllerOutline} iconColor="success" text="Play!" to="/play" />
+        )}
         <SideMenuLink icon={FiSettings} iconColor="danger" text="Settings" to="/settings" />
       </div>
 
