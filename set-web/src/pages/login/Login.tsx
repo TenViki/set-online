@@ -67,6 +67,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
     socket.on("login-success", (usr: UserType) => {
       setOverlayActive(true);
       setTimeout(() => {
+        TokenManager.loadToken();
         user.setUser(usr);
         loginWindow.current?.close();
         setOverlayActive(false);
