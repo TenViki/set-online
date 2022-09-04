@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router";
 import DiscordRedirect from "./pages/auth/DiscordRedirect";
 import GoogleRedirect from "./pages/auth/GoogleRedirect";
+import Game from "./pages/game/Game";
 import GamesPage from "./pages/games/GamesPage";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
@@ -19,6 +20,7 @@ const Router = () => {
       <Route path="/recovery" element={<Recovery />} />
 
       <Route path="/play" element={<GamesPage />} />
+      <Route path="/games/:id" element={<Game />} />
 
       <Route path="/profile/*" element={<Profile />} />
 

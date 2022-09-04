@@ -1,9 +1,10 @@
-import React, { CSSProperties, useRef } from "react";
+import React, { CSSProperties, useContext, useRef } from "react";
 import { FiChevronRight, FiPlusCircle } from "react-icons/fi";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { createGameRequest } from "../../../api/game";
+import { GameContext } from "../../../App";
 import Button from "../../../components/button/Button";
 import Checkbox from "../../../components/fields/Checkbox";
 import NumberField from "../../../components/fields/NumberField";
@@ -17,6 +18,7 @@ const NewGame = () => {
   const [isPublic, setPublic] = React.useState(false);
 
   const content = useRef<HTMLDivElement>(null);
+  const { setGame } = useContext(GameContext);
 
   const navigate = useNavigate();
 
@@ -25,6 +27,7 @@ const NewGame = () => {
       toast.error(err.response?.data.error.message || "Something went wrong");
     },
     onSuccess: (data) => {
+      setGame(data);
       toast.success("Game created");
       setNewGameMenuOpened(false);
       navigate(`/games/${data.id}`);

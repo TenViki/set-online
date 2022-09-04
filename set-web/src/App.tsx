@@ -9,6 +9,7 @@ import { UserType } from "./types/User.type";
 import { TokenManager } from "./utils/tokenManager";
 import { useQuery } from "react-query";
 import { getUser } from "./api/auth";
+import { GameType } from "./types/Game.type";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -26,6 +27,14 @@ export const UserContext = React.createContext<{
   setUser: () => {},
 });
 
+export const GameContext = React.createContext<{
+  game: GameType | null;
+  setGame: React.Dispatch<React.SetStateAction<GameType | null>>;
+}>({
+  game: null,
+  setGame: () => {},
+});
+
 function App() {
   const userQuery = useQuery(["user"], getUser, {
     enabled: false,
@@ -35,15 +44,9 @@ function App() {
     },
   });
 
-  const [cardProps, setCardProps] = useState<CardProps>({
-    color: 1,
-    shape: 1,
-    count: 1,
-    fill: 1,
-  });
-
   const [darkMode, setDarkMode] = useState(getDefaultDarkmodeSetting());
   const [user, setUser] = useState<UserType | null>(null);
+  const [game, setGame] = useState<GameType | null>(null);
 
   useEffect(() => {
     localStorage.setItem("color-setting", darkMode ? "dark" : "light");
@@ -59,13 +62,15 @@ function App() {
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
       <UserContext.Provider value={{ user, setUser }}>
-        <div className={`app ${darkMode ? "dark" : ""}`}>
-          <SideMenu />
-          <main>
-            <Router />
-          </main>
-          <ToastContainer theme={darkMode ? "dark" : "light"} />
-        </div>
+        <GameContext.Provider value={{ game, setGame }}>
+          <div className={`app ${darkMode ? "dark" : ""}`}>
+            <SideMenu />
+            <main>
+              <Router />
+            </main>
+            <ToastContainer theme={darkMode ? "dark" : "light"} />
+          </div>
+        </GameContext.Provider>
       </UserContext.Provider>
     </DarkModeContext.Provider>
   );
