@@ -5,7 +5,7 @@ export interface GameType {
   winner: string | null;
   created: Date;
   players: UserLowType[];
-  host: string;
+  host: UserLowType;
   limit: number;
   public: boolean;
 }

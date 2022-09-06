@@ -1,4 +1,4 @@
-import { Expose, Transform } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 import { UserLowDto } from "src/user/dtos/user-low.dto";
 
 export class GameDto {
@@ -18,11 +18,12 @@ export class GameDto {
   created: Date;
 
   @Expose()
-  @Transform(() => UserLowDto)
+  @Type(() => UserLowDto)
   players: UserLowDto[];
 
   @Expose()
-  host: string;
+  @Type(() => UserLowDto)
+  host: UserLowDto;
 
   @Expose()
   limit: number;

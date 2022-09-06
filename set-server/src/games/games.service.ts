@@ -38,6 +38,10 @@ export class GamesService {
     // Find a game where the user is a player
     const game = await this.gameRepo.findOne({
       where: { players: { id: user.id } },
+      relations: {
+        host: true,
+        players: true,
+      },
     });
 
     if (!game) throw new NotFoundException("Game not found");
