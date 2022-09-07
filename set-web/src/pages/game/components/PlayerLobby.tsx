@@ -16,8 +16,6 @@ const PlayerLobby: FC<PlayerLobbyProps> = ({ user }) => {
 
   const gameHostId = game.game?.host.id;
 
-  console.log(game.game, user);
-
   return (
     <div
       className={`game-lobby-player ${!user ? "empty" : ""} ${
