@@ -63,3 +63,19 @@ body {
   grid-template-columns: repeat(9, 1fr);
   width: fit-content;
 }
+
+::-webkit-scrollbar {
+  width: 0.3rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #aaa;
+  transition: $darkModeTransition background-color;
+}
+
+.dark {
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+}
