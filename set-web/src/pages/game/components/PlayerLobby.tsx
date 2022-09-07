@@ -27,7 +27,7 @@ const PlayerLobby: FC<PlayerLobbyProps> = ({ user }) => {
       <div className="game-lobby-player-avatar">
         <FiUser />
       </div>
-      <div className="game-lobby-player-name">{user?.username || "Waiting for user..."}</div>
+      <div className="game-lobby-player-name">{user?.username || "Waiting for player..."}</div>
 
       {user && gameHostId === user.id && <div className="game-lobby-player-host">Host</div>}
     </div>

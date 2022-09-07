@@ -7,7 +7,7 @@ const GameControls = () => {
   return (
     <div className="lobby-game-controls">
       <div className="lobby-game-controls-buttons">
-        <Button color="gray" text="Invite people" leftIcon={FiUserPlus} />
+        <Button color="gray" text="Invite players" leftIcon={FiUserPlus} />
         <Button color="gray" text="Copy game code" leftIcon={FiCopy} />
         <Button color="gray" text="Copy join link" leftIcon={FiLink} />
       </div>
