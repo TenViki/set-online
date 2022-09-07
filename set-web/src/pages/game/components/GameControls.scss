@@ -13,6 +13,13 @@
     }
   }
 
+  &-waiting {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    color: #777;
+  }
+
   background-color: #f1f1f1;
   margin: 0 1rem 1rem 1rem;
   padding: 0.5rem;
@@ -24,5 +31,16 @@
 .dark {
   .lobby-game-controls {
     background-color: #292929;
+  }
+}
+
+.lobby-game-code {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 300;
   }
 }
