@@ -31,6 +31,7 @@ import { GoogleLogin } from "./login/googleLogin/googleLogin.entity";
     DiscordLoginService,
     GoogleLoginService,
   ],
+  exports: [AuthService],
 })
 export class AuthModule {
   configure(consumer: MiddlewareConsumer) {

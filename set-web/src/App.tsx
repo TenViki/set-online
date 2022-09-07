@@ -10,6 +10,7 @@ import { TokenManager } from "./utils/tokenManager";
 import { useQuery } from "react-query";
 import { getUser } from "./api/auth";
 import { GameType } from "./types/Game.type";
+import { io, Socket } from "socket.io-client";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -36,6 +37,8 @@ export const GameContext = React.createContext<{
 });
 
 function App() {
+  const [gamesSocket, setGamesSocket] = useState<Socket | null>(null);
+
   const userQuery = useQuery(["user"], getUser, {
     enabled: false,
     retry: false,
@@ -58,6 +61,28 @@ function App() {
       userQuery.refetch();
     }
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    console.log("Trying to connect to games socket");
+
+    const socket = io(import.meta.env.VITE_BACKEND_URL + "games", {
+      auth: {
+        token: TokenManager.getToken(),
+      },
+    });
+
+    socket.on("connect", () => {
+      console.log("games socket connected");
+
+      socket.emit("message", "lel");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]);
 
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>

@@ -13,6 +13,8 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
 import { GamesModule } from "./games/games.module";
 import { GamesGateway } from "./games/games.gateway";
+import { SocketAuthService } from "./socket/socket-auth.service";
+import { SocketModule } from "./socket/socket.module";
 
 @Module({
   imports: [
@@ -32,7 +34,6 @@ import { GamesGateway } from "./games/games.gateway";
         password: config.get("DB_PASS"),
         database: config.get("DB_NAME"),
         synchronize: process.env.NODE_ENV === "dev",
-        logging: true,
         entities: [__dirname + "/**/*.entity{.ts,.js}", Session],
       }),
     }),
@@ -61,6 +62,7 @@ import { GamesGateway } from "./games/games.gateway";
       }),
     }),
     GamesModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [
@@ -76,7 +78,6 @@ import { GamesGateway } from "./games/games.gateway";
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    GamesGateway,
   ],
 })
 export class AppModule {}

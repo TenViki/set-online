@@ -114,4 +114,16 @@ export class AuthService {
       success: true,
     };
   }
+
+  async verifyToken(token: string) {
+    const sessionId = this.sessionService.verifyToken(token);
+    if (!sessionId) return null;
+
+    const session = await this.sessionService.getSession(sessionId);
+    if (!session) return null;
+
+    if (session.expiresAt < new Date()) return null;
+
+    return session.user;
+  }
 }
