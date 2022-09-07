@@ -36,13 +36,14 @@ export class GamesService {
   }
 
   async getGameByUser(user: User) {
-    // Find a game where the user is a player
-    const game = await this.gameRepo.findOne({
+    // Find a game where the user is a player with all the players
+    const gameObject = await this.gameRepo.findOne({
       where: { players: { id: user.id } },
-      relations: {
-        host: true,
-        players: true,
-      },
+    });
+
+    const game = await this.gameRepo.findOne({
+      where: { id: gameObject.id },
+      relations: ["players", "host"],
     });
 
     if (!game) throw new NotFoundException("Game not found");
@@ -56,10 +57,7 @@ export class GamesService {
     // searhc for game with either the code or the id
     const game = await this.gameRepo.findOne({
       where: [{ code: joinDto.code }, { id: joinDto.gameId }],
-      relations: {
-        host: true,
-        players: true,
-      },
+      relations: ["players", "host"],
     });
 
     if (!game) throw new NotFoundException("Game not found");
