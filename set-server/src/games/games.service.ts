@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
@@ -51,6 +51,8 @@ export class GamesService {
   }
 
   async join(user: User, joinDto: JoinGameDto) {
+    if (!joinDto.code && !joinDto.gameId) throw new BadRequestException("Game code or game id required");
+
     // searhc for game with either the code or the id
     const game = await this.gameRepo.findOne({
       where: [{ code: joinDto.code }, { id: joinDto.gameId }],

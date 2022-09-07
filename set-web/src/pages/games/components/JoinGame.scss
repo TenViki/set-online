@@ -1,0 +1,8 @@
+.join-game-form {
+  width: min(25rem, 100%);
+  margin-bottom: 1rem;
+
+  & > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}
