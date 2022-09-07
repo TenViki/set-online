@@ -18,7 +18,10 @@ export class AuthGuard implements CanActivate {
 
       const user = socket.data.user;
 
-      if (!user) throw new WsException("Not logged in");
+      if (!user) {
+        console.log("No user");
+        throw new WsException("Not logged in");
+      }
       return user;
     }
   }

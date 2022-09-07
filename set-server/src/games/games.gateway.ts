@@ -7,9 +7,12 @@ import { AuthGuard } from "src/utils/guards/auth.guard";
 export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private socketAuthService: SocketAuthService) {}
 
-  handleConnection(client: Socket) {
-    console.log("Client connected", client.id);
-    this.socketAuthService.registerSocket(client, client.handshake.auth.token);
+  async handleConnection(client: Socket) {
+    try {
+      await this.socketAuthService.registerSocket(client, client.handshake.auth.token);
+    } catch (err) {
+      client.emit("error", err);
+    }
   }
 
   handleDisconnect(client: Socket) {

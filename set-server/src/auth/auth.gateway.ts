@@ -9,7 +9,6 @@ export class AuthGateway {
   @SubscribeMessage("login-listen")
   listen(@MessageBody("state") state: string, @ConnectedSocket() client: Socket) {
     this.clients.set(state, client);
-    console.log(state);
   }
 
   sendLoginSuccess(state: string, user: User) {
