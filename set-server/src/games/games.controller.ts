@@ -4,6 +4,7 @@ import { CurrentUser } from "src/utils/decorators/current-user.decorator";
 import { AuthGuard } from "src/utils/guards/auth.guard";
 import { Serialize } from "src/utils/interceptors/serialize.interceptor";
 import { GameDto } from "./dtos/game.dto";
+import { JoinGameDto } from "./dtos/join-game.dto";
 import { NewGameDto } from "./dtos/new-game.dto";
 import { GamesService } from "./games.service";
 
@@ -23,5 +24,12 @@ export class GamesController {
   @UseGuards(AuthGuard)
   async get(@CurrentUser() user: User) {
     return this.gamesService.getGameByUser(user);
+  }
+
+  @Post("/join")
+  @Serialize(GameDto)
+  @UseGuards(AuthGuard)
+  async join(@Body() body: JoinGameDto, @CurrentUser() user: User) {
+    return this.gamesService.join(user, body);
   }
 }

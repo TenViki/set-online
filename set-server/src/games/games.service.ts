@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
+import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
 
 @Injectable()
@@ -13,7 +14,7 @@ export class GamesService {
 
     do {
       code = Math.floor(Math.random() * 10000);
-    } while (await this.gameRepo.findOne({ where: { code } }));
+    } while (await this.gameRepo.findOne({ where: { code: code.toString() } }));
 
     return code;
   }
@@ -22,7 +23,7 @@ export class GamesService {
     const code = await this.getUniqueCode();
 
     const game = this.gameRepo.create({
-      code,
+      code: code.toString(),
       limit,
       host: user,
       players: [user],
@@ -47,5 +48,29 @@ export class GamesService {
     if (!game) throw new NotFoundException("Game not found");
 
     return game;
+  }
+
+  async join(user: User, joinDto: JoinGameDto) {
+    // searhc for game with either the code or the id
+    const game = await this.gameRepo.findOne({
+      where: [{ code: joinDto.code }, { id: joinDto.gameId }],
+      relations: {
+        host: true,
+        players: true,
+      },
+    });
+
+    if (!game) throw new NotFoundException("Game not found");
+
+    // check if the game is full
+    if (game.players.length >= game.limit) {
+      throw new NotFoundException("Game is full");
+    }
+
+    // join user to game
+    game.players.push(user);
+
+    // save game
+    return this.gameRepo.save(game);
   }
 }

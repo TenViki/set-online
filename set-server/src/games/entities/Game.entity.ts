@@ -13,7 +13,7 @@ export class Game {
   id: string;
 
   @Column()
-  code: number;
+  code: string;
 
   @Column()
   status: string;

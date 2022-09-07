@@ -16,7 +16,6 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: Socket) {
-    console.log("Client disconnected", client.id);
     this.socketAuthService.unregisterSocket(client);
   }
 

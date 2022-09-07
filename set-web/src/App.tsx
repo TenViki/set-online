@@ -69,14 +69,12 @@ function App() {
 
     const socket = io(import.meta.env.VITE_BACKEND_URL + "games", {
       auth: {
-        token: TokenManager.getToken() + "h",
+        token: TokenManager.getToken(),
       },
     });
 
     socket.on("connect", () => {
       console.log("games socket connected");
-
-      socket.emit("message", "lel");
     });
 
     socket.on("error", (err) => {
