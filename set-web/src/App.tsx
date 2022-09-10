@@ -31,9 +31,13 @@ export const UserContext = React.createContext<{
 export const GameContext = React.createContext<{
   game: GameType | null;
   setGame: React.Dispatch<React.SetStateAction<GameType | null>>;
+  socket: Socket | null;
+  setSocket: React.Dispatch<React.SetStateAction<Socket | null>>;
 }>({
   game: null,
   setGame: () => {},
+  socket: null,
+  setSocket: () => {},
 });
 
 function App() {
@@ -96,7 +100,7 @@ function App() {
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
       <UserContext.Provider value={{ user, setUser }}>
-        <GameContext.Provider value={{ game, setGame }}>
+        <GameContext.Provider value={{ game, setGame, socket: gamesSocket, setSocket: setGamesSocket }}>
           <div className={`app ${darkMode ? "dark" : ""}`}>
             <SideMenu />
             <main>

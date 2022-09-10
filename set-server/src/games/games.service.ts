@@ -1,13 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { Inject } from "@nestjs/common/decorators";
+import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
+import { GamesGateway } from "./games.gateway";
 
 @Injectable()
 export class GamesService {
-  constructor(@InjectRepository(Game) private gameRepo: Repository<Game>) {}
+  constructor(
+    @InjectRepository(Game) private gameRepo: Repository<Game>,
+    @Inject(forwardRef(() => GamesGateway)) private gamesGateway: GamesGateway,
+  ) {}
 
   async getUniqueCode() {
     let code: number;
@@ -102,5 +108,7 @@ export class GamesService {
 
     // save game
     this.gameRepo.save(game);
+
+    this.gamesGateway.sendToGame(game.id, "kick", id);
   }
 }

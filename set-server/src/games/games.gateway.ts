@@ -1,4 +1,6 @@
-import { UseGuards, UseInterceptors } from "@nestjs/common";
+import { UseGuards } from "@nestjs/common";
+import { Inject } from "@nestjs/common/decorators";
+import { forwardRef } from "@nestjs/common/utils";
 import {
   ConnectedSocket,
   MessageBody,
@@ -7,7 +9,8 @@ import {
   SubscribeMessage,
   WebSocketGateway,
 } from "@nestjs/websockets";
-import { Socket } from "socket.io";
+import { WebSocketServer } from "@nestjs/websockets/decorators";
+import { Server, Socket } from "socket.io";
 import { SocketAuthService } from "src/socket/socket-auth.service";
 import { User } from "src/user/user.entity";
 import { CurrentUser } from "src/utils/decorators/current-user.decorator";
@@ -15,7 +18,13 @@ import { AuthGuard } from "src/utils/guards/auth.guard";
 import { GamesService } from "./games.service";
 @WebSocketGateway({ namespace: "games", cors: true })
 export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private socketAuthService: SocketAuthService, private gamesService: GamesService) {}
+  @WebSocketServer()
+  server: Server;
+
+  constructor(
+    private socketAuthService: SocketAuthService,
+    @Inject(forwardRef(() => GamesService)) private gamesService: GamesService,
+  ) {}
 
   async handleConnection(client: Socket) {
     try {
@@ -46,5 +55,9 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
       timestamp: data,
       serverTimestamp: Date.now(),
     });
+  }
+
+  sendToGame(gameId: string, event: string, data: any) {
+    this.server.to(`game:${gameId}`).emit(event, data);
   }
 }

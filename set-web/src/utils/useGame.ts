@@ -23,5 +23,7 @@ export const useGame = () => {
     loading: game.game ? false : fetchedGame.isLoading,
     game: game.game || fetchedGame.data,
     error: fetchedGame.error as ApiError,
+    socket: game.socket,
+    setGame: game.setGame,
   };
 };
