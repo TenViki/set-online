@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Post, UseGuards } from "@nestjs/common";
 import { User } from "src/user/user.entity";
 import { CurrentUser } from "src/utils/decorators/current-user.decorator";
 import { AuthGuard } from "src/utils/guards/auth.guard";
@@ -31,5 +31,11 @@ export class GamesController {
   @UseGuards(AuthGuard)
   async join(@Body() body: JoinGameDto, @CurrentUser() user: User) {
     return this.gamesService.join(user, body);
+  }
+
+  @Delete("/")
+  @UseGuards(AuthGuard)
+  async leave(@CurrentUser() user: User) {
+    return this.gamesService.leave(user);
   }
 }

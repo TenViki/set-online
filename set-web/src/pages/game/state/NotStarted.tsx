@@ -1,5 +1,10 @@
 import React, { FC } from "react";
 import { FiUser } from "react-icons/fi";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { leaveGameRequest } from "../../../api/game";
+import { ApiError } from "../../../types/Api.type";
 import { GameType } from "../../../types/Game.type";
 import GameControls from "../components/GameControls";
 import PlayerLobby from "../components/PlayerLobby";

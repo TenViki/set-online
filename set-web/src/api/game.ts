@@ -12,3 +12,7 @@ export const getGameByUser = () => {
 export const joinGameRequest = (data: { code?: string; gameId?: string }) => {
   return httpRequest<GameType>("/games/join", "post", { data, useToken: true });
 };
+
+export const leaveGameRequest = () => {
+  return httpRequest("/games", "delete", { useToken: true });
+};

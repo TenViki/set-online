@@ -41,12 +41,12 @@ export class GamesService {
       where: { players: { id: user.id } },
     });
 
+    if (!gameObject) throw new NotFoundException("Game not found");
+
     const game = await this.gameRepo.findOne({
       where: { id: gameObject.id },
       relations: ["players", "host"],
     });
-
-    if (!game) throw new NotFoundException("Game not found");
 
     return game;
   }
@@ -72,5 +72,22 @@ export class GamesService {
 
     // save game
     return this.gameRepo.save(game);
+  }
+
+  async leave(user: User) {
+    const game = await this.getGameByUser(user);
+
+    if (!game) throw new NotFoundException("User not in game");
+
+    // remove user from game
+    game.players = game.players.filter((player) => player.id !== user.id);
+
+    if (user.id === game.host.id) {
+      this.gameRepo.delete(game.id);
+      return;
+    }
+
+    // save game
+    this.gameRepo.save(game);
   }
 }
