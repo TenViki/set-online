@@ -75,6 +75,7 @@ function App() {
 
     socket.on("connect", () => {
       console.log("games socket connected");
+      setGamesSocket(socket);
     });
 
     socket.on("error", (err) => {
@@ -85,6 +86,12 @@ function App() {
       socket.disconnect();
     };
   }, [user]);
+
+  useEffect(() => {
+    if (!gamesSocket || !game) return;
+
+    gamesSocket.emit("listen", game.id);
+  }, [gamesSocket, game]);
 
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
