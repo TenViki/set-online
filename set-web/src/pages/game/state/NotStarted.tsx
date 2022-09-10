@@ -9,6 +9,7 @@ import Modal, { useModal } from "../../../components/modal/Modal";
 import ModalButtons from "../../../components/modal/ModalButtons";
 import { ApiError } from "../../../types/Api.type";
 import { GameType, UserLowType } from "../../../types/Game.type";
+import { usePing } from "../../../utils/usePing";
 import GameControls from "../components/GameControls";
 import PlayerLobby from "../components/PlayerLobby";
 import "./NotStarted.scss";
@@ -32,24 +33,38 @@ const NotStarted: FC<NotStartedProps> = ({ game }) => {
     },
   });
 
+  const ping = usePing();
+
   return (
     <div className="game-lobby">
-      <div className="game-lobby-players">
-        <div className="game-lobby-players-grid">
-          {game.players.map((player) => (
-            <PlayerLobby user={player} key={player.id} onClick={handleUserClick} />
-          ))}
+      <div className="game-lobby-players-wrapper">
+        <div className="game-lobby-players">
+          <div className="game-lobby-players-grid">
+            {game.players.map((player) => (
+              <PlayerLobby user={player} key={player.id} onClick={handleUserClick} />
+            ))}
 
-          {new Array(game.limit - game.players.length).fill(0).map((_, i) => (
-            <PlayerLobby key={i} />
-          ))}
+            {new Array(game.limit - game.players.length).fill(0).map((_, i) => (
+              <PlayerLobby key={i} />
+            ))}
+          </div>
+        </div>
+        <div className="game-lobby-ping">
+          <div className="game-lobby-ping-ping text ">
+            Ping: <span className="text">{ping.ping} ms</span>
+          </div>
+          <div className="game-lobby-ping-value text">
+            Client -&gt; Server: <span className="text">{ping.clientToServer} ms</span>
+          </div>
+          <div className="game-lobby-ping-value text">
+            Server -&gt; Client: <span className="text"> {ping.clientToServer} ms</span>
+          </div>
         </div>
       </div>
 
       <div className="game-lobby-controls">
         <GameControls />
       </div>
-
       <Modal isOpen={isOpen} toggle={toggle} title={`Kick ${playerToKick?.username}?`}>
         <p>Are you sure you want to kick {playerToKick?.username}?</p>
         <ModalButtons>
