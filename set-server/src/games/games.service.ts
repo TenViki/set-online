@@ -76,6 +76,8 @@ export class GamesService {
     // join user to game
     game.players.push(user);
 
+    this.gamesGateway.sendToGame(game.id, "join", user);
+
     // save game
     return this.gameRepo.save(game);
   }
@@ -95,6 +97,8 @@ export class GamesService {
 
     // save game
     this.gameRepo.save(game);
+
+    this.gamesGateway.sendToGame(game.id, "leave", user.id);
   }
 
   async kick(user: User, id: string) {

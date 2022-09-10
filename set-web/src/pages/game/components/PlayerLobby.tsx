@@ -22,7 +22,7 @@ const PlayerLobby: FC<PlayerLobbyProps> = ({ user, onClick }) => {
       className={`game-lobby-player ${!user ? "empty" : ""} ${
         usr.isLoggedIn && usr.id === gameHostId && user && usr.id !== user.id ? "hoverable" : ""
       }`}
-      onClick={() => onClick && user && onClick(user)}
+      onClick={() => onClick && user && user.id === game.game?.host.id && onClick(user)}
     >
       <div className="game-lobby-player-avatar">
         <FiUser />

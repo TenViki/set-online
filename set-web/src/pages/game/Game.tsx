@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
-import { GameStatus } from "../../types/Game.type";
+import { GameStatus, UserLowType } from "../../types/Game.type";
 import { useGame } from "../../utils/useGame";
 import { useUser } from "../../utils/useUser";
 import NotStarted from "./state/NotStarted";
@@ -13,7 +13,6 @@ const Game = () => {
   const navigate = useNavigate();
 
   const handleKick = (id: string) => {
-    console.log("kick handled");
     game.setGame((prevGame) => {
       if (prevGame) {
         return {
@@ -31,13 +30,28 @@ const Game = () => {
     }
   };
 
+  const handleJoin = (user: UserLowType) => {
+    game.setGame((prevGame) => {
+      if (prevGame) {
+        return {
+          ...prevGame,
+          players: [...prevGame.players, user],
+        };
+      }
+      return null;
+    });
+  };
+
   useEffect(() => {
     if (!game.game || !user.isLoggedIn) return;
-    console.log("Game socket:", game.socket?.id);
     game.socket?.on("kick", handleKick);
+    game.socket?.on("join", handleJoin);
+    game.socket?.on("leave", handleKick);
 
     return () => {
       game.socket?.off("kick", handleKick);
+      game.socket?.off("join", handleJoin);
+      game.socket?.off("leave", handleKick);
     };
   }, [game.socket, user]);
 
