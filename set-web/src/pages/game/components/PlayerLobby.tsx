@@ -8,9 +8,10 @@ import "./PlayerLobby.scss";
 
 interface PlayerLobbyProps {
   user?: UserLowType;
+  onClick?: (user: UserLowType) => void;
 }
 
-const PlayerLobby: FC<PlayerLobbyProps> = ({ user }) => {
+const PlayerLobby: FC<PlayerLobbyProps> = ({ user, onClick }) => {
   const game = useGame();
   const usr = useUser();
 
@@ -21,6 +22,7 @@ const PlayerLobby: FC<PlayerLobbyProps> = ({ user }) => {
       className={`game-lobby-player ${!user ? "empty" : ""} ${
         usr.isLoggedIn && usr.id === gameHostId && user && usr.id !== user.id ? "hoverable" : ""
       }`}
+      onClick={() => onClick && user && onClick(user)}
     >
       <div className="game-lobby-player-avatar">
         <FiUser />

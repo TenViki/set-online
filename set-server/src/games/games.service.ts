@@ -90,4 +90,17 @@ export class GamesService {
     // save game
     this.gameRepo.save(game);
   }
+
+  async kick(user: User, id: string) {
+    const game = await this.getGameByUser(user);
+
+    if (!game) throw new NotFoundException("User not in game");
+    if (user.id !== game.host.id) throw new BadRequestException("Only host can kick");
+
+    // remove user from game
+    game.players = game.players.filter((player) => player.id !== id);
+
+    // save game
+    this.gameRepo.save(game);
+  }
 }

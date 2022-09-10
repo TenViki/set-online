@@ -16,3 +16,7 @@ export const joinGameRequest = (data: { code?: string; gameId?: string }) => {
 export const leaveGameRequest = () => {
   return httpRequest("/games", "delete", { useToken: true });
 };
+
+export const kickPlayerRequest = (id: string) => {
+  return httpRequest(`/games/user/${id}`, "delete", { useToken: true });
+};
