@@ -1,11 +1,13 @@
 import React, { FC, useContext } from "react";
 import { FiChevronRight, FiCopy, FiLink, FiLogOut, FiTrash, FiUserPlus } from "react-icons/fi";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { leaveGameRequest } from "../../../api/game";
 import { GameContext } from "../../../App";
 import Button from "../../../components/button/Button";
+import Modal, { useModal } from "../../../components/modal/Modal";
+import ModalButtons from "../../../components/modal/ModalButtons";
 import { ApiError } from "../../../types/Api.type";
 import { GameType } from "../../../types/Game.type";
 import { useGame } from "../../../utils/useGame";
@@ -16,19 +18,28 @@ const GameControls = () => {
   const game = useGame();
   const user = useUser();
 
+  const queryClient = useQueryClient();
+
   const { setGame } = useContext(GameContext);
 
   const navigate = useNavigate();
 
   const leaveGameMutation = useMutation(leaveGameRequest, {
     onSuccess: () => {
+      console.log("Setting game null");
+      // clear queryclient cache
+
+      queryClient.removeQueries("game");
+
       setGame(null);
-      navigate("/");
+      toggle(false);
     },
     onError: (err: ApiError) => {
       toast.error(err.response?.data.error.message || "Something went wrong");
     },
   });
+
+  const { isOpen, toggle } = useModal();
 
   if (user.isLoggedIn && game.game?.host.id === user.id)
     return (
@@ -39,7 +50,7 @@ const GameControls = () => {
             text="Delete game"
             leftIcon={FiTrash}
             loading={leaveGameMutation.isLoading}
-            onClick={() => leaveGameMutation.mutate()}
+            onClick={() => toggle()}
           />
           <Button color="gray" text="Invite players" leftIcon={FiUserPlus} />
           <Button color="gray" text="Copy join link" leftIcon={FiLink} />
@@ -52,6 +63,21 @@ const GameControls = () => {
         <div className="lobby-game-controls-start">
           <Button color="success" text="Start game" rightIcon={FiChevronRight} />
         </div>
+
+        <Modal toggle={toggle} isOpen={isOpen} title="Really?">
+          Do you really want to delete the game?
+          <ModalButtons>
+            <Button color="gray" text="Cancel " onClick={() => toggle(false)} />
+            <Button
+              leftIcon={FiTrash}
+              rightIcon={FiChevronRight}
+              color="danger"
+              text="Delete game"
+              onClick={() => leaveGameMutation.mutate()}
+              loading={leaveGameMutation.isLoading}
+            />
+          </ModalButtons>
+        </Modal>
       </div>
     );
   else {
@@ -63,7 +89,7 @@ const GameControls = () => {
             text="Leave"
             leftIcon={FiLogOut}
             loading={leaveGameMutation.isLoading}
-            onClick={() => leaveGameMutation.mutate()}
+            onClick={() => toggle()}
           />
           <div className="lobby-game-code text">
             Game code:
@@ -71,6 +97,21 @@ const GameControls = () => {
           </div>
         </div>
         <div className="lobby-game-controls-waiting">Waiting for host to start...</div>
+
+        <Modal toggle={toggle} isOpen={isOpen} title="Really?">
+          Do you really want to leave this game?
+          <ModalButtons>
+            <Button color="gray" text="Cancel " onClick={() => toggle(false)} />
+            <Button
+              leftIcon={FiLogOut}
+              rightIcon={FiChevronRight}
+              color="danger"
+              text="Yes, leave"
+              onClick={() => leaveGameMutation.mutate()}
+              loading={leaveGameMutation.isLoading}
+            />
+          </ModalButtons>
+        </Modal>
       </div>
     );
   }

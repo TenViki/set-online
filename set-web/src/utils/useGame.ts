@@ -9,7 +9,7 @@ export const useGame = () => {
   const game = useContext(GameContext);
   const user = useUser();
 
-  const fetchedGame = useQuery(["game"], getGameByUser, {
+  const fetchedGame = useQuery("game", getGameByUser, {
     enabled: !game.game && user.isLoggedIn,
   });
 
