@@ -25,7 +25,7 @@ const Game = () => {
     });
 
     if (user.isLoggedIn && user.id === id) {
-      game.setGame(null);
+      game.remove();
       toast.info("You have been kicked from the game");
       navigate("/");
     }

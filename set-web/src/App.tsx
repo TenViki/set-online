@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserType } from "./types/User.type";
 import { TokenManager } from "./utils/tokenManager";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { getUser } from "./api/auth";
 import { GameType } from "./types/Game.type";
 import { io, Socket } from "socket.io-client";

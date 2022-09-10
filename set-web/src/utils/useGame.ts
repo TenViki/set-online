@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { getGameByUser } from "../api/game";
 import { GameContext, UserContext } from "../App";
 import { ApiError } from "../types/Api.type";
@@ -19,11 +19,19 @@ export const useGame = () => {
     }
   }, [game, fetchedGame]);
 
+  const queryClient = useQueryClient();
+
+  const remove = () => {
+    queryClient.removeQueries("game");
+    game.setGame(null);
+  };
+
   return {
     loading: game.game ? false : fetchedGame.isLoading,
     game: game.game || fetchedGame.data,
     error: fetchedGame.error as ApiError,
     socket: game.socket,
     setGame: game.setGame,
+    remove,
   };
 };
