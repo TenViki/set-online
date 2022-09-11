@@ -30,6 +30,12 @@ const Game = () => {
     }
   };
 
+  const handleDeleted = () => {
+    toast.info("Game has been deleted");
+    game.remove();
+    navigate("/");
+  };
+
   const handleJoin = (user: UserLowType) => {
     game.setGame((prevGame) => {
       if (prevGame) {
@@ -47,11 +53,13 @@ const Game = () => {
     game.socket?.on("kick", handleKick);
     game.socket?.on("join", handleJoin);
     game.socket?.on("leave", handleKick);
+    game.socket?.on("deleted", handleDeleted);
 
     return () => {
       game.socket?.off("kick", handleKick);
       game.socket?.off("join", handleJoin);
       game.socket?.off("leave", handleKick);
+      game.socket?.off("deleted", handleDeleted);
     };
   }, [game.socket, user]);
 

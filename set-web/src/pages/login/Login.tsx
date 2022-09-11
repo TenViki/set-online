@@ -57,7 +57,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const [overlayActive, setOverlayActive] = useState(false);
 
   useEffect(() => {
-    const socket = io("http://localhost:7000/auth");
+    const socket = io("http://10.0.0.16:7000/auth");
     setSocket(socket);
 
     socket.on("connect", () => {

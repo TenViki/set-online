@@ -92,6 +92,7 @@ export class GamesService {
 
     if (user.id === game.host.id) {
       this.gameRepo.delete(game.id);
+      this.gamesGateway.sendToGame(game.id, "deleted");
       return;
     }
 
