@@ -39,25 +39,22 @@
   bottom: 0;
   right: 1rem;
   background-color: #f1f1f1;
-  transition: $darkModeTransition color, $darkModeTransition background-color, 0.3s transform;
+  transition: $darkModeTransition color, $darkModeTransition background-color;
   padding: 0.5rem;
-  transform: translateY(3rem);
+  // transform: translateY(3rem);
   border-radius: 0.3rem 0.3rem 0 0;
+  min-width: 8rem;
 
-  &-ping,
-  &-value {
+  &-ping {
     display: flex;
     justify-content: space-between;
-    color: #777;
-
-    span {
-      margin-left: 0.5rem;
-      color: #000;
-    }
   }
 
-  &:hover {
-    transform: translateY(0);
+  &-chart {
+    height: 2rem;
+    canvas {
+      height: 2rem !important;
+    }
   }
 }
 

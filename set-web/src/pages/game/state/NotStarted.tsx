@@ -53,12 +53,6 @@ const NotStarted: FC<NotStartedProps> = ({ game }) => {
           <div className="game-lobby-ping-ping text ">
             Ping: <span className="text">{ping.ping} ms</span>
           </div>
-          <div className="game-lobby-ping-value text">
-            Client -&gt; Server: <span className="text">{ping.clientToServer} ms</span>
-          </div>
-          <div className="game-lobby-ping-value text">
-            Server -&gt; Client: <span className="text"> {ping.clientToServer} ms</span>
-          </div>
         </div>
       </div>
 

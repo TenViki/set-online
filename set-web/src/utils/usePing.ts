@@ -5,8 +5,6 @@ export const usePing = () => {
   const game = useGame();
   const [ping, setPing] = useState({
     ping: 0,
-    clientToServer: 0,
-    serverToClient: 0,
   });
 
   const handlePing = () => {
@@ -20,10 +18,10 @@ export const usePing = () => {
 
     const interval = setInterval(handlePing, 3000);
     game.socket.on("pong", (data: { timestamp: number; serverTimestamp: number }) => {
-      setPing({
-        ping: Date.now() - data.timestamp,
-        clientToServer: data.serverTimestamp - data.timestamp,
-        serverToClient: Date.now() - data.serverTimestamp,
+      setPing((oldPing) => {
+        return {
+          ping: Date.now() - data.timestamp,
+        };
       });
     });
 
