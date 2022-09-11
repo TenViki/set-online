@@ -6,6 +6,7 @@ import { UserContext } from "../App";
 import { queryClient } from "../main";
 import { UserType } from "../types/User.type";
 import { TokenManager } from "./tokenManager";
+import { useGame } from "./useGame";
 
 export const useUser = ():
   | (UserType & {
@@ -39,12 +40,14 @@ export const useLogout = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useUser();
+  const game = useGame();
 
   return () => {
     queryClient.removeQueries("user");
     TokenManager.removeToken();
     toast.success("Logged out successfully");
     user.setUser(null);
+    game.remove();
     navigate("/login");
   };
 };
