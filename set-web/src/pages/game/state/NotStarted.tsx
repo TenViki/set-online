@@ -50,8 +50,8 @@ const NotStarted: FC<NotStartedProps> = ({ game }) => {
           </div>
         </div>
         <div className="game-lobby-ping">
-          <div className="game-lobby-ping-ping text ">
-            Ping: <span className="text">{ping.ping} ms</span>
+          <div className="game-lobby-ping-ping">
+            <span>Ping:</span> <span>{ping.ping} ms</span>
           </div>
         </div>
       </div>

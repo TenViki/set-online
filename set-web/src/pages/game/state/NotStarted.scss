@@ -39,7 +39,7 @@
   bottom: 0;
   right: 1rem;
   background-color: #f1f1f1;
-  transition: $darkModeTransition color, $darkModeTransition background-color;
+  transition: $darkModeTransition background-color;
   padding: 0.5rem;
   // transform: translateY(3rem);
   border-radius: 0.3rem 0.3rem 0 0;
@@ -48,6 +48,13 @@
   &-ping {
     display: flex;
     justify-content: space-between;
+
+    span {
+      &:first-child {
+        color: #777;
+      }
+      transition: $darkModeTransition color;
+    }
   }
 
   &-chart {
@@ -62,11 +69,12 @@
   .game-lobby-ping {
     background-color: #292929;
 
-    &-ping,
-    &-value {
-      color: #aaa;
-
+    &-ping {
       span {
+        &:first-child {
+          color: #aaa;
+        }
+
         color: #fff;
       }
     }
