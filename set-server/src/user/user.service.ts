@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { User } from "./user.entity";
-import { FindOptionsRelations, Repository } from "typeorm";
+import { FindOptionsRelations, Like, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { defaultRelations } from "src/utils/database.config";
 
@@ -29,5 +29,14 @@ export class UserService {
 
   async saveUser(user: User) {
     return this.userRepo.save(user);
+  }
+
+  async query(q: string) {
+    if (!q) return [];
+    return this.userRepo.find({
+      where: {
+        username: Like(`%${q}%`),
+      },
+    });
   }
 }
