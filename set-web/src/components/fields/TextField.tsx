@@ -11,9 +11,10 @@ interface TextFieldProps {
   onChange: (text: string) => void;
   error?: string;
   color: ColorType;
+  disableAutofill?: boolean;
 }
 
-const TextField: FC<TextFieldProps> = ({ icon: Icon, placeholder, type, value, onChange, error, color }) => {
+const TextField: FC<TextFieldProps> = ({ icon: Icon, placeholder, type, value, onChange, error, color, disableAutofill }) => {
   const [focused, setFocused] = React.useState(false);
 
   return (
@@ -32,6 +33,7 @@ const TextField: FC<TextFieldProps> = ({ icon: Icon, placeholder, type, value, o
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
+          autoComplete={disableAutofill ? "off" : "on"}
         />
       </div>
 

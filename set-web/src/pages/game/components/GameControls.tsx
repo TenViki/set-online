@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useState } from "react";
 import { FiChevronRight, FiCopy, FiLink, FiLogOut, FiTrash, FiUserPlus } from "react-icons/fi";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router";
@@ -13,6 +13,7 @@ import { GameType } from "../../../types/Game.type";
 import { useGame } from "../../../utils/useGame";
 import { useUser } from "../../../utils/useUser";
 import "./GameControls.scss";
+import InvitePlayers from "./InvitePlayers";
 
 const GameControls = () => {
   const game = useGame();
@@ -21,6 +22,7 @@ const GameControls = () => {
   const queryClient = useQueryClient();
 
   const { setGame } = useContext(GameContext);
+  const [invitePlayersOpened, setInvitePlayersOpened] = useState(false);
 
   const navigate = useNavigate();
 
@@ -52,7 +54,15 @@ const GameControls = () => {
             loading={leaveGameMutation.isLoading}
             onClick={() => toggle()}
           />
-          <Button color="gray" text="Invite players" leftIcon={FiUserPlus} />
+          <div className="invite-players-wrapper">
+            <Button
+              color="gray"
+              text="Invite players"
+              leftIcon={FiUserPlus}
+              onClick={() => setInvitePlayersOpened(!invitePlayersOpened)}
+            />
+            <InvitePlayers isOpen={invitePlayersOpened} onClose={() => setInvitePlayersOpened(false)} />
+          </div>
           <Button color="gray" text="Copy join link" leftIcon={FiLink} />
           <Button color="gray" text="Copy game code" leftIcon={FiCopy} />
           <div className="lobby-game-code text">

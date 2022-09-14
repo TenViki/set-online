@@ -2,6 +2,7 @@
 
 .lobby-game-controls {
   display: flex;
+  z-index: 1;
 
   &-buttons {
     display: flex;

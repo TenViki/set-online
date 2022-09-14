@@ -18,6 +18,7 @@ export const httpRequest = async <ReturnType>(
   options?: {
     useToken?: boolean;
     data?: any;
+    query?: any;
   }
 ) => {
   const response = await api.request<ReturnType>({
@@ -28,6 +29,7 @@ export const httpRequest = async <ReturnType>(
       "Content-Type": "application/json",
       ...(options?.useToken && { Authorization: TokenManager.getToken() || undefined }),
     },
+    params: options?.query,
   });
   return response.data;
 };

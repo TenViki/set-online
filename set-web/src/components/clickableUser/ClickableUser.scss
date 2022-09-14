@@ -1,0 +1,66 @@
+@import "../../styles/theme.scss";
+
+.user-clickable {
+  cursor: pointer;
+  display: flex;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  transition: 0.3s background-color, color $darkModeTransition;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  font-size: 1rem;
+  align-items: center;
+
+  &:focus-visible,
+  &:hover {
+    background-color: #f1f1f1;
+  }
+
+  &:active {
+    background-color: #d3d3d3;
+  }
+
+  &-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: #000;
+
+      transition: color $darkModeTransition;
+    }
+  }
+}
+
+.dark {
+  .user-clickable {
+    color: #fff;
+
+    &:focus-visible,
+    &:hover {
+      background-color: #3a3a3a;
+    }
+
+    &:active {
+      background-color: #4a4a4a;
+    }
+
+    &-avatar svg {
+      color: #fff;
+    }
+  }
+}

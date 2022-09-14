@@ -1,0 +1,56 @@
+@import "../../../styles/theme.scss";
+
+.invite-players {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(calc(-100% + 1rem));
+  top: 0;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+
+  background-color: #e1e1e1;
+  border-radius: 0.5rem;
+
+  transition: $darkModeTransition background-color, 0.3s transform, 0.3s opacity, 0.3s visibility;
+  z-index: 0;
+
+  &-wrapper {
+    position: relative;
+  }
+
+  &-header {
+    display: flex;
+    & > *:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+
+    padding: 0.5rem 0.5rem 0 0.5rem;
+  }
+
+  &-search {
+    height: 15rem;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 0.5rem;
+
+    .error {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+    }
+  }
+
+  &.opened {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(calc(-100% - 1rem));
+  }
+}
+
+.dark .invite-players {
+  background-color: #303030;
+}
