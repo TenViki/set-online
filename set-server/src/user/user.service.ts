@@ -37,6 +37,10 @@ export class UserService {
       where: {
         username: Like(`%${q}%`),
       },
+      order: {
+        username: "DESC",
+      },
+      take: 5,
     });
   }
 }
