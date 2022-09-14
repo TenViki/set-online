@@ -10,6 +10,7 @@ import Modal, { useModal } from "../../../components/modal/Modal";
 import ModalButtons from "../../../components/modal/ModalButtons";
 import { ApiError } from "../../../types/Api.type";
 import { GameType } from "../../../types/Game.type";
+import { copyToClipboard } from "../../../utils/copy.util";
 import { useGame } from "../../../utils/useGame";
 import { useUser } from "../../../utils/useUser";
 import "./GameControls.scss";
@@ -63,8 +64,24 @@ const GameControls = () => {
             />
             <InvitePlayers isOpen={invitePlayersOpened} onClose={() => setInvitePlayersOpened(false)} />
           </div>
-          <Button color="gray" text="Copy join link" leftIcon={FiLink} />
-          <Button color="gray" text="Copy game code" leftIcon={FiCopy} />
+          <Button
+            color="gray"
+            text="Copy join link"
+            leftIcon={FiLink}
+            onClick={() => {
+              copyToClipboard(window.location.href + "/join/" + game.game?.code);
+              toast.success("Copied to clipboard");
+            }}
+          />
+          <Button
+            color="gray"
+            text="Copy game code"
+            leftIcon={FiCopy}
+            onClick={() => {
+              copyToClipboard(game.game?.code + "");
+              toast.success("Copied to clipboard");
+            }}
+          />
           <div className="lobby-game-code text">
             Game code:
             <span>{game.game?.code}</span>
