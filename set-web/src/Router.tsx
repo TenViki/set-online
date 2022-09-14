@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router";
 import DiscordRedirect from "./pages/auth/DiscordRedirect";
 import GoogleRedirect from "./pages/auth/GoogleRedirect";
 import Game from "./pages/game/Game";
+import JoinGame from "./pages/game/JoinGame";
 import GamesPage from "./pages/games/GamesPage";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
@@ -21,6 +22,7 @@ const Router = () => {
 
       <Route path="/play" element={<GamesPage />} />
       <Route path="/game" element={<Game />} />
+      <Route path="/game/join/:code" element={<JoinGame />} />
 
       <Route path="/profile/*" element={<Profile />} />
 
