@@ -11,6 +11,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { getUser } from "./api/auth";
 import { GameType } from "./types/Game.type";
 import { io, Socket } from "socket.io-client";
+import InvitePopup from "./components/invite-popup/InvitePopup";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -107,6 +108,7 @@ function App() {
               <Router />
             </main>
             <ToastContainer theme={darkMode ? "dark" : "light"} />
+            <InvitePopup />
           </div>
         </GameContext.Provider>
       </UserContext.Provider>

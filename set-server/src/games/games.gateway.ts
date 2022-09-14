@@ -60,4 +60,8 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   sendToGame(gameId: string, event: string, data?: any) {
     this.server.to(`game:${gameId}`).emit(event, data);
   }
+
+  sendToUser(userId: string, event: string, data?: any) {
+    this.server.to(`user:${userId}`).emit(event, data);
+  }
 }

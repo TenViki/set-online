@@ -1,0 +1,40 @@
+@import "../../styles/theme.scss";
+
+.invite-popup {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  padding: 1rem;
+  background-color: #e1e1e1;
+  z-index: 20;
+  border-radius: 0.5rem;
+
+  transform: translateY(calc(100% + 1rem));
+
+  &-buttons {
+    display: flex;
+
+    & > *:not(:last-child) {
+      margin-right: 1rem;
+    }
+
+    .button {
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+  }
+
+  &-text {
+    margin-bottom: 1rem;
+  }
+
+  transition: $darkModeTransition background-color, $darkModeTransition color, 0.35s transform;
+
+  &.opened {
+    transform: translateY(0);
+  }
+}
+
+.dark .invite-popup {
+  background-color: #303030;
+}

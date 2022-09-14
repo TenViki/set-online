@@ -20,3 +20,7 @@ export const leaveGameRequest = () => {
 export const kickPlayerRequest = (id: string) => {
   return httpRequest(`/games/user/${id}`, "delete", { useToken: true });
 };
+
+export const invitePlayerRequest = (id: string) => {
+  return httpRequest(`/games/invite/${id}`, "post", { useToken: true });
+};

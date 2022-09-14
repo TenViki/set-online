@@ -116,4 +116,18 @@ export class GamesService {
 
     this.gamesGateway.sendToGame(game.id, "kick", id);
   }
+
+  async invite(user: User, id: string) {
+    const game = await this.getGameByUser(user);
+
+    if (!game) throw new NotFoundException("User not in game");
+    if (user.id !== game.host.id) throw new BadRequestException("Only host can invite");
+
+    this.gamesGateway.sendToUser(id, "invite", {
+      game,
+      user: {
+        username: user.username,
+      },
+    });
+  }
 }

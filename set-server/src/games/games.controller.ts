@@ -44,4 +44,10 @@ export class GamesController {
   async kick(@CurrentUser() user: User, @Param("id") id: string) {
     return this.gamesService.kick(user, id);
   }
+
+  @Post("/invite/:id")
+  @UseGuards(AuthGuard)
+  async invite(@CurrentUser() user: User, @Param("id") id: string) {
+    return this.gamesService.invite(user, id);
+  }
 }
