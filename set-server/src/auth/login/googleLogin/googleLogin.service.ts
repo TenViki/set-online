@@ -9,6 +9,8 @@ import { GoogleUserResponse } from "src/utils/types/google.types";
 import { BadRequestException } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
 import { Credentials } from "google-auth-library/build/src/auth/credentials";
+import axios from "axios";
+import * as fs from "fs/promises";
 
 @Injectable()
 export class GoogleLoginService {
@@ -47,17 +49,21 @@ export class GoogleLoginService {
     const googleLogin = await this.googleLoginRepo.findOne({ where: { id: identifier }, relations: ["user"] });
     if (!googleLogin) throw new BadRequestException("Google login not found");
 
-    console.log("Google Login: ", googleLogin.googleId);
-
     const user = await this.userService.getUser({ username });
-    console.log("User: ", user);
     if (user || googleLogin.user) throw new BadRequestException("Username already taken");
 
     const userInfo = await this.getUser(googleLogin);
+
+    let avatarId: string;
+    try {
+      if (userInfo.picture) avatarId = await this.downloadAvatar(userInfo.picture, userInfo.id);
+    } catch {}
+
     const newUser = this.userService.createUser({
       username,
       email: userInfo.email,
       googleLogin,
+      avatar: avatarId,
     });
 
     return newUser;
@@ -151,5 +157,15 @@ export class GoogleLoginService {
       identifier: savedGoogleLogin.id,
       suggestedUsername: data.name,
     };
+  }
+
+  async downloadAvatar(picture: string, userId: string) {
+    const buffer = await axios.get(picture, { responseType: "arraybuffer" });
+
+    const filename = userId;
+
+    await fs.writeFile(`./files/avatars/${filename}.png`, buffer.data);
+
+    return filename;
   }
 }
