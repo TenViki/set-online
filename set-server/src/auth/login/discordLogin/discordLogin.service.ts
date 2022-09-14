@@ -180,14 +180,14 @@ export class DiscordLoginService {
     }
   }
 
-  async downloadAvatar(avatarId: string, userId: string) {
+  async downloadAvatar(avatarId: string, discordUserId: string) {
     if (!avatarId) return;
 
-    const response = await axios.get(`https://cdn.discordapp.com/avatars/${userId}/${avatarId}.png`, {
+    const response = await axios.get(`https://cdn.discordapp.com/avatars/${discordUserId}/${avatarId}.png`, {
       responseType: "arraybuffer",
     });
 
-    const filename = v4();
+    const filename = discordUserId;
 
     const avatarPath = `files/avatars/${filename}.png`;
     await fs.writeFile(avatarPath, response.data);
