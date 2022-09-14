@@ -21,6 +21,9 @@ export class User {
   })
   sessions: Session[];
 
+  @Column({ nullable: true })
+  avatar: string | null;
+
   @JoinColumn()
   @OneToOne(() => PasswordLogin, (passwordLogin) => passwordLogin.user, { onDelete: "SET NULL" })
   passwordLogin: PasswordLogin;

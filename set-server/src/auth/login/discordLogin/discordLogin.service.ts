@@ -9,6 +9,8 @@ import { DiscordTokenResponse, DiscordUserResponse } from "src/utils/types/disco
 import { Repository } from "typeorm";
 import { DiscordLogin } from "./discordLogin.entity";
 import { URLSearchParams } from "url";
+import * as fs from "fs/promises";
+import { v4 } from "uuid";
 
 @Injectable()
 export class DiscordLoginService {
@@ -93,7 +95,13 @@ export class DiscordLoginService {
 
     const discordUser = await this.getUser(discordLogin);
 
-    user = await this.userService.createUser({ username, discordLogin, email: discordUser.email });
+    let avatarId: string;
+
+    try {
+      if (discordUser.avatar) avatarId = await this.downloadAvatar(discordUser.avatar, discordUser.id);
+    } catch {}
+
+    user = await this.userService.createUser({ username, discordLogin, email: discordUser.email, avatar: avatarId });
     return user;
   }
 
@@ -170,5 +178,20 @@ export class DiscordLoginService {
         suggestedUsername: discordUser.username,
       };
     }
+  }
+
+  async downloadAvatar(avatarId: string, userId: string) {
+    if (!avatarId) return;
+
+    const response = await axios.get(`https://cdn.discordapp.com/avatars/${userId}/${avatarId}.png`, {
+      responseType: "arraybuffer",
+    });
+
+    const filename = v4();
+
+    const avatarPath = `files/avatars/${filename}.png`;
+    await fs.writeFile(avatarPath, response.data);
+
+    return filename;
   }
 }
