@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect } from "react";
+import React, { CSSProperties, useEffect, useRef } from "react";
 import CardRenderer from "../../../components/card-renderer/CardRenderer";
 import { idToCard } from "../../../utils/deck.util";
 import { useGame } from "../../../utils/useGame";
@@ -10,11 +10,12 @@ const InProgress = () => {
   const { game } = useGame();
   const user = useUser();
 
+  const cardWrapperRef = useRef<HTMLDivElement>(null);
+
   const [selectedCards, setSelectedCards] = React.useState<string[]>([]);
+  const [shiftPressed, setShiftPressed] = React.useState(false);
 
-  if (!game || !user.isLoggedIn) return null;
-
-  console.log(game);
+  if (!game || !user.isLoggedIn || !game.laidOut) return null;
 
   useEffect(() => {
     if (!selectedCards.length) return;
@@ -22,9 +23,89 @@ const InProgress = () => {
     if (selectedCards.length === 3) setTimeout(() => setSelectedCards([]), 300);
   }, [selectedCards]);
 
+  const rowLength = game.laidOut.length / 3;
+  const keyMap: { [s: string]: number | null } = {
+    "7": 0,
+    "8": 1,
+    "9": 2,
+
+    "4": rowLength,
+    "5": rowLength + 1,
+    "6": rowLength + 2,
+
+    "1": rowLength * 2,
+    "2": rowLength * 2 + 1,
+    "3": rowLength * 2 + 2,
+
+    Home: rowLength > 3 ? 3 : null,
+    ArrowUp: rowLength > 4 ? 4 : null,
+    PageUp: rowLength > 5 ? 5 : null,
+
+    ArrowLeft: rowLength > 3 ? rowLength + 3 : null,
+    Clear: rowLength > 4 ? rowLength + 4 : null,
+    ArrowRight: rowLength > 5 ? rowLength + 5 : null,
+
+    End: rowLength > 3 ? rowLength * 2 + 3 : null,
+    ArrowDown: rowLength > 4 ? rowLength * 2 + 4 : null,
+    PageDown: rowLength > 5 ? rowLength * 2 + 5 : null,
+  };
+
+  useEffect(() => {
+    // on shift press
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Shift") setShiftPressed(true);
+
+      // if keypad 1-9 is pressed
+      // if (e.key >= "1" && e.key <= "9") {
+      if (e.key in keyMap) {
+        if (!game.laidOut) return;
+        const index = keyMap[e.key];
+        if (index === null) return;
+        const card = game.laidOut[index];
+
+        if (selectedCards.includes(card)) {
+          setSelectedCards((prev) => prev.filter((c) => c !== card));
+        } else {
+          setSelectedCards((prev) => [...prev, card]);
+        }
+      } else {
+        console.log(e.key);
+      }
+      // }
+    };
+
+    // on shift release
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "Shift") setShiftPressed(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [selectedCards]);
+
   return (
     <div className="game-wrapper">
-      <div className="game-cards" style={{ "--columns": (game.laidOut?.length || 0) / 3 } as CSSProperties}>
+      <div
+        className={`game-keyboard-selector ${shiftPressed && "active"}`}
+        style={
+          {
+            "--x": cardWrapperRef.current?.offsetLeft + "px",
+            "--y": cardWrapperRef.current?.offsetTop + "px",
+          } as CSSProperties
+        }
+      >
+        {new Array(9).fill(0).map((_, i) => {
+          const colId = (i % 3) + 1;
+          const shown = ((game.laidOut?.length || 0) - 9) / 3 >= colId;
+          return <div key={i} className={`game-keyboard-selector-item ${shown && "active"}`} />;
+        })}
+      </div>
+      <div className="game-cards" style={{ "--columns": (game.laidOut?.length || 0) / 3 } as CSSProperties} ref={cardWrapperRef}>
         {game.laidOut?.map((card, i) => (
           <div
             className={`game-card-wrapper ${selectedCards.includes(card) && "active"}`}

@@ -13,6 +13,7 @@
   display: flex;
   flex-grow: 1;
   align-items: center;
+  position: relative;
 }
 
 .game-players {
@@ -50,6 +51,47 @@
     &:active,
     &.active {
       border-color: #444;
+    }
+  }
+}
+
+.game-keyboard-selector {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+
+  display: grid;
+  gap: 0.2rem;
+  opacity: 0;
+
+  transition: 0.3s;
+  transform: translateX(calc(50% + 0.2rem));
+
+  pointer-events: none;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  &-item {
+    width: calc(7rem + 1.2rem);
+    height: calc(7rem * (3 / 2) + 1.2rem);
+    border: 0.4rem solid #ddd;
+    border-radius: 0.8rem;
+
+    &:not(.active) {
+      opacity: 0;
+    }
+  }
+
+  &.active {
+    transform: translateX(calc(100% + 0.2rem));
+    opacity: 1;
+  }
+}
+
+.dark {
+  .game-keyboard-selector {
+    &-item {
+      border-color: #333;
     }
   }
 }
