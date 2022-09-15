@@ -73,6 +73,13 @@ export class GamesService {
       throw new NotFoundException("Game is full");
     }
 
+    // Check if the user is already in a game
+    const userGame = await this.getGameByUser(user);
+
+    if (userGame) {
+      await this.leave(user);
+    }
+
     // join user to game
     game.players.push(user);
 
