@@ -30,4 +30,8 @@ export class GameDto {
 
   @Expose()
   public: boolean;
+
+  @Expose()
+  @Transform(({ value }) => (value ? value.split(",") : null))
+  laidOut: string[] | null;
 }

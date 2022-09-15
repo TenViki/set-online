@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { GameStatus, UserLowType } from "../../types/Game.type";
 import { useGame } from "../../utils/useGame";
 import { useUser } from "../../utils/useUser";
+import InProgress from "./state/InProgress";
 import NotStarted from "./state/NotStarted";
 
 const Game = () => {
@@ -82,6 +83,7 @@ const Game = () => {
   }, [game.socket, user]);
 
   if (game.game?.status === GameStatus.NOT_STARTED) return <NotStarted game={game.game} />;
+  if (game.game?.status === GameStatus.IN_PROGRESS) return <InProgress />;
 
   return <div>Game</div>;
 };

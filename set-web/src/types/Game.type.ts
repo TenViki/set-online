@@ -8,6 +8,8 @@ export interface GameType {
   host: UserLowType;
   limit: number;
   public: boolean;
+  deck: string[] | null;
+  laidOut: string[] | null;
 }
 export interface UserLowType {
   id: string;

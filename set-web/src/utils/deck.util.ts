@@ -30,3 +30,12 @@ const getThirdValue = (a: number, b: number) => {
 
   return 6 - a - b;
 };
+
+export const idToCard = (id: string): CardProps => {
+  return {
+    count: Number(id[0]),
+    color: "rpg".indexOf(id[1]) + 1,
+    fill: "fhe".indexOf(id[2]) + 1,
+    shape: "orw".indexOf(id[3]) + 1,
+  };
+};
