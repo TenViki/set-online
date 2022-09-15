@@ -28,7 +28,12 @@ const InProgress = () => {
         {game.laidOut?.map((card, i) => (
           <div
             className={`game-card-wrapper ${selectedCards.includes(card) && "active"}`}
-            onClick={() => setSelectedCards((prev) => [...prev, card])}
+            onClick={() => {
+              if (selectedCards.includes(card)) return setSelectedCards(selectedCards.filter((c) => c !== card));
+              if (selectedCards.length === 3) return;
+
+              setSelectedCards((prev) => [...prev, card]);
+            }}
           >
             <CardRenderer key={i} props={idToCard(card)} />
           </div>
