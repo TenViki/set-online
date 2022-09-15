@@ -3,6 +3,7 @@ import { Inject } from "@nestjs/common/decorators";
 import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/user/user.entity";
+import { generateDeck, shuffleDeck } from "src/utils/cards.utils";
 import { Repository } from "typeorm";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
@@ -137,6 +138,29 @@ export class GamesService {
       user: {
         username: user.username,
       },
+    });
+  }
+
+  async start(user: User) {
+    const game = await this.getGameByUser(user);
+
+    if (!game) throw new NotFoundException("User not in game");
+    if (user.id !== game.host.id) throw new BadRequestException("Only host can start");
+    if (game.players.length < 2) throw new BadRequestException("Not enough players");
+
+    game.status = GameStatus.IN_PROGRESS;
+
+    const deck = shuffleDeck(generateDeck());
+
+    const laidOut = deck.slice(0, 12);
+
+    game.deck = deck.join(",");
+    game.laidOut = laidOut.join(",");
+
+    this.gameRepo.save(game);
+
+    this.gamesGateway.sendToGame(game.id, "start", {
+      laidOut: laidOut,
     });
   }
 }

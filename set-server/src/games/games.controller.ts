@@ -50,4 +50,10 @@ export class GamesController {
   async invite(@CurrentUser() user: User, @Param("id") id: string) {
     return this.gamesService.invite(user, id);
   }
+
+  @Post("/start")
+  @UseGuards(AuthGuard)
+  async start(@CurrentUser() user: User) {
+    return this.gamesService.start(user);
+  }
 }
