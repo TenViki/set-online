@@ -103,7 +103,13 @@ export class AuthService {
         break;
     }
 
-    const session = await this.sessionService.createSession(user, loginDto.loginType, userAgent, ip, loginDto.rememberMe);
+    const session = await this.sessionService.createSession(
+      user,
+      loginDto.loginType,
+      userAgent,
+      ip,
+      loginDto.loginType === LoginType.PASSWORD ? loginDto.rememberMe : true,
+    );
     const token = this.sessionService.createToken(session);
 
     this.authGateway.sendLoginSuccess(loginDto.state, user);
