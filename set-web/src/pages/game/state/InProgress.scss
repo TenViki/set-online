@@ -3,5 +3,20 @@
   display: grid;
   grid-template-columns: repeat(var(--columns), 1fr);
   width: fit-content;
-  gap: 1rem;
+  gap: 1.5rem;
+  align-self: center;
+}
+
+.game-wrapper {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.game-players {
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  padding: 1rem 0;
 }
