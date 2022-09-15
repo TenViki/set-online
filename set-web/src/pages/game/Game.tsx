@@ -48,18 +48,36 @@ const Game = () => {
     });
   };
 
+  const handleStart = (data: { laidOut: string[] }) => {
+    game.setGame((prevGame) => {
+      if (prevGame) {
+        return {
+          ...prevGame,
+          laidOut: data.laidOut,
+          status: GameStatus.IN_PROGRESS,
+        };
+      }
+      return null;
+    });
+
+    toast.info("Game has started");
+    console.log(data.laidOut);
+  };
+
   useEffect(() => {
     if (!game.game || !user.isLoggedIn) return;
     game.socket?.on("kick", handleKick);
     game.socket?.on("join", handleJoin);
     game.socket?.on("leave", handleKick);
     game.socket?.on("deleted", handleDeleted);
+    game.socket?.on("start", handleStart);
 
     return () => {
       game.socket?.off("kick", handleKick);
       game.socket?.off("join", handleJoin);
       game.socket?.off("leave", handleKick);
       game.socket?.off("deleted", handleDeleted);
+      game.socket?.off("start", handleStart);
     };
   }, [game.socket, user]);
 

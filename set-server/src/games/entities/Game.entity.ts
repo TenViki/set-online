@@ -1,5 +1,4 @@
 import { User } from "src/user/user.entity";
-import { Card } from "src/utils/cards.utils";
 import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export enum GameStatus {
@@ -28,7 +27,7 @@ export class Game {
   @OneToMany(() => User, (user) => user.game)
   players: User[];
 
-  @OneToOne(() => User, (user) => user.hosting) S;
+  @OneToOne(() => User, (user) => user.hosting)
   host: User;
 
   @Column()

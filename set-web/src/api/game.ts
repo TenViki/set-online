@@ -24,3 +24,7 @@ export const kickPlayerRequest = (id: string) => {
 export const invitePlayerRequest = (id: string) => {
   return httpRequest(`/games/invite/${id}`, "post", { useToken: true });
 };
+
+export const startGameRequest = () => {
+  return httpRequest("/games/start", "post", { useToken: true });
+};

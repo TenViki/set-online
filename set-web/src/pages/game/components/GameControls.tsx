@@ -3,7 +3,7 @@ import { FiChevronRight, FiCopy, FiLink, FiLogOut, FiTrash, FiUserPlus } from "r
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { leaveGameRequest } from "../../../api/game";
+import { leaveGameRequest, startGameRequest } from "../../../api/game";
 import { GameContext } from "../../../App";
 import Button from "../../../components/button/Button";
 import Modal, { useModal } from "../../../components/modal/Modal";
@@ -25,7 +25,7 @@ const GameControls = () => {
   const { setGame } = useContext(GameContext);
   const [invitePlayersOpened, setInvitePlayersOpened] = useState(false);
 
-  const navigate = useNavigate();
+  const startGameMutation = useMutation(startGameRequest);
 
   const leaveGameMutation = useMutation(leaveGameRequest, {
     onSuccess: () => {
@@ -88,7 +88,15 @@ const GameControls = () => {
           </div>
         </div>
         <div className="lobby-game-controls-start">
-          <Button color="success" text="Start game" rightIcon={FiChevronRight} />
+          <Button
+            color="success"
+            text="Start game"
+            rightIcon={FiChevronRight}
+            onClick={() => {
+              startGameMutation.mutate();
+            }}
+            loading={startGameMutation.isLoading}
+          />
         </div>
 
         <Modal toggle={toggle} isOpen={isOpen} title="Really?">
