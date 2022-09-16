@@ -39,3 +39,7 @@ export const idToCard = (id: string): CardProps => {
     shape: "orw".indexOf(id[3]) + 1,
   };
 };
+
+export const wait = async (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
