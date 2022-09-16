@@ -72,8 +72,6 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const user = await this.socketAuthService.getUser(socket);
     const game = await this.gamesService.getGameByUser(user);
 
-    console.log(data);
-
     try {
       await this.gamesService.handleSet(user, data);
     } catch (error: any) {
