@@ -2,9 +2,11 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { Inject } from "@nestjs/common/decorators";
 import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
+import { WsException } from "@nestjs/websockets/errors";
 import { User } from "src/user/user.entity";
 import { generateDeck, shuffleDeck } from "src/utils/cards.utils";
 import { Repository } from "typeorm";
+import { isSet } from "util/types";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
 import { GamesGateway } from "./games.gateway";
@@ -161,6 +163,31 @@ export class GamesService {
 
     this.gamesGateway.sendToGame(game.id, "start", {
       laidOut: laidOut,
+    });
+  }
+
+  async handleSet(user: User, set: string[]) {
+    const game = await this.getGameByUser(user);
+
+    if (!game || game.status !== GameStatus.IN_PROGRESS || set.length !== 3) {
+      return;
+    }
+
+    // check if really a set
+    if (!isSet(set)) {
+      throw new Error("Not a set");
+    }
+
+    // remove set from laid out cards
+    const laidOut = game.laidOut.split(",").filter((card) => !set.includes(card));
+
+    game.laidOut = laidOut.join(",");
+
+    await this.gameRepo.save(game);
+
+    this.gamesGateway.sendToGame(game.id, "set", {
+      laidOut: laidOut,
+      set: set,
     });
   }
 }

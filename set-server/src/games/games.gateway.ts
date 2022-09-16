@@ -10,11 +10,13 @@ import {
   WebSocketGateway,
 } from "@nestjs/websockets";
 import { WebSocketServer } from "@nestjs/websockets/decorators";
+import { WsException } from "@nestjs/websockets/errors";
 import { Server, Socket } from "socket.io";
 import { SocketAuthService } from "src/socket/socket-auth.service";
 import { User } from "src/user/user.entity";
 import { CurrentUser } from "src/utils/decorators/current-user.decorator";
 import { AuthGuard } from "src/utils/guards/auth.guard";
+import { GameStatus } from "./entities/Game.entity";
 import { GamesService } from "./games.service";
 @WebSocketGateway({ namespace: "games", cors: true })
 export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -63,5 +65,16 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   sendToUser(userId: string, event: string, data?: any) {
     this.server.to(`user:${userId}`).emit(event, data);
+  }
+
+  @SubscribeMessage("set")
+  async handleSet(@ConnectedSocket() socket: Socket, @MessageBody("cards") data: string[]) {
+    const user = await this.socketAuthService.getUser(socket);
+
+    try {
+      await this.gamesService.handleSet(user, data);
+    } catch (error: any) {
+      throw new WsException(error.message);
+    }
   }
 }
