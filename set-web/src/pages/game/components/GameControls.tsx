@@ -96,6 +96,7 @@ const GameControls = () => {
               startGameMutation.mutate();
             }}
             loading={startGameMutation.isLoading}
+            disabled={game.game?.players.length < 2}
           />
         </div>
 
