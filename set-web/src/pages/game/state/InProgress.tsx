@@ -13,7 +13,6 @@ const InProgress = () => {
   const cardWrapperRef = useRef<HTMLDivElement>(null);
 
   const [selectedCards, setSelectedCards] = React.useState<string[]>([]);
-  const [shiftPressed, setShiftPressed] = React.useState(false);
 
   if (!game || !user.isLoggedIn || !game.laidOut) return null;
 
@@ -51,10 +50,7 @@ const InProgress = () => {
   };
 
   useEffect(() => {
-    // on shift press
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Shift") setShiftPressed(true);
-
       // if keypad 1-9 is pressed
       // if (e.key >= "1" && e.key <= "9") {
       if (e.key in keyMap) {
@@ -62,6 +58,8 @@ const InProgress = () => {
         const index = keyMap[e.key];
         if (index === null) return;
         const card = game.laidOut[index];
+
+        if (selectedCards.length >= 3) return;
 
         if (selectedCards.includes(card)) {
           setSelectedCards((prev) => prev.filter((c) => c !== card));
@@ -74,37 +72,15 @@ const InProgress = () => {
       // }
     };
 
-    // on shift release
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "Shift") setShiftPressed(false);
-    };
-
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
     };
   }, [selectedCards]);
 
   return (
     <div className="game-wrapper">
-      <div
-        className={`game-keyboard-selector ${shiftPressed && "active"}`}
-        style={
-          {
-            "--x": cardWrapperRef.current?.offsetLeft + "px",
-            "--y": cardWrapperRef.current?.offsetTop + "px",
-          } as CSSProperties
-        }
-      >
-        {new Array(9).fill(0).map((_, i) => {
-          const colId = (i % 3) + 1;
-          const shown = ((game.laidOut?.length || 0) - 9) / 3 >= colId;
-          return <div key={i} className={`game-keyboard-selector-item ${shown && "active"}`} />;
-        })}
-      </div>
       <div className="game-cards" style={{ "--columns": (game.laidOut?.length || 0) / 3 } as CSSProperties} ref={cardWrapperRef}>
         {game.laidOut?.map((card, i) => (
           <div
