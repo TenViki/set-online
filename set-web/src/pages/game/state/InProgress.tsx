@@ -54,18 +54,9 @@ const InProgress = () => {
       movingCardsObj[card] = freeSlot;
     }
 
-    // if (!sCards.includes(card1)) movingCardsObj[card1] = freeSlots[0]!;
-
-    // if (!sCards.includes(card1) && game.laidOut.indexOf(sCards[0]) < game.laidOut.length - 3)
-    //   movingCardsObj[card1] = game.laidOut.indexOf(sCards[0]);
-    // if (!sCards.includes(card2) && game.laidOut.indexOf(sCards[1]) < game.laidOut.length - 3)
-    //   movingCardsObj[card2] = game.laidOut.indexOf(sCards[1]);
-    // if (!sCards.includes(card3) && game.laidOut.indexOf(sCards[2]) < game.laidOut.length - 3)
-    //   movingCardsObj[card3] = game.laidOut.indexOf(sCards[2]);
-
     setMovingCards(movingCardsObj);
 
-    await wait(1000);
+    await wait(300);
     setGame((game) => {
       if (!game) return null;
 
