@@ -62,7 +62,7 @@ const InProgress = () => {
 
       const newLaidOut = game.laidOut;
       if (newLaidOut) {
-        newLaidOut.splice(newLaidOut.length - 3, 3);
+        // newLaidOut.splice(newLaidOut.length - 3, 3);
 
         for (const card in movingCardsObj) {
           newLaidOut[movingCardsObj[card]] = card;
@@ -72,6 +72,17 @@ const InProgress = () => {
       return {
         ...game,
         laidOut: newLaidOut ?? null,
+      };
+    });
+
+    await wait(100);
+
+    setGame((game) => {
+      if (!game) return null;
+
+      return {
+        ...game,
+        laidOut: game.laidOut?.slice(0, game.laidOut.length - 3) ?? null,
       };
     });
 
