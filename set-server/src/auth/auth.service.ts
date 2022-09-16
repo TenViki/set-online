@@ -123,7 +123,6 @@ export class AuthService {
 
   async verifyToken(token: string) {
     const sessionId = this.sessionService.verifyToken(token);
-    console.log(sessionId);
     if (!sessionId) return null;
 
     const session = await this.sessionService.getSession(sessionId);

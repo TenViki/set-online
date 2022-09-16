@@ -45,7 +45,6 @@ export class GoogleLoginService {
   }
 
   async completeLogin(username: string, identifier: string) {
-    console.log(identifier, username);
     const googleLogin = await this.googleLoginRepo.findOne({ where: { id: identifier }, relations: ["user"] });
     if (!googleLogin) throw new BadRequestException("Google login not found");
 
