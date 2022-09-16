@@ -96,31 +96,36 @@ const InProgress = () => {
     if (selectedCards.length === 3) handleCardSelect();
   }, [selectedCards]);
 
-  const rowLength = game.laidOut.length / 3;
+  useEffect(() => {
+    if (!cardWrapperRef.current) return;
+    setCardsToDisappear([]);
+  }, [cardSlots]);
+
+  const colLength = 3;
   const keyMap: { [s: string]: number | null } = {
     "7": 0,
-    "8": 1,
-    "9": 2,
+    "4": 1,
+    "1": 2,
 
-    "4": rowLength,
-    "5": rowLength + 1,
-    "6": rowLength + 2,
+    "8": colLength,
+    "5": colLength + 1,
+    "2": colLength + 2,
 
-    "1": rowLength * 2,
-    "2": rowLength * 2 + 1,
-    "3": rowLength * 2 + 2,
+    "9": colLength * 2,
+    "6": colLength * 2 + 1,
+    "3": colLength * 2 + 2,
 
-    Home: rowLength > 3 ? 3 : null,
-    ArrowUp: rowLength > 4 ? 4 : null,
-    PageUp: rowLength > 5 ? 5 : null,
+    Home: colLength * 3,
+    ArrowLeft: colLength * 3 + 1,
+    End: colLength * 3 + 2,
 
-    ArrowLeft: rowLength > 3 ? rowLength + 3 : null,
-    Clear: rowLength > 4 ? rowLength + 4 : null,
-    ArrowRight: rowLength > 5 ? rowLength + 5 : null,
+    ArrowUp: colLength * 4,
+    Clear: colLength * 4 + 1,
+    ArrowDown: colLength * 4 + 2,
 
-    End: rowLength > 3 ? rowLength * 2 + 3 : null,
-    ArrowDown: rowLength > 4 ? rowLength * 2 + 4 : null,
-    PageDown: rowLength > 5 ? rowLength * 2 + 5 : null,
+    PagEUp: colLength * 5,
+    ArrowRight: colLength * 5 + 1,
+    PageDown: colLength * 5 + 2,
   };
 
   useEffect(() => {
