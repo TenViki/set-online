@@ -88,6 +88,7 @@ const InProgress = () => {
 
     setCardsToDisappear([]);
     setMovingCards({});
+    setSelectedCards([]);
   };
 
   useEffect(() => {
@@ -135,7 +136,7 @@ const InProgress = () => {
       if (e.key in keyMap) {
         if (!game.laidOut) return;
         const index = keyMap[e.key];
-        if (index === null) return;
+        if (index === null || index >= game.laidOut.length) return;
         const card = game.laidOut[index];
 
         if (selectedCards.length >= 3) return;
@@ -169,22 +170,7 @@ const InProgress = () => {
           const row = Math.floor(i / rowLength);
           const id = column * 3 + row;
 
-          return (
-            <div className="card-slot" ref={(ref) => (cardSlots.current[id] = ref)} key={i}>
-              {id}
-            </div>
-            // <div
-            //   className={`game-card-wrapper ${selectedCards.includes(card) && "active"}`}
-            //   onClick={() => {
-            //     if (selectedCards.includes(card)) return setSelectedCards(selectedCards.filter((c) => c !== card));
-            //     if (selectedCards.length === 3) return;
-
-            //     setSelectedCards((prev) => [...prev, card]);
-            //   }}
-            // >
-            //   <CardRenderer key={i} props={idToCard(card)} />
-            // </div>
-          );
+          return <div className="card-slot" ref={(ref) => (cardSlots.current[id] = ref)} key={i} />;
         })}
       </div>
 
@@ -197,6 +183,7 @@ const InProgress = () => {
             onClick={() => {
               if (selectedCards.includes(card)) return setSelectedCards(selectedCards.filter((c) => c !== card));
               if (selectedCards.length === 3) return;
+              if (Object.keys(movingCards).length) return;
               setSelectedCards((prev) => [...prev, card]);
             }}
             style={
