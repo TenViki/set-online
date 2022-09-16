@@ -25,8 +25,7 @@ const InProgress = () => {
 
   if (!game || !user.isLoggedIn || !game.laidOut) return null;
 
-  const handleCardSelect = async () => {
-    const sCards = selectedCards;
+  const removeCards = async (sCards: string[]) => {
     if (!game.laidOut) return;
     sCards.sort((a, b) => game.laidOut!.indexOf(a) - game.laidOut!.indexOf(b));
 
@@ -89,6 +88,10 @@ const InProgress = () => {
     setCardsToDisappear([]);
     setMovingCards({});
     setSelectedCards([]);
+  };
+
+  const handleCardSelect = async () => {
+    removeCards(selectedCards);
   };
 
   useEffect(() => {
