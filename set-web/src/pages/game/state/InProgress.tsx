@@ -123,7 +123,7 @@ const InProgress = () => {
     Clear: colLength * 4 + 1,
     ArrowDown: colLength * 4 + 2,
 
-    PagEUp: colLength * 5,
+    PageUp: colLength * 5,
     ArrowRight: colLength * 5 + 1,
     PageDown: colLength * 5 + 2,
   };

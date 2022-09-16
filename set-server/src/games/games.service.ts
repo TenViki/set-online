@@ -152,7 +152,7 @@ export class GamesService {
 
     const deck = shuffleDeck(generateDeck());
 
-    const laidOut = deck.slice(0, 12);
+    const laidOut = deck.splice(0, 12);
 
     game.deck = deck.join(",");
     game.laidOut = laidOut.join(",");
