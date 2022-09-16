@@ -28,7 +28,7 @@
   border: 0.4rem solid transparent;
   padding: 0.2rem;
   border-radius: 0.8rem;
-  transition: border-color $darkModeTransition, 0.2s transform, 0s opacity, 0.3s top, 0.3s left;
+  transition: border-color $darkModeTransition, 0.2s transform, 0s opacity, 0.4s top, 0.4s left;
   cursor: pointer;
   position: absolute;
   left: calc(var(--x) * 1px);
@@ -45,8 +45,14 @@
   }
 
   &.disappear {
+    transition: border-color $darkModeTransition, 0.4s transform, 0.2s opacity, 0.4s top, 0.4s left;
+    transform: translateY(calc(-50% + 1.5rem)) scale(0);
+  }
+
+  &.none {
     opacity: 0;
-    transition: border-color $darkModeTransition, 0.2s transform, 0.2s opacity, 0.3s top, 0.3s left;
+    transition: border-color $darkModeTransition, 0s transform, 0s opacity, 0s top, 0s left;
+    transform: translateY(0) scale(1);
   }
 }
 

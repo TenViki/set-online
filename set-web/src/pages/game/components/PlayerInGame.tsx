@@ -9,11 +9,12 @@ interface PlayerInGameProps {
   isHost: boolean;
   isMe: boolean;
   score: number;
+  rf: (element: HTMLDivElement) => void;
 }
 
-const PlayerInGame: FC<PlayerInGameProps> = ({ isHost, isMe, score, user }) => {
+const PlayerInGame: FC<PlayerInGameProps> = ({ isHost, isMe, score, user, rf }) => {
   return (
-    <div className={`game-player ${isMe && "me"} ${isHost && "host"}`}>
+    <div className={`game-player ${isMe && "me"} ${isHost && "host"}`} ref={rf}>
       <div className="game-player-avatar">{user.avatar ? <img src={getAvatar(user.avatar)} alt="avatar" /> : <FiUser />}</div>
 
       <div className="game-player-text">

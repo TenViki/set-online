@@ -12,6 +12,10 @@ type MovingCardsType = {
   [id: string]: number;
 };
 
+type DisappearingCardsType = {
+  [id: string]: string;
+};
+
 // laid out preset: 3ghw,2rfo,2gfr,2pfw,1gfo,3phr,3rer,2rhr,3gfw,1ger,1reo,2rer,2rho,3rhr,3peo,2rhw,1pew,3rfr
 
 const InProgress = () => {
@@ -22,21 +26,31 @@ const InProgress = () => {
   const cardSlots = useRef<{
     [key: string]: HTMLDivElement | null;
   }>({});
+  const playerSlots = useRef<{
+    [key: string]: HTMLDivElement | null;
+  }>({});
 
   const [selectedCards, setSelectedCards] = React.useState<string[]>([]);
-  const [cardsToDisappear, setCardsToDisappear] = React.useState<string[]>([]);
+  const [cardsToDisappear, setCardsToDisappear] = React.useState<DisappearingCardsType>({});
   const [movingCards, setMovingCards] = React.useState<MovingCardsType>({});
+
+  const [noneCards, setNoneCards] = React.useState<string[]>([]);
 
   if (!game || !user.isLoggedIn || !game.laidOut) return null;
 
-  const removeCards = async (sCards: string[]) => {
+  const removeCards = async (sCards: string[], user: string) => {
     if (!game.laidOut) return;
     sCards.sort((a, b) => game.laidOut!.indexOf(a) - game.laidOut!.indexOf(b));
 
     await wait(300);
-    setCardsToDisappear(sCards);
-    setSelectedCards([]);
-    await wait(300);
+    setCardsToDisappear({
+      [sCards[0]]: user,
+      [sCards[1]]: user,
+      [sCards[2]]: user,
+    });
+    await wait(400);
+
+    setNoneCards(sCards);
 
     const movingCardsObj: MovingCardsType = {};
 
@@ -79,6 +93,7 @@ const InProgress = () => {
     });
 
     await wait(100);
+    setNoneCards([]);
 
     setGame((game) => {
       if (!game) return null;
@@ -89,9 +104,8 @@ const InProgress = () => {
       };
     });
 
-    setCardsToDisappear([]);
+    setCardsToDisappear({});
     setMovingCards({});
-    setSelectedCards([]);
   };
 
   const handleCardSelect = async () => {
@@ -108,7 +122,7 @@ const InProgress = () => {
 
   useEffect(() => {
     if (!cardWrapperRef.current) return;
-    setCardsToDisappear([]);
+    setCardsToDisappear({});
   }, [cardSlots]);
 
   const colLength = 3;
@@ -173,7 +187,7 @@ const InProgress = () => {
   };
 
   const handleSet = (data: { user: string; set: string[]; laidOut: string[] }) => {
-    removeCards(data.set);
+    removeCards(data.set, data.user);
   };
 
   useEffect(() => {
@@ -207,8 +221,8 @@ const InProgress = () => {
         {game.laidOut?.map((card, i) => (
           <div
             className={`game-card-wrapper ${selectedCards.includes(card) && "active"} ${
-              cardsToDisappear.includes(card) && "disappear"
-            }`}
+              card in cardsToDisappear && "disappear"
+            } ${noneCards.includes(card) && "none"}`}
             onClick={() => {
               if (selectedCards.includes(card)) return setSelectedCards(selectedCards.filter((c) => c !== card));
               if (selectedCards.length === 3) return;
@@ -217,8 +231,14 @@ const InProgress = () => {
             }}
             style={
               {
-                "--x": cardSlots.current[movingCards[card] ?? i]?.offsetLeft,
-                "--y": cardSlots.current[movingCards[card] ?? i]?.offsetTop,
+                "--x":
+                  card in cardsToDisappear && !noneCards.includes(card)
+                    ? playerSlots.current[cardsToDisappear[card]]?.offsetLeft
+                    : cardSlots.current[movingCards[card] ?? i]?.offsetLeft,
+                "--y":
+                  card in cardsToDisappear && !noneCards.includes(card)
+                    ? playerSlots.current[cardsToDisappear[card]]?.offsetTop
+                    : cardSlots.current[movingCards[card] ?? i]?.offsetTop,
               } as CSSProperties
             }
             key={i}
@@ -236,6 +256,9 @@ const InProgress = () => {
             isHost={player.id === game.host.id}
             isMe={user.id === player.id}
             score={0}
+            rf={(ref) => {
+              playerSlots.current[player.id] = ref;
+            }}
           />
         ))}
       </div>
