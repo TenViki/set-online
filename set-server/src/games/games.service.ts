@@ -4,9 +4,8 @@ import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { WsException } from "@nestjs/websockets/errors";
 import { User } from "src/user/user.entity";
-import { generateDeck, shuffleDeck } from "src/utils/cards.utils";
+import { generateDeck, isSet, shuffleDeck } from "src/utils/cards.utils";
 import { Repository } from "typeorm";
-import { isSet } from "util/types";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
 import { GamesGateway } from "./games.gateway";
@@ -183,11 +182,12 @@ export class GamesService {
 
     game.laidOut = laidOut.join(",");
 
-    await this.gameRepo.save(game);
+    // await this.gameRepo.save(game);
 
-    this.gamesGateway.sendToGame(game.id, "set", {
+    this.gamesGateway.sendToGame(game.id, "set-success", {
       laidOut: laidOut,
       set: set,
+      user: user.id,
     });
   }
 }

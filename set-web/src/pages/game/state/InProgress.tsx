@@ -1,5 +1,7 @@
 import React, { CSSProperties, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 import CardRenderer from "../../../components/card-renderer/CardRenderer";
+import { UserLowType } from "../../../types/Game.type";
 import { idToCard, wait } from "../../../utils/deck.util";
 import { useGame } from "../../../utils/useGame";
 import { useUser } from "../../../utils/useUser";
@@ -10,8 +12,10 @@ type MovingCardsType = {
   [id: string]: number;
 };
 
+// laid out preset: 3ghw,2rfo,2gfr,2pfw,1gfo,3phr,3rer,2rhr,3gfw,1ger,1reo,2rer,2rho,3rhr,3peo,2rhw,1pew,3rfr
+
 const InProgress = () => {
-  const { game, setGame } = useGame();
+  const { game, setGame, socket } = useGame();
   const user = useUser();
 
   const cardWrapperRef = useRef<HTMLDivElement>(null);
@@ -30,7 +34,7 @@ const InProgress = () => {
     sCards.sort((a, b) => game.laidOut!.indexOf(a) - game.laidOut!.indexOf(b));
 
     await wait(300);
-    setCardsToDisappear(selectedCards);
+    setCardsToDisappear(sCards);
     setSelectedCards([]);
     await wait(300);
 
@@ -91,14 +95,16 @@ const InProgress = () => {
   };
 
   const handleCardSelect = async () => {
-    removeCards(selectedCards);
+    if (!socket) return;
+    socket.emit("set", { cards: selectedCards });
+    setSelectedCards([]);
   };
 
   useEffect(() => {
     if (!selectedCards.length) return;
 
     if (selectedCards.length === 3) handleCardSelect();
-  }, [selectedCards]);
+  }, [selectedCards, socket]);
 
   useEffect(() => {
     if (!cardWrapperRef.current) return;
@@ -162,6 +168,26 @@ const InProgress = () => {
     };
   }, [selectedCards]);
 
+  const handleSetError = (data: { user: string }) => {
+    toast.info(`${data.user} failed to set`);
+  };
+
+  const handleSet = (data: { user: string; set: string[]; laidOut: string[] }) => {
+    removeCards(data.set);
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("set-error", handleSetError);
+    socket.on("set-success", handleSet);
+
+    return () => {
+      socket.off("set-error", handleSetError);
+      socket.off("set-success", handleSet);
+    };
+  }, [socket, game.laidOut]);
+
   return (
     <div className="game-wrapper">
       <div className="game-cards" style={{ "--columns": (game.laidOut?.length || 0) / 3 } as CSSProperties} ref={cardWrapperRef}>
@@ -195,6 +221,7 @@ const InProgress = () => {
                 "--y": cardSlots.current[movingCards[card] ?? i]?.offsetTop,
               } as CSSProperties
             }
+            key={i}
           >
             <CardRenderer key={i} props={idToCard(card)} />
           </div>
