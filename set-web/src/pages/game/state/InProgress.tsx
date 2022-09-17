@@ -274,6 +274,7 @@ const InProgress = () => {
             onClick={() => {
               newCardsMutation.mutate();
             }}
+            disabled={game.laidOut.length >= 21}
           />
         </div>
       </div>

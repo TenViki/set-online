@@ -227,13 +227,17 @@ export class GamesService {
     if (game.noSetVotes.split(",").length / game.players.length >= 0.8) {
       const deck = game.deck.split(",");
       const laidOut = game.laidOut.split(",");
+
+      if (deck.length < 3) {
+        throw new BadRequestException("Not enough cards in deck");
+      }
       const newCards = deck.splice(0, 3);
 
       game.deck = deck.join(",");
       game.noSetVotes = "";
       game.laidOut = [...laidOut, ...newCards].join(",");
 
-      this.gamesGateway.sendToGame(game.id, "no-set", {
+      this.gamesGateway.sendToGame(game.id, "new-cards", {
         laidOut: game.laidOut.split(","),
         newCards: newCards,
       });
