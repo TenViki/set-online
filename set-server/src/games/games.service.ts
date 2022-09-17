@@ -182,7 +182,7 @@ export class GamesService {
 
     game.laidOut = laidOut.join(",");
 
-    // await this.gameRepo.save(game);
+    await this.gameRepo.save(game);
 
     this.gamesGateway.sendToGame(game.id, "set-success", {
       laidOut: laidOut,
