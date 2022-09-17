@@ -190,4 +190,49 @@ export class GamesService {
       user: user.id,
     });
   }
+
+  async voteForNoSet(user: User) {
+    const game = await this.getGameByUser(user);
+
+    if (!game || game.status !== GameStatus.IN_PROGRESS) {
+      throw new NotFoundException("Game not found");
+    }
+
+    if (game.laidOut.split(",").length >= 21) {
+      throw new BadRequestException("Max cards laid out");
+    }
+
+    // check if user already voted
+    if (game.noSetVotes.includes(user.id)) {
+      // Remvoe vote
+      game.noSetVotes = game.noSetVotes
+        .split(",")
+        .filter((id) => id !== user.id)
+        .join(",");
+    } else {
+      game.noSetVotes = [...game.noSetVotes.split(","), user.id].join(",");
+    }
+
+    this.gamesGateway.sendToGame(game.id, "no-set-vote", {
+      voted: game.noSetVotes.split(","),
+      treshold: 0.8,
+    });
+
+    if (game.noSetVotes.split(",").length / game.players.length >= 0.8) {
+      const deck = game.deck.split(",");
+      const laidOut = game.laidOut.split(",");
+      const newCards = deck.splice(0, 3);
+
+      game.deck = deck.join(",");
+
+      game.laidOut = [...laidOut, ...newCards].join(",");
+
+      this.gamesGateway.sendToGame(game.id, "no-set", {
+        laidOut: game.laidOut.split(","),
+        newCards: newCards,
+      });
+    }
+
+    await this.gameRepo.save(game);
+  }
 }

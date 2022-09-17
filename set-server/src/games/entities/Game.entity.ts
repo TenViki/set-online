@@ -41,4 +41,7 @@ export class Game {
 
   @Column({ nullable: true })
   laidOut: string;
+
+  @Column({ nullable: true })
+  noSetVotes: string;
 }
