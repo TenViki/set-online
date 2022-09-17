@@ -1,11 +1,15 @@
 import React, { CSSProperties, useEffect, useRef } from "react";
+import { useMutation } from "react-query";
 import { toast } from "react-toastify";
+import { voteForNoSet } from "../../../api/game";
+import Button from "../../../components/button/Button";
 import CardRenderer from "../../../components/card-renderer/CardRenderer";
 import { UserLowType } from "../../../types/Game.type";
 import { idToCard, wait } from "../../../utils/deck.util";
 import { useGame } from "../../../utils/useGame";
 import { useUser } from "../../../utils/useUser";
 import PlayerInGame from "../components/PlayerInGame";
+import VotePopup from "../components/VotePopup";
 import "./InProgress.scss";
 
 type MovingCardsType = {
@@ -202,6 +206,8 @@ const InProgress = () => {
     };
   }, [socket, game.laidOut]);
 
+  const newCardsMutation = useMutation(voteForNoSet);
+
   return (
     <div className="game-wrapper">
       <div className="game-cards" style={{ "--columns": (game.laidOut?.length || 0) / 3 } as CSSProperties} ref={cardWrapperRef}>
@@ -249,19 +255,30 @@ const InProgress = () => {
       </div>
 
       <div className="game-players">
-        {game.players.map((player) => (
-          <PlayerInGame
-            key={player.id}
-            user={player}
-            isHost={player.id === game.host.id}
-            isMe={user.id === player.id}
-            score={0}
-            rf={(ref) => {
-              playerSlots.current[player.id] = ref;
+        <div className="game-players-list">
+          {game.players.map((player) => (
+            <PlayerInGame
+              key={player.id}
+              user={player}
+              isHost={player.id === game.host.id}
+              isMe={user.id === player.id}
+              score={0}
+              rf={(ref) => {
+                playerSlots.current[player.id] = ref;
+              }}
+            />
+          ))}
+
+          <Button
+            text="Vote for new cards"
+            onClick={() => {
+              newCardsMutation.mutate();
             }}
           />
-        ))}
+        </div>
       </div>
+
+      <VotePopup />
     </div>
   );
 };

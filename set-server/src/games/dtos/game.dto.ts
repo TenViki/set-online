@@ -34,4 +34,8 @@ export class GameDto {
   @Expose()
   @Transform(({ value }) => (value ? value.split(",") : null))
   laidOut: string[] | null;
+
+  @Expose()
+  @Transform(({ value }) => (value ? value.split(",") : null))
+  noSetVotes: string[] | null;
 }

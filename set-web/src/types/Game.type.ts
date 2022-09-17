@@ -10,6 +10,7 @@ export interface GameType {
   public: boolean;
   deck: string[] | null;
   laidOut: string[] | null;
+  noSetVotes: string[] | null;
 }
 export interface UserLowType {
   id: string;

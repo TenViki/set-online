@@ -198,9 +198,12 @@ export class GamesService {
       throw new NotFoundException("Game not found");
     }
 
+    console.log(game.laidOut.split(","));
     if (game.laidOut.split(",").length >= 21) {
       throw new BadRequestException("Max cards laid out");
     }
+
+    if (!game.noSetVotes) game.noSetVotes = "";
 
     // check if user already voted
     if (game.noSetVotes.includes(user.id)) {
@@ -210,13 +213,16 @@ export class GamesService {
         .filter((id) => id !== user.id)
         .join(",");
     } else {
-      game.noSetVotes = [...game.noSetVotes.split(","), user.id].join(",");
+      game.noSetVotes = [...(game.noSetVotes.split(",")[0] ? game.noSetVotes.split(",") : []), user.id].join(",");
     }
 
+    console.log("emitting no set vote");
     this.gamesGateway.sendToGame(game.id, "no-set-vote", {
-      voted: game.noSetVotes.split(","),
+      voted: game.noSetVotes.split(",").filter((id) => id !== ""),
       treshold: 0.8,
     });
+
+    console.log(game.noSetVotes.split(","), game.players.length);
 
     if (game.noSetVotes.split(",").length / game.players.length >= 0.8) {
       const deck = game.deck.split(",");
@@ -224,12 +230,17 @@ export class GamesService {
       const newCards = deck.splice(0, 3);
 
       game.deck = deck.join(",");
-
+      game.noSetVotes = "";
       game.laidOut = [...laidOut, ...newCards].join(",");
 
       this.gamesGateway.sendToGame(game.id, "no-set", {
         laidOut: game.laidOut.split(","),
         newCards: newCards,
+      });
+
+      this.gamesGateway.sendToGame(game.id, "no-set-vote", {
+        voted: [],
+        treshold: 0.8,
       });
     }
 
