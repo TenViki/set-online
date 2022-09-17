@@ -114,3 +114,44 @@
   width: calc(7rem + 1.2rem);
   height: calc(7rem * (3 / 2) + 1.2rem);
 }
+
+.deck-slot {
+  width: calc(7rem + 1.2rem);
+  height: calc(7rem * (3 / 2) + 1.2rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: -0.6rem;
+
+  &-inner {
+    width: 7rem;
+    height: 7rem * (3 / 2);
+    background-color: #f1f1f1;
+    transition: background-color $darkModeTransition;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 0.3rem;
+  }
+
+  &-logo {
+    font-size: 3rem;
+    font-weight: 100;
+    color: var(--main);
+    transform: rotate(-45deg);
+    margin-bottom: 1.5rem;
+  }
+
+  &-cards {
+    color: #777;
+  }
+}
+
+.dark {
+  .deck-slot-inner {
+    background-color: #292929;
+  }
+}

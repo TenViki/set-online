@@ -37,8 +37,10 @@ const InProgress = () => {
   const [selectedCards, setSelectedCards] = React.useState<string[]>([]);
   const [cardsToDisappear, setCardsToDisappear] = React.useState<DisappearingCardsType>({});
   const [movingCards, setMovingCards] = React.useState<MovingCardsType>({});
+  const [newCards, setNewCards] = React.useState<string[]>([]);
 
   const [noneCards, setNoneCards] = React.useState<string[]>([]);
+  const deckSlot = useRef<HTMLDivElement>(null);
 
   if (!game || !user.isLoggedIn || !game.laidOut) return null;
 
@@ -194,15 +196,33 @@ const InProgress = () => {
     removeCards(data.set, data.user);
   };
 
+  const handleNewCards = async (data: { laidOut: string[]; newCards: string[] }) => {
+    setGame((game) => {
+      if (!game) return null;
+
+      return {
+        ...game,
+        laidOut: game.laidOut ? [...game.laidOut, ...data.newCards] : null,
+      };
+    });
+
+    setNewCards(data.newCards);
+    await wait(100);
+    setNewCards([]);
+    setNoneCards([]);
+  };
+
   useEffect(() => {
     if (!socket) return;
 
     socket.on("set-error", handleSetError);
     socket.on("set-success", handleSet);
+    socket.on("new-cards", handleNewCards);
 
     return () => {
       socket.off("set-error", handleSetError);
       socket.off("set-success", handleSet);
+      socket.off("new-cards", handleNewCards);
     };
   }, [socket, game.laidOut]);
 
@@ -237,14 +257,16 @@ const InProgress = () => {
             }}
             style={
               {
-                "--x":
-                  card in cardsToDisappear && !noneCards.includes(card)
-                    ? playerSlots.current[cardsToDisappear[card]]?.offsetLeft
-                    : cardSlots.current[movingCards[card] ?? i]?.offsetLeft,
-                "--y":
-                  card in cardsToDisappear && !noneCards.includes(card)
-                    ? playerSlots.current[cardsToDisappear[card]]?.offsetTop
-                    : cardSlots.current[movingCards[card] ?? i]?.offsetTop,
+                "--x": newCards.includes(card)
+                  ? deckSlot.current?.offsetLeft
+                  : card in cardsToDisappear && !noneCards.includes(card)
+                  ? playerSlots.current[cardsToDisappear[card]]?.offsetLeft
+                  : cardSlots.current[movingCards[card] ?? i]?.offsetLeft,
+                "--y": newCards.includes(card)
+                  ? deckSlot.current?.offsetTop
+                  : card in cardsToDisappear && !noneCards.includes(card)
+                  ? playerSlots.current[cardsToDisappear[card]]?.offsetTop
+                  : cardSlots.current[movingCards[card] ?? i]?.offsetTop,
               } as CSSProperties
             }
             key={i}
@@ -276,6 +298,13 @@ const InProgress = () => {
             }}
             disabled={game.laidOut.length >= 21}
           />
+
+          <div className="deck-slot" ref={deckSlot}>
+            <div className="deck-slot-inner">
+              <div className="deck-slot-logo">SET!</div>
+              <div className="deck-slot-cards">0 / 81</div>
+            </div>
+          </div>
         </div>
       </div>
 
