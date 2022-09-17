@@ -198,7 +198,6 @@ export class GamesService {
       throw new NotFoundException("Game not found");
     }
 
-    console.log(game.laidOut.split(","));
     if (game.laidOut.split(",").length >= 21) {
       throw new BadRequestException("Max cards laid out");
     }
@@ -208,6 +207,7 @@ export class GamesService {
     // check if user already voted
     if (game.noSetVotes.includes(user.id)) {
       // Remvoe vote
+
       game.noSetVotes = game.noSetVotes
         .split(",")
         .filter((id) => id !== user.id)
@@ -216,19 +216,18 @@ export class GamesService {
       game.noSetVotes = [...(game.noSetVotes.split(",")[0] ? game.noSetVotes.split(",") : []), user.id].join(",");
     }
 
-    console.log("emitting no set vote");
     this.gamesGateway.sendToGame(game.id, "no-set-vote", {
       voted: game.noSetVotes.split(",").filter((id) => id !== ""),
       treshold: 0.8,
     });
-
-    console.log(game.noSetVotes.split(","), game.players.length);
 
     if (game.noSetVotes.split(",").length / game.players.length >= 0.8) {
       const deck = game.deck.split(",");
       const laidOut = game.laidOut.split(",");
 
       if (deck.length < 3) {
+        await this.gameRepo.save(game);
+
         throw new BadRequestException("Not enough cards in deck");
       }
       const newCards = deck.splice(0, 3);
