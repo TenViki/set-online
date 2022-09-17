@@ -92,10 +92,21 @@ function App() {
     };
   }, [user]);
 
+  const handleCnnectSuccess = () => {
+    console.log("Registering game socket to game", game?.id);
+    gamesSocket?.emit("listen", game?.id);
+  };
+
   useEffect(() => {
     if (!gamesSocket || !game) return;
 
+    gamesSocket.on("connect-success", handleCnnectSuccess);
+
     gamesSocket.emit("listen", game.id);
+
+    return () => {
+      gamesSocket.off("connect-success", handleCnnectSuccess);
+    };
   }, [gamesSocket, game]);
 
   return (

@@ -28,3 +28,7 @@ export const invitePlayerRequest = (id: string) => {
 export const startGameRequest = () => {
   return httpRequest("/games/start", "post", { useToken: true });
 };
+
+export const voteForNoSet = () => {
+  return httpRequest("/games/vote", "post", { useToken: true });
+};

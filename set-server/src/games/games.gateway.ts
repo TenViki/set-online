@@ -31,6 +31,8 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleConnection(client: Socket) {
     try {
       await this.socketAuthService.registerSocket(client, client.handshake.auth.token);
+
+      client.emit("connect-success");
     } catch (err) {
       console.error("Error while registering socket", client.id, ":", err);
       client.emit("error", err);

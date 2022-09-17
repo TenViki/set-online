@@ -56,4 +56,10 @@ export class GamesController {
   async start(@CurrentUser() user: User) {
     return this.gamesService.start(user);
   }
+
+  @Post("/vote")
+  @UseGuards(AuthGuard)
+  async vote(@CurrentUser() user: User) {
+    return this.gamesService.voteForNoSet(user);
+  }
 }
