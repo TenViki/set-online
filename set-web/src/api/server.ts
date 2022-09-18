@@ -1,8 +1,16 @@
 import axios from "axios";
 import { TokenManager } from "../utils/tokenManager";
 
+const currentDomain = window.location.origin;
+
+console.log(currentDomain);
+
+export const serverUrl = currentDomain.includes("109.183.118.22")
+  ? "http://109.183.118.22:7000/"
+  : import.meta.env.VITE_BACKEND_URL;
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL,
+  baseURL: serverUrl,
   headers: {
     "Content-Type": "application/json",
   },

@@ -189,7 +189,7 @@ const InProgress = () => {
   }, [selectedCards]);
 
   const handleSetError = (data: { user: string }) => {
-    toast.info(`${data.user} failed to set`);
+    toast.info(`${game.players.find((user) => user.id === data.user)?.username} failed to set`);
   };
 
   const handleSet = (data: { user: string; set: string[]; laidOut: string[] }) => {
@@ -284,7 +284,7 @@ const InProgress = () => {
               user={player}
               isHost={player.id === game.host.id}
               isMe={user.id === player.id}
-              score={0}
+              score={69}
               rf={(ref) => {
                 playerSlots.current[player.id] = ref;
               }}

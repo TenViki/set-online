@@ -12,6 +12,7 @@ import { getUser } from "./api/auth";
 import { GameType } from "./types/Game.type";
 import { io, Socket } from "socket.io-client";
 import InvitePopup from "./components/invite-popup/InvitePopup";
+import { serverUrl } from "./api/server";
 
 export const DarkModeContext = React.createContext<{
   darkMode: boolean;
@@ -72,7 +73,7 @@ function App() {
 
     console.log("Trying to connect to games socket");
 
-    const socket = io(import.meta.env.VITE_BACKEND_URL + "games", {
+    const socket = io(serverUrl + "games", {
       auth: {
         token: TokenManager.getToken(),
       },

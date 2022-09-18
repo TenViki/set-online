@@ -42,13 +42,20 @@ export class PasswordLoginService {
       where: { user },
     });
 
-    if (!passwordLogin) throw new BadRequestException("Password login not found");
-
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    passwordLogin.password = hashedPassword;
+    if (!passwordLogin) {
+      const passwordLogin = this.passwordLoginRepository.create({
+        user,
+        password: hashedPassword,
+        email: user.email,
+      });
 
-    return this.passwordLoginRepository.save(passwordLogin);
+      return this.passwordLoginRepository.save(passwordLogin);
+    } else {
+      passwordLogin.password = hashedPassword;
+      return this.passwordLoginRepository.save(passwordLogin);
+    }
   }
 }

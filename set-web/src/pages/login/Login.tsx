@@ -19,6 +19,7 @@ import { useNavigate } from "react-router";
 import Loading from "../../components/loading/Loading";
 import { getOauthLink } from "../../api/oauth";
 import { UserType } from "../../types/User.type";
+import { serverUrl } from "../../api/server";
 
 interface LoginProps {
   defaultState: 0 | 1 | 2;
@@ -57,7 +58,7 @@ const Login: FC<LoginProps> = ({ defaultState }) => {
   const [overlayActive, setOverlayActive] = useState(false);
 
   useEffect(() => {
-    const socket = io("http://10.0.0.16:7000/auth");
+    const socket = io(serverUrl + "auth");
     setSocket(socket);
 
     socket.on("connect", () => {

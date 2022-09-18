@@ -1,1 +1,3 @@
-export const getAvatar = (id: string) => `${import.meta.env.VITE_BACKEND_URL}user/avatars/${id}`;
+import { serverUrl } from "../api/server";
+
+export const getAvatar = (id: string) => `${serverUrl}user/avatars/${id}`;
