@@ -44,6 +44,7 @@ const InProgress = () => {
 
   if (!game || !user.isLoggedIn || !game.laidOut) return null;
   const [userPoints, setUserPoints] = React.useState<{ [key: string]: number }>(transformPoints(game.points));
+  const [remainingCards, setRemainingCards] = React.useState(81);
 
   const removeCards = async (sCards: string[], user: string) => {
     if (!game.laidOut) return;
@@ -200,7 +201,7 @@ const InProgress = () => {
     setUserPoints((prev) => ({ ...prev, [data.user]: data.points }));
   };
 
-  const handleNewCards = async (data: { laidOut: string[]; newCards: string[] }) => {
+  const handleNewCards = async (data: { laidOut: string[]; newCards: string[]; remaining: number }) => {
     setGame((game) => {
       if (!game) return null;
 
@@ -209,6 +210,8 @@ const InProgress = () => {
         laidOut: game.laidOut ? [...game.laidOut, ...data.newCards] : null,
       };
     });
+
+    setRemainingCards(data.remaining);
 
     setNewCards(data.newCards);
     await wait(100);
@@ -306,7 +309,7 @@ const InProgress = () => {
           <div className="deck-slot" ref={deckSlot}>
             <div className="deck-slot-inner">
               <div className="deck-slot-logo">SET!</div>
-              <div className="deck-slot-cards">0 / 81</div>
+              <div className="deck-slot-cards">{remainingCards} / 81</div>
             </div>
           </div>
         </div>

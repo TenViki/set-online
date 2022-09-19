@@ -284,6 +284,7 @@ export class GamesService {
       this.gamesGateway.sendToGame(game.id, "new-cards", {
         laidOut: game.laidOut.split(","),
         newCards: newCards,
+        remaining: deck.length,
       });
 
       this.gamesGateway.sendToGame(game.id, "no-set-vote", {
