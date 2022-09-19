@@ -197,8 +197,6 @@ export class GamesService {
       });
 
       return this.pointsRepo.save(points);
-
-      return;
     }
 
     // remove set from laid out cards

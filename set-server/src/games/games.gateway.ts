@@ -72,14 +72,7 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage("set")
   async handleSet(@ConnectedSocket() socket: Socket, @MessageBody("cards") data: string[]) {
     const user = await this.socketAuthService.getUser(socket);
-    const game = await this.gamesService.getGameByUser(user);
 
-    try {
-      await this.gamesService.handleSet(user, data);
-    } catch (error: any) {
-      this.sendToGame(game.id, "set-error", {
-        user: user.id,
-      });
-    }
+    await this.gamesService.handleSet(user, data);
   }
 }
