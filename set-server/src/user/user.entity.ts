@@ -3,6 +3,7 @@ import { GoogleLogin } from "src/auth/login/googleLogin/googleLogin.entity";
 import { PasswordLogin } from "src/auth/login/passwordLogin.entity";
 import { Session } from "src/auth/session.entity";
 import { Game } from "src/games/entities/Game.entity";
+import { Points } from "src/games/entities/Points.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -42,4 +43,7 @@ export class User {
   @JoinColumn()
   @OneToOne(() => Game, (game) => game.host, { onDelete: "SET NULL" })
   hosting: Game;
+
+  @OneToMany(() => Points, (points) => points.user)
+  points: Points[];
 }

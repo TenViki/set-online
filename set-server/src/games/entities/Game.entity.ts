@@ -1,5 +1,6 @@
 import { User } from "src/user/user.entity";
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Points } from "./Points.entity";
 
 export enum GameStatus {
   NOT_STARTED = "NOT_STARTED",
@@ -44,4 +45,7 @@ export class Game {
 
   @Column({ nullable: true })
   noSetVotes: string;
+
+  @OneToMany(() => Points, (points) => points.game)
+  points: Points[];
 }

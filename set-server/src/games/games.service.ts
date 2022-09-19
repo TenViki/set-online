@@ -8,12 +8,14 @@ import { generateDeck, isSet, shuffleDeck } from "src/utils/cards.utils";
 import { Repository } from "typeorm";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
+import { Points } from "./entities/Points.entity";
 import { GamesGateway } from "./games.gateway";
 
 @Injectable()
 export class GamesService {
   constructor(
     @InjectRepository(Game) private gameRepo: Repository<Game>,
+    @InjectRepository(Points) private pointsRepo: Repository<Points>,
     @Inject(forwardRef(() => GamesGateway)) private gamesGateway: GamesGateway,
   ) {}
 
@@ -86,6 +88,15 @@ export class GamesService {
 
     // join user to game
     game.players.push(user);
+
+    // create points object for user
+    const points = this.pointsRepo.create({
+      game,
+      user,
+      points: 0,
+    });
+
+    await this.pointsRepo.save(points);
 
     this.gamesGateway.sendToGame(game.id, "join", user);
 
@@ -172,9 +183,22 @@ export class GamesService {
       return;
     }
 
+    const points = await this.pointsRepo.findOne({
+      where: { game, user },
+    });
+
     // check if really a set
     if (!isSet(set)) {
-      throw new Error("Not a set");
+      points.points -= 1;
+
+      this.gamesGateway.sendToGame(game.id, "set-error", {
+        user: user.id,
+        points: points.points,
+      });
+
+      return this.pointsRepo.save(points);
+
+      return;
     }
 
     // remove set from laid out cards
@@ -184,10 +208,15 @@ export class GamesService {
 
     await this.gameRepo.save(game);
 
+    points.points += 1;
+
+    await this.pointsRepo.save(points);
+
     this.gamesGateway.sendToGame(game.id, "set-success", {
       laidOut: laidOut,
       set: set,
       user: user.id,
+      points: points.points,
     });
   }
 

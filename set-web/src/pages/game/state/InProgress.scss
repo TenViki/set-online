@@ -126,7 +126,7 @@
 
   &-inner {
     width: 7rem;
-    height: 7rem * (3 / 2);
+    height: calc(7rem * 3 / 2);
     background-color: #f1f1f1;
     transition: background-color $darkModeTransition;
 
