@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConsoleLogger, Injectable, NotFoundException } from "@nestjs/common";
 import { Inject } from "@nestjs/common/decorators";
 import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -42,7 +42,19 @@ export class GamesService {
       winner: null,
     });
 
-    return this.gameRepo.save(game);
+    const gameDb = await this.gameRepo.save(game);
+
+    const points = this.pointsRepo.create({
+      game: gameDb,
+      user,
+      points: 0,
+    });
+
+    await this.pointsRepo.save(points);
+
+    gameDb.points = [points];
+
+    return gameDb;
   }
 
   async getGameByUser(user: User) {
@@ -55,7 +67,7 @@ export class GamesService {
 
     const game = await this.gameRepo.findOne({
       where: { id: gameObject.id },
-      relations: ["players", "host"],
+      relations: ["players", "host", "points", "points.user"],
     });
 
     return game;
@@ -67,7 +79,7 @@ export class GamesService {
     // searhc for game with either the code or the id
     const game = await this.gameRepo.findOne({
       where: [{ code: joinDto.code }, { id: joinDto.gameId }],
-      relations: ["players", "host"],
+      relations: ["players", "host", "points"],
     });
 
     if (!game) throw new NotFoundException("Game not found");
@@ -184,7 +196,13 @@ export class GamesService {
     }
 
     const points = await this.pointsRepo.findOne({
-      where: { game, user },
+      where: {
+        game: {
+          id: game.id,
+        },
+        user,
+      },
+      relations: ["game", "user"],
     });
 
     // check if really a set

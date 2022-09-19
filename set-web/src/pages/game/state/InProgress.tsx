@@ -5,7 +5,7 @@ import { voteForNoSet } from "../../../api/game";
 import Button from "../../../components/button/Button";
 import CardRenderer from "../../../components/card-renderer/CardRenderer";
 import { UserLowType } from "../../../types/Game.type";
-import { idToCard, wait } from "../../../utils/deck.util";
+import { idToCard, transformPoints, wait } from "../../../utils/deck.util";
 import { useGame } from "../../../utils/useGame";
 import { useUser } from "../../../utils/useUser";
 import PlayerInGame from "../components/PlayerInGame";
@@ -43,6 +43,7 @@ const InProgress = () => {
   const deckSlot = useRef<HTMLDivElement>(null);
 
   if (!game || !user.isLoggedIn || !game.laidOut) return null;
+  const [userPoints, setUserPoints] = React.useState<{ [key: string]: number }>(transformPoints(game.points));
 
   const removeCards = async (sCards: string[], user: string) => {
     if (!game.laidOut) return;
@@ -188,12 +189,15 @@ const InProgress = () => {
     };
   }, [selectedCards]);
 
-  const handleSetError = (data: { user: string }) => {
+  const handleSetError = (data: { user: string; points: number }) => {
     toast.info(`${game.players.find((user) => user.id === data.user)?.username} failed to set`);
+
+    setUserPoints((prev) => ({ ...prev, [data.user]: data.points }));
   };
 
-  const handleSet = (data: { user: string; set: string[]; laidOut: string[] }) => {
+  const handleSet = (data: { user: string; set: string[]; laidOut: string[]; points: number }) => {
     removeCards(data.set, data.user);
+    setUserPoints((prev) => ({ ...prev, [data.user]: data.points }));
   };
 
   const handleNewCards = async (data: { laidOut: string[]; newCards: string[] }) => {
@@ -284,7 +288,7 @@ const InProgress = () => {
               user={player}
               isHost={player.id === game.host.id}
               isMe={user.id === player.id}
-              score={69}
+              score={userPoints[player.id] || 0}
               rf={(ref) => {
                 playerSlots.current[player.id] = ref;
               }}

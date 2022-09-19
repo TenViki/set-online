@@ -11,6 +11,10 @@ export interface GameType {
   deck: string[] | null;
   laidOut: string[] | null;
   noSetVotes: string[] | null;
+  points: {
+    user: string;
+    points: number;
+  }[];
 }
 export interface UserLowType {
   id: string;

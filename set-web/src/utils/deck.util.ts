@@ -43,3 +43,11 @@ export const idToCard = (id: string): CardProps => {
 export const wait = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export const transformPoints = (points: { user: string; points: number }[]): { [key: string]: number } => {
+  const newPoints: { [key: string]: number } = {};
+  points.forEach((point) => {
+    newPoints[point.user] = point.points;
+  });
+  return newPoints;
+};
