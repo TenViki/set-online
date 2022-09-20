@@ -8,6 +8,7 @@ import { UserLowType } from "../../../types/Game.type";
 import { idToCard, transformPoints, wait } from "../../../utils/deck.util";
 import { useGame } from "../../../utils/useGame";
 import { useUser } from "../../../utils/useUser";
+import GameLog, { useGameLog } from "../components/GameLog";
 import PlayerInGame from "../components/PlayerInGame";
 import VotePopup from "../components/VotePopup";
 import "./InProgress.scss";
@@ -22,6 +23,7 @@ type DisappearingCardsType = {
 
 const InProgress = () => {
   const { game, setGame, socket } = useGame();
+  const { addLog, log } = useGameLog();
   const user = useUser();
 
   const cardWrapperRef = useRef<HTMLDivElement>(null);
@@ -189,7 +191,8 @@ const InProgress = () => {
   }, [selectedCards]);
 
   const handleSetError = (data: { user: string; points: number }) => {
-    toast.info(`${game.players.find((user) => user.id === data.user)?.username} failed to set`);
+    const username = game.players.find((user) => user.id === data.user)?.username;
+    addLog(`**${username}** failed to find a set *(${data.points} points)*`, "error");
 
     setUserPoints((prev) => ({ ...prev, [data.user]: data.points }));
   };
@@ -197,9 +200,13 @@ const InProgress = () => {
   const handleSet = (data: { user: string; set: string[]; laidOut: string[]; points: number }) => {
     removeCards(data.set, data.user);
     setUserPoints((prev) => ({ ...prev, [data.user]: data.points }));
+
+    const username = game.players.find((user) => user.id === data.user)?.username;
+    addLog(`**${username}** found a set *(${data.points} points)*`);
   };
 
   const handleNewCards = async (data: { laidOut: string[]; newCards: string[]; remaining: number }) => {
+    addLog(`Drawed new cards *(${data.remaining} remaining in deck)*`);
     setGame((game) => {
       if (!game) return null;
 
@@ -280,6 +287,8 @@ const InProgress = () => {
           </div>
         ))}
       </div>
+
+      <GameLog log={log} />
 
       <div className="game-players">
         <div className="game-players-list">

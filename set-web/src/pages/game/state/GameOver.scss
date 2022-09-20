@@ -18,18 +18,18 @@
       margin-right: 1rem;
       color: #777;
       font-weight: 100;
+    }
 
-      &:nth-child(1) {
-        color: #bb9f00;
-      }
+    &:nth-child(1) &-place {
+      color: #bb9f00;
+    }
 
-      &:nth-child(2) {
-        color: #8f8f8f;
-      }
+    &:nth-child(2) &-place {
+      color: #8f8f8f;
+    }
 
-      &:nth-child(3) {
-        color: #a5682a;
-      }
+    &:nth-child(3) &-place {
+      color: #a5682a;
     }
   }
 
