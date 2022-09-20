@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { GameStatus, UserLowType } from "../../types/Game.type";
 import { useGame } from "../../utils/useGame";
 import { useUser } from "../../utils/useUser";
+import GameOver from "./state/GameOver";
 import InProgress from "./state/InProgress";
 import NotStarted from "./state/NotStarted";
 
@@ -71,10 +72,7 @@ const Game = () => {
         return {
           ...prevGame,
           status: GameStatus.FINISHED,
-          points: data.points.map((point) => ({
-            user: point.user.id,
-            points: point.points,
-          })),
+          points: data.points,
         };
       }
       return null;
@@ -102,6 +100,7 @@ const Game = () => {
 
   if (game.game?.status === GameStatus.NOT_STARTED) return <NotStarted game={game.game} />;
   if (game.game?.status === GameStatus.IN_PROGRESS) return <InProgress />;
+  if (game.game?.status === GameStatus.FINISHED) return <GameOver />;
 
   return <div>Game</div>;
 };

@@ -47,4 +47,8 @@ export class UserService {
   getQueryBuilder() {
     return this.userRepo.createQueryBuilder("user");
   }
+
+  getRepository() {
+    return this.userRepo;
+  }
 }

@@ -12,7 +12,7 @@ export interface GameType {
   laidOut: string[] | null;
   noSetVotes: string[] | null;
   points: {
-    user: string;
+    user: UserLowType;
     points: number;
   }[];
 }

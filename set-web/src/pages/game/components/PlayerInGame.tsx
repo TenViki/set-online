@@ -9,7 +9,7 @@ interface PlayerInGameProps {
   isHost: boolean;
   isMe: boolean;
   score: number;
-  rf: (element: HTMLDivElement) => void;
+  rf?: (element: HTMLDivElement) => void;
 }
 
 const PlayerInGame: FC<PlayerInGameProps> = ({ isHost, isMe, score, user, rf }) => {
@@ -18,7 +18,7 @@ const PlayerInGame: FC<PlayerInGameProps> = ({ isHost, isMe, score, user, rf }) 
       <div className="game-player-avatar">{user.avatar ? <img src={getAvatar(user.avatar)} alt="avatar" /> : <FiUser />}</div>
 
       <div className="game-player-text">
-        <div className="game-player-username">{user.username}</div>
+        <div className="game-player-username text">{user.username}</div>
         <div className="game-player-score">{score}</div>
       </div>
     </div>

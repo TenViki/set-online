@@ -2,9 +2,9 @@ import { Expose, Transform, Type } from "class-transformer";
 import { UserLowDto } from "src/user/dtos/user-low.dto";
 
 export class PointsDto {
+  @Type(() => UserLowDto)
   @Expose()
-  @Transform(({ obj }) => obj.user.id)
-  user: string;
+  user: UserLowDto;
 
   @Expose()
   points: number;

@@ -20,8 +20,6 @@ type DisappearingCardsType = {
   [id: string]: string;
 };
 
-// laid out preset: 3ghw,2rfo,2gfr,2pfw,1gfo,3phr,3rer,2rhr,3gfw,1ger,1reo,2rer,2rho,3rhr,3peo,2rhw,1pew,3rfr
-
 const InProgress = () => {
   const { game, setGame, socket } = useGame();
   const user = useUser();

@@ -295,11 +295,18 @@ export class GamesService {
           points: plainToInstance(PointsDto, points),
         });
 
-        await this.usersService.getQueryBuilder().where("game.id = :id", { id: game.id }).update(User, { game: null }).execute();
-
         game.winner = points.sort((a, b) => b.points - a.points)[0].user;
-
         await this.gameRepo.save(game);
+
+        await this.usersService.getRepository().update(
+          {
+            game: game,
+          },
+          {
+            game: null,
+          },
+        );
+
         return;
       }
 

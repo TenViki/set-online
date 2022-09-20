@@ -1,4 +1,5 @@
 import { CardProps } from "../types/CardType";
+import { UserLowType } from "../types/Game.type";
 
 export const genrateRandomSet = (): CardProps[] => {
   const card1 = generateRandomCard();
@@ -44,10 +45,10 @@ export const wait = async (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const transformPoints = (points: { user: string; points: number }[]): { [key: string]: number } => {
+export const transformPoints = (points: { user: UserLowType; points: number }[]): { [key: string]: number } => {
   const newPoints: { [key: string]: number } = {};
   points.forEach((point) => {
-    newPoints[point.user] = point.points;
+    newPoints[point.user.id] = point.points;
   });
   return newPoints;
 };

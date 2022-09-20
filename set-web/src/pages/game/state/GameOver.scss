@@ -1,0 +1,39 @@
+.game-over {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+
+  h1 {
+    margin-bottom: 1rem;
+    font-weight: 100;
+  }
+
+  .game-podium-item {
+    display: flex;
+    align-items: center;
+
+    &-place {
+      font-size: 2rem;
+      margin-right: 1rem;
+      color: #777;
+      font-weight: 100;
+
+      &:nth-child(1) {
+        color: #bb9f00;
+      }
+
+      &:nth-child(2) {
+        color: #8f8f8f;
+      }
+
+      &:nth-child(3) {
+        color: #a5682a;
+      }
+    }
+  }
+
+  .game-podium {
+    margin-bottom: 1rem;
+  }
+}
