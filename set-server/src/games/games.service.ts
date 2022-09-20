@@ -4,8 +4,9 @@ import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { WsException } from "@nestjs/websockets/errors";
 import { User } from "src/user/user.entity";
+import { UserService } from "src/user/user.service";
 import { generateDeck, isSet, shuffleDeck, wait } from "src/utils/cards.utils";
-import { Repository } from "typeorm";
+import { QueryBuilder, Repository } from "typeorm";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
 import { Points } from "./entities/Points.entity";
@@ -17,6 +18,7 @@ export class GamesService {
     @InjectRepository(Game) private gameRepo: Repository<Game>,
     @InjectRepository(Points) private pointsRepo: Repository<Points>,
     @Inject(forwardRef(() => GamesGateway)) private gamesGateway: GamesGateway,
+    private usersService: UserService,
   ) {}
 
   async getUniqueCode() {
@@ -275,8 +277,28 @@ export class GamesService {
 
     if (game.noSetVotes.split(",").length / game.players.length >= 0.8) {
       if (!(await this.drawCards(game))) {
+        // game over
+        game.status = GameStatus.FINISHED;
+
+        this.gamesGateway.sendToGame(game.id, "game-over", {
+          points: await this.pointsRepo.find({
+            where: {
+              game: {
+                id: game.id,
+              },
+            },
+            relations: ["user"],
+          }),
+        });
+
+        const users = await this.usersService
+          .getQueryBuilder()
+          .where("game.id = :id", { id: game.id })
+          .update(User, { game: null })
+          .execute();
+
         await this.gameRepo.save(game);
-        throw new BadRequestException("No more cards in deck");
+        return;
       }
 
       this.gamesGateway.sendToGame(game.id, "no-set-vote", {

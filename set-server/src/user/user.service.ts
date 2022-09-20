@@ -43,4 +43,8 @@ export class UserService {
       take: 5,
     });
   }
+
+  getQueryBuilder() {
+    return this.userRepo.createQueryBuilder("user");
+  }
 }
