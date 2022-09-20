@@ -4,7 +4,7 @@ import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { WsException } from "@nestjs/websockets/errors";
 import { User } from "src/user/user.entity";
-import { generateDeck, isSet, shuffleDeck } from "src/utils/cards.utils";
+import { generateDeck, isSet, shuffleDeck, wait } from "src/utils/cards.utils";
 import { Repository } from "typeorm";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
@@ -79,7 +79,7 @@ export class GamesService {
     // searhc for game with either the code or the id
     const game = await this.gameRepo.findOne({
       where: [{ code: joinDto.code }, { id: joinDto.gameId }],
-      relations: ["players", "host", "points"],
+      relations: ["players", "host", "points", "points.user"],
     });
 
     if (!game) throw new NotFoundException("Game not found");
@@ -111,6 +111,8 @@ export class GamesService {
     await this.pointsRepo.save(points);
 
     this.gamesGateway.sendToGame(game.id, "join", user);
+
+    game.points.push(points);
 
     // save game
     return this.gameRepo.save(game);
@@ -234,6 +236,11 @@ export class GamesService {
       user: user.id,
       points: points.points,
     });
+
+    if (laidOut.length < 12) {
+      await wait(1300);
+      this.drawCards(game);
+    }
   }
 
   async voteForNoSet(user: User) {
@@ -267,25 +274,10 @@ export class GamesService {
     });
 
     if (game.noSetVotes.split(",").length / game.players.length >= 0.8) {
-      const deck = game.deck.split(",");
-      const laidOut = game.laidOut.split(",");
-
-      if (deck.length < 3) {
+      if (!(await this.drawCards(game))) {
         await this.gameRepo.save(game);
-
-        throw new BadRequestException("Not enough cards in deck");
+        throw new BadRequestException("No more cards in deck");
       }
-      const newCards = deck.splice(0, 3);
-
-      game.deck = deck.join(",");
-      game.noSetVotes = "";
-      game.laidOut = [...laidOut, ...newCards].join(",");
-
-      this.gamesGateway.sendToGame(game.id, "new-cards", {
-        laidOut: game.laidOut.split(","),
-        newCards: newCards,
-        remaining: deck.length,
-      });
 
       this.gamesGateway.sendToGame(game.id, "no-set-vote", {
         voted: [],
@@ -294,5 +286,29 @@ export class GamesService {
     }
 
     await this.gameRepo.save(game);
+  }
+
+  async drawCards(game: Game) {
+    const deck = game.deck.split(",");
+    const laidOut = game.laidOut.split(",");
+
+    if (deck.length < 3) {
+      await this.gameRepo.save(game);
+      return false;
+    }
+    const newCards = deck.splice(0, 3);
+
+    game.deck = deck.join(",");
+    game.noSetVotes = "";
+    game.laidOut = [...laidOut, ...newCards].join(",");
+
+    this.gamesGateway.sendToGame(game.id, "new-cards", {
+      laidOut: game.laidOut.split(","),
+      newCards: newCards,
+      remaining: deck.length,
+    });
+
+    await this.gameRepo.save(game);
+    return true;
   }
 }

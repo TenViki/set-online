@@ -299,7 +299,7 @@ const InProgress = () => {
           ))}
 
           <Button
-            text="Vote for new cards"
+            text={remainingCards > 0 ? "Vote for new cards" : "Vote for game end"}
             onClick={() => {
               newCardsMutation.mutate();
             }}

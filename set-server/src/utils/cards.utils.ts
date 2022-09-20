@@ -5,6 +5,8 @@ export interface Card {
   fill: number;
 }
 
+export const wait = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const getCardId = (card: Card) => {
   return `${card.count}${"rpg"[card.color - 1]}${"fhe"[card.fill - 1]}${"orw"[card.shape - 1]}`;
 };

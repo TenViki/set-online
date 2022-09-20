@@ -13,6 +13,8 @@ export class Points {
   @ManyToOne(() => User)
   user: User;
 
-  @ManyToOne(() => Game, (game) => game.points)
+  @ManyToOne(() => Game, (game) => game.points, {
+    onDelete: "CASCADE",
+  })
   game: Game;
 }
