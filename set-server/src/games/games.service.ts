@@ -3,10 +3,12 @@ import { Inject } from "@nestjs/common/decorators";
 import { forwardRef } from "@nestjs/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { WsException } from "@nestjs/websockets/errors";
+import { plainToClass, plainToInstance } from "class-transformer";
 import { User } from "src/user/user.entity";
 import { UserService } from "src/user/user.service";
 import { generateDeck, isSet, shuffleDeck, wait } from "src/utils/cards.utils";
 import { QueryBuilder, Repository } from "typeorm";
+import { PointsDto } from "./dtos/game.dto";
 import { JoinGameDto } from "./dtos/join-game.dto";
 import { Game, GameStatus } from "./entities/Game.entity";
 import { Points } from "./entities/Points.entity";
@@ -279,23 +281,23 @@ export class GamesService {
       if (!(await this.drawCards(game))) {
         // game over
         game.status = GameStatus.FINISHED;
-
-        this.gamesGateway.sendToGame(game.id, "game-over", {
-          points: await this.pointsRepo.find({
-            where: {
-              game: {
-                id: game.id,
-              },
+        const points = await this.pointsRepo.find({
+          where: {
+            game: {
+              id: game.id,
             },
-            relations: ["user"],
-          }),
+          },
+          relations: ["game", "user"],
         });
 
-        const users = await this.usersService
-          .getQueryBuilder()
-          .where("game.id = :id", { id: game.id })
-          .update(User, { game: null })
-          .execute();
+        this.gamesGateway.sendToGame(game.id, "game-over", {
+          // transform points with class transformer
+          points: plainToInstance(PointsDto, points),
+        });
+
+        await this.usersService.getQueryBuilder().where("game.id = :id", { id: game.id }).update(User, { game: null }).execute();
+
+        game.winner = points.sort((a, b) => b.points - a.points)[0].user;
 
         await this.gameRepo.save(game);
         return;

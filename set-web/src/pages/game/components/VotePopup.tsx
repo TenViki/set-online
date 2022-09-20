@@ -6,7 +6,11 @@ import { useModal } from "../../../components/modal/Modal";
 import { useGame } from "../../../utils/useGame";
 import { useUser } from "../../../utils/useUser";
 
-const VotePopup = () => {
+interface VotePopupProps {
+  remainingCards: number;
+}
+
+const VotePopup: React.FC<VotePopupProps> = ({ remainingCards }) => {
   const { isOpen, toggle } = useModal();
   const { socket } = useGame();
   const user = useUser();
@@ -52,7 +56,8 @@ const VotePopup = () => {
   return (
     <div className={`invite-popup ${isOpen ? "opened" : ""}`}>
       <div className="invite-popup-text">
-        {voteData.voted.length}/{Math.ceil(game.players.length * voteData.treshold)} players voted for new cards.
+        {voteData.voted.length}/{Math.ceil(game.players.length * voteData.treshold)} players voted for{" "}
+        {remainingCards ? "new cards" : "end of the game"}
       </div>
 
       <div className="invite-popup-buttons">

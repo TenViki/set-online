@@ -65,6 +65,22 @@ const Game = () => {
     console.log(data.laidOut);
   };
 
+  const handleGameOver = (data: { points: { user: UserLowType; points: number }[] }) => {
+    game.setGame((prevGame) => {
+      if (prevGame) {
+        return {
+          ...prevGame,
+          status: GameStatus.FINISHED,
+          points: data.points.map((point) => ({
+            user: point.user.id,
+            points: point.points,
+          })),
+        };
+      }
+      return null;
+    });
+  };
+
   useEffect(() => {
     if (!game.game || !user.isLoggedIn) return;
     game.socket?.on("kick", handleKick);
@@ -72,6 +88,7 @@ const Game = () => {
     game.socket?.on("leave", handleKick);
     game.socket?.on("deleted", handleDeleted);
     game.socket?.on("start", handleStart);
+    game.socket?.on("game-over", handleGameOver);
 
     return () => {
       game.socket?.off("kick", handleKick);
@@ -79,6 +96,7 @@ const Game = () => {
       game.socket?.off("leave", handleKick);
       game.socket?.off("deleted", handleDeleted);
       game.socket?.off("start", handleStart);
+      game.socket?.off("game-over", handleGameOver);
     };
   }, [game.socket, user]);
 

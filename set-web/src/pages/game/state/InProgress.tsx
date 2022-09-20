@@ -315,7 +315,7 @@ const InProgress = () => {
         </div>
       </div>
 
-      <VotePopup />
+      <VotePopup remainingCards={remainingCards} />
     </div>
   );
 };
