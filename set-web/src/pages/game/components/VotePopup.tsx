@@ -8,47 +8,21 @@ import { useUser } from "../../../utils/useUser";
 
 interface VotePopupProps {
   remainingCards: number;
+  voteData: {
+    voted: string[];
+    treshold: number;
+  };
 }
 
-const VotePopup: React.FC<VotePopupProps> = ({ remainingCards }) => {
+const VotePopup: React.FC<VotePopupProps> = ({ remainingCards, voteData }) => {
   const { isOpen, toggle } = useModal();
   const { socket } = useGame();
   const user = useUser();
   const { game } = useGame();
-  const [voteData, setVoteData] = useState<{
-    voted: string[];
-    treshold: number;
-  }>({
-    voted: [],
-    treshold: 0,
-  });
-
-  const handleSomeoneVoted = (data: { voted: string[]; treshold: number }) => {
-    toggle(!!data.voted.length);
-    setVoteData(data);
-  };
 
   useEffect(() => {
-    if (!socket) return;
-
-    socket.on("no-set-vote", handleSomeoneVoted);
-
-    return () => {
-      socket.off("no-set-vote", handleSomeoneVoted);
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    if (!game) return;
-
-    if (game?.noSetVotes?.length) {
-      toggle(true);
-      setVoteData({
-        voted: game.noSetVotes,
-        treshold: 0.8,
-      });
-    }
-  }, [game]);
+    toggle(!!voteData.voted.length);
+  }, [voteData]);
 
   const newCardsMutation = useMutation(voteForNoSet);
 

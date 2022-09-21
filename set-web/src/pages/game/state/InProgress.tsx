@@ -237,6 +237,29 @@ const InProgress = () => {
     setPlayerSelectedCards((prev) => prev.filter((c) => c !== data.card));
   };
 
+  const [voteData, setVoteData] = useState<{
+    voted: string[];
+    treshold: number;
+  }>({
+    voted: [],
+    treshold: 0,
+  });
+
+  const handleSomeoneVoted = (data: { voted: string[]; treshold: number }) => {
+    setVoteData(data);
+  };
+
+  useEffect(() => {
+    if (!game) return;
+
+    if (game?.noSetVotes?.length) {
+      setVoteData({
+        voted: game.noSetVotes,
+        treshold: 0.8,
+      });
+    }
+  }, [game]);
+
   useEffect(() => {
     if (!socket) return;
 
@@ -245,6 +268,7 @@ const InProgress = () => {
     socket.on("new-cards", handleNewCards);
     socket.on("select-card", handlePlayerCardSelect);
     socket.on("unselect-card", handleUnselectPlayerCard);
+    socket.on("no-set-vote", handleSomeoneVoted);
 
     return () => {
       socket.off("set-error", handleSetError);
@@ -252,6 +276,7 @@ const InProgress = () => {
       socket.off("new-cards", handleNewCards);
       socket.off("select-card", handlePlayerCardSelect);
       socket.off("unselect-card", handleUnselectPlayerCard);
+      socket.off("no-set-vote", handleSomeoneVoted);
     };
   }, [socket, game.laidOut]);
 
@@ -268,7 +293,11 @@ const InProgress = () => {
 
   return (
     <div className="game-wrapper">
-      <div className="game-cards" style={{ "--columns": (game.laidOut?.length || 0) / 3 } as CSSProperties} ref={cardWrapperRef}>
+      <div
+        className="game-cards"
+        style={{ "--columns": Math.ceil((game.laidOut?.length || 0) / 3) } as CSSProperties}
+        ref={cardWrapperRef}
+      >
         {game.laidOut?.map((_, i) => {
           if (!game.laidOut) return null;
           const rowLength = game.laidOut.length / 3;
@@ -333,6 +362,7 @@ const InProgress = () => {
               rf={(ref) => {
                 playerSlots.current[player.id] = ref;
               }}
+              hasVoted={voteData.voted.includes(player.id)}
             />
           ))}
 
@@ -353,7 +383,7 @@ const InProgress = () => {
         </div>
       </div>
 
-      <VotePopup remainingCards={remainingCards} />
+      <VotePopup remainingCards={remainingCards} voteData={voteData} />
     </div>
   );
 };
