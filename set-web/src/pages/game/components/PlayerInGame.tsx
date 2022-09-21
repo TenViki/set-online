@@ -10,9 +10,10 @@ interface PlayerInGameProps {
   isMe: boolean;
   score: number;
   rf?: (element: HTMLDivElement) => void;
+  ping?: number;
 }
 
-const PlayerInGame: FC<PlayerInGameProps> = ({ isHost, isMe, score, user, rf }) => {
+const PlayerInGame: FC<PlayerInGameProps> = ({ isHost, isMe, score, user, rf, ping }) => {
   return (
     <div className={`game-player ${isMe && "me"} ${isHost && "host"}`} ref={rf}>
       <div className="game-player-avatar">{user.avatar ? <img src={getAvatar(user.avatar)} alt="avatar" /> : <FiUser />}</div>
@@ -21,6 +22,7 @@ const PlayerInGame: FC<PlayerInGameProps> = ({ isHost, isMe, score, user, rf }) 
         <div className="game-player-username text">{user.username}</div>
         <div className="game-player-score">{score}</div>
       </div>
+      {ping && <div className="game-player-ping">Ping: {ping} ms</div>}
     </div>
   );
 };

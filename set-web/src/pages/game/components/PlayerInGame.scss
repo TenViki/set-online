@@ -3,6 +3,7 @@
 .game-player {
   display: flex;
   align-items: center;
+  padding-right: 1rem;
 
   &-avatar {
     width: 3rem;
@@ -32,11 +33,17 @@
     margin-bottom: 1rem;
   }
 
+  width: 16rem;
+
   &-text {
-    width: 8rem;
+    flex-grow: 1;
   }
 
   &-score {
+    color: #777;
+  }
+
+  &-ping {
     color: #777;
   }
 }

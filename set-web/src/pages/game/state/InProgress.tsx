@@ -7,6 +7,7 @@ import CardRenderer from "../../../components/card-renderer/CardRenderer";
 import { UserLowType } from "../../../types/Game.type";
 import { idToCard, transformPoints, wait } from "../../../utils/deck.util";
 import { useGame } from "../../../utils/useGame";
+import { usePing } from "../../../utils/usePing";
 import { useUser } from "../../../utils/useUser";
 import GameLog, { useGameLog } from "../components/GameLog";
 import PlayerInGame from "../components/PlayerInGame";
@@ -263,6 +264,7 @@ const InProgress = () => {
   }, [playerSelectedCards]);
 
   const newCardsMutation = useMutation(voteForNoSet);
+  const ping = usePing();
 
   return (
     <div className="game-wrapper">
@@ -326,6 +328,7 @@ const InProgress = () => {
               user={player}
               isHost={player.id === game.host.id}
               isMe={user.id === player.id}
+              ping={user.id === player.id ? ping.ping : undefined}
               score={userPoints[player.id] || 0}
               rf={(ref) => {
                 playerSlots.current[player.id] = ref;
