@@ -44,6 +44,11 @@
     transform: scale(0.95);
   }
 
+  &.player-selected {
+    border-color: var(--danger);
+    transform: scale(0.95);
+  }
+
   &.disappear {
     transition: border-color $darkModeTransition, 0.4s transform, 0.2s opacity, 0.4s top, 0.4s left;
     transform: translateY(calc(-50% + 1.5rem)) scale(0);
@@ -53,11 +58,6 @@
     opacity: 0;
     transition: border-color $darkModeTransition, 0s transform, 0s opacity, 0s top, 0s left;
     transform: translateY(0) scale(1);
-  }
-
-  &.player-selected {
-    border-color: var(--danger);
-    transform: scale(0.95);
   }
 }
 

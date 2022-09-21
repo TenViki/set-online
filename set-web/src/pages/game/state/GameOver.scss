@@ -13,6 +13,10 @@
     display: flex;
     align-items: center;
 
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+
     &-place {
       font-size: 2rem;
       margin-right: 1rem;
@@ -20,15 +24,15 @@
       font-weight: 100;
     }
 
-    &:nth-child(1) &-place {
+    &:nth-child(1) .game-podium-item-place {
       color: #bb9f00;
     }
 
-    &:nth-child(2) &-place {
+    &:nth-child(2) .game-podium-item-place {
       color: #8f8f8f;
     }
 
-    &:nth-child(3) &-place {
+    &:nth-child(3) .game-podium-item-place {
       color: #a5682a;
     }
   }
