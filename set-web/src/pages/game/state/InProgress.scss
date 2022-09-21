@@ -54,6 +54,11 @@
     transition: border-color $darkModeTransition, 0s transform, 0s opacity, 0s top, 0s left;
     transform: translateY(0) scale(1);
   }
+
+  &.player-selected {
+    border-color: var(--danger);
+    transform: scale(0.95);
+  }
 }
 
 .dark {

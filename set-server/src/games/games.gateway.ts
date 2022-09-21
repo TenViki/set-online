@@ -75,4 +75,28 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     await this.gamesService.handleSet(user, data);
   }
+
+  @SubscribeMessage("select-card")
+  async handleSelect(@ConnectedSocket() socket: Socket, @MessageBody("card") data: string) {
+    const user = await this.socketAuthService.getUser(socket);
+
+    const game = await this.gamesService.getGameByUser(user);
+
+    this.sendToGame(game.id, "select-card", {
+      user: user.id,
+      card: data,
+    });
+  }
+
+  @SubscribeMessage("unselect-card")
+  async handleUnselect(@ConnectedSocket() socket: Socket, @MessageBody("card") data: string) {
+    const user = await this.socketAuthService.getUser(socket);
+
+    const game = await this.gamesService.getGameByUser(user);
+
+    this.sendToGame(game.id, "unselect-card", {
+      user: user.id,
+      card: data,
+    });
+  }
 }

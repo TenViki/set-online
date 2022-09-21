@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 import { voteForNoSet } from "../../../api/game";
@@ -224,19 +224,43 @@ const InProgress = () => {
     setNoneCards([]);
   };
 
+  const [playerSelectedCards, setPlayerSelectedCards] = useState<string[]>([]);
+
+  const handlePlayerCardSelect = (data: { user: string; card: string }) => {
+    if (data.user === user.id) return;
+    setPlayerSelectedCards((prev) => [...prev, data.card]);
+  };
+
+  const handleUnselectPlayerCard = (data: { user: string; card: string }) => {
+    if (data.user === user.id) return;
+    setPlayerSelectedCards((prev) => prev.filter((c) => c !== data.card));
+  };
+
   useEffect(() => {
     if (!socket) return;
 
     socket.on("set-error", handleSetError);
     socket.on("set-success", handleSet);
     socket.on("new-cards", handleNewCards);
+    socket.on("select-card", handlePlayerCardSelect);
+    socket.on("unselect-card", handleUnselectPlayerCard);
 
     return () => {
       socket.off("set-error", handleSetError);
       socket.off("set-success", handleSet);
       socket.off("new-cards", handleNewCards);
+      socket.off("select-card", handlePlayerCardSelect);
+      socket.off("unselect-card", handleUnselectPlayerCard);
     };
   }, [socket, game.laidOut]);
+
+  useEffect(() => {
+    if (playerSelectedCards.length >= 3) {
+      setTimeout(() => {
+        setPlayerSelectedCards([]);
+      }, 300);
+    }
+  }, [playerSelectedCards]);
 
   const newCardsMutation = useMutation(voteForNoSet);
 
@@ -260,12 +284,16 @@ const InProgress = () => {
           <div
             className={`game-card-wrapper ${selectedCards.includes(card) && "active"} ${
               card in cardsToDisappear && "disappear"
-            } ${noneCards.includes(card) && "none"}`}
+            } ${noneCards.includes(card) && "none"} ${playerSelectedCards.includes(card) && "player-selected"}`}
             onClick={() => {
-              if (selectedCards.includes(card)) return setSelectedCards(selectedCards.filter((c) => c !== card));
+              if (selectedCards.includes(card)) {
+                socket?.emit("unselect-card", { card });
+                return setSelectedCards(selectedCards.filter((c) => c !== card));
+              }
               if (selectedCards.length === 3) return;
               if (Object.keys(movingCards).length) return;
               setSelectedCards((prev) => [...prev, card]);
+              socket?.emit("select-card", { card });
             }}
             style={
               {
