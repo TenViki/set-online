@@ -88,6 +88,8 @@ export class GamesService {
 
     if (!game) throw new NotFoundException("Game not found");
 
+    if (game.players.some((player) => player.id === user.id)) throw new BadRequestException("User already in game");
+
     // check if the game is full
     if (game.players.length >= game.limit) {
       throw new NotFoundException("Game is full");
@@ -210,6 +212,11 @@ export class GamesService {
       },
       relations: ["game", "user"],
     });
+
+    // check if cards are laid out
+    if (!set.every((card) => game.laidOut.includes(card))) {
+      return;
+    }
 
     // check if really a set
     if (!isSet(set)) {
