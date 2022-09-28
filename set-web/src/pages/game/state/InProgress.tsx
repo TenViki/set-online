@@ -22,10 +22,47 @@ type DisappearingCardsType = {
   [id: string]: string;
 };
 
+const SET_TIME_OUT = 2500;
+
+const useTimer = (time: number) => {
+  const [running, setRunning] = useState(false);
+  const [id, setId] = useState<string | null>(null);
+  const [endedOnTime, setEndedOnTime] = useState(false);
+  const [timerId, setTimerId] = useState<number | null>(null);
+
+  const trigger = (id: string) => {
+    setRunning(true);
+    setEndedOnTime(false);
+    setId(id);
+    let timerId = setTimeout(() => {
+      setEndedOnTime(true);
+      setRunning(false);
+    }, time);
+
+    console.log("Setting timer id", timerId);
+
+    setTimerId(timerId);
+  };
+
+  const cancel = () => {
+    setRunning(false);
+
+    console.log("Clearing timer id", timerId);
+    if (timerId) {
+      clearTimeout(timerId);
+      setTimerId(null);
+    }
+  };
+
+  return { trigger, running, id, setId, cancel, endedOnTime, timerId };
+};
+
 const InProgress = () => {
   const { game, setGame, socket } = useGame();
   const { addLog, log } = useGameLog();
   const user = useUser();
+
+  const { trigger, running, id, setId, cancel, endedOnTime, timerId } = useTimer(SET_TIME_OUT);
 
   const cardWrapperRef = useRef<HTMLDivElement>(null);
   const cardSlots = useRef<{
@@ -120,6 +157,7 @@ const InProgress = () => {
   const handleCardSelect = async () => {
     if (!socket) return;
     socket.emit("set", { cards: selectedCards });
+    cancel();
     setSelectedCards([]);
   };
 
@@ -127,7 +165,7 @@ const InProgress = () => {
     if (!selectedCards.length) return;
 
     if (selectedCards.length === 3) handleCardSelect();
-  }, [selectedCards, socket]);
+  }, [selectedCards, socket, timerId]);
 
   useEffect(() => {
     if (!cardWrapperRef.current) return;
@@ -194,6 +232,7 @@ const InProgress = () => {
   }, [selectedCards]);
 
   const handleSetError = (data: { user: string; points: number }) => {
+    cancel();
     const username = game.players.find((user) => user.id === data.user)?.username;
     addLog(`**${username}** failed to find a set *(${data.points} points)*`, "error");
 
@@ -201,6 +240,7 @@ const InProgress = () => {
   };
 
   const handleSet = (data: { user: string; set: string[]; laidOut: string[]; points: number }) => {
+    cancel();
     removeCards(data.set, data.user);
     setUserPoints((prev) => ({ ...prev, [data.user]: data.points }));
 
@@ -230,6 +270,10 @@ const InProgress = () => {
   const [playerSelectedCards, setPlayerSelectedCards] = useState<string[]>([]);
 
   const handlePlayerCardSelect = (data: { user: string; card: string }) => {
+    if ((playerSelectedCards.length === 0 && data.user !== user.id) || (selectedCards.length === 1 && data.user === user.id)) {
+      console.log(playerSelectedCards.length, selectedCards.length);
+      trigger(data.user);
+    }
     if (data.user === user.id) return;
     setPlayerSelectedCards((prev) => [...prev, data.card]);
   };
@@ -263,6 +307,21 @@ const InProgress = () => {
   }, [game]);
 
   useEffect(() => {
+    if (!running) {
+      if (id === user.id) {
+        setSelectedCards([]);
+        if (endedOnTime) {
+          socket?.emit("set", {
+            timeout: true,
+          });
+        }
+      } else setPlayerSelectedCards([]);
+
+      setId(null);
+    }
+  }, [running, id, endedOnTime]);
+
+  useEffect(() => {
     if (!socket) return;
 
     socket.on("set-error", handleSetError);
@@ -280,7 +339,7 @@ const InProgress = () => {
       socket.off("unselect-card", handleUnselectPlayerCard);
       socket.off("no-set-vote", handleSomeoneVoted);
     };
-  }, [socket, game.laidOut]);
+  }, [socket, game.laidOut, running, timerId, playerSelectedCards, selectedCards]);
 
   useEffect(() => {
     if (playerSelectedCards.length >= 3) {
@@ -317,8 +376,11 @@ const InProgress = () => {
           <div
             className={`game-card-wrapper ${selectedCards.includes(card) && "active"} ${
               card in cardsToDisappear && "disappear"
-            } ${noneCards.includes(card) && "none"} ${playerSelectedCards.includes(card) && "player-selected"}`}
+            } ${noneCards.includes(card) && "none"} ${playerSelectedCards.includes(card) && "player-selected"} ${
+              running && id !== user.id && "disabled"
+            }`}
             onClick={() => {
+              if (running && id !== user.id) return;
               if (selectedCards.includes(card)) {
                 socket?.emit("unselect-card", { card });
                 return setSelectedCards(selectedCards.filter((c) => c !== card));
@@ -355,6 +417,7 @@ const InProgress = () => {
         <div className="game-players-list">
           {game.players.map((player) => (
             <PlayerInGame
+              timer={player.id === id}
               key={player.id}
               user={player}
               isHost={player.id === game.host.id}

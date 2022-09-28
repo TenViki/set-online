@@ -20,7 +20,7 @@ $sizes: (
       justify-content: center;
       border-radius: calc($card-width * 1.5 * 0.4 / 15);
 
-      transition: $darkModeTransition background;
+      transition: all 0.2s, $darkModeTransition background;
 
       svg {
         width: calc($card-width * 30 / 50);
@@ -53,5 +53,5 @@ $sizes: (
 .dark .card {
   background-color: #292929;
   color: #fff;
-  transition: $darkModeTransition background, $darkModeTransition color;
+  transition: all 0.2s, $darkModeTransition background, $darkModeTransition color;
 }

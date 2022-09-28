@@ -70,10 +70,14 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage("set")
-  async handleSet(@ConnectedSocket() socket: Socket, @MessageBody("cards") data: string[]) {
+  async handleSet(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody("cards") data: string[],
+    @MessageBody("timeout") timeout: boolean,
+  ) {
     const user = await this.socketAuthService.getUser(socket);
 
-    await this.gamesService.handleSet(user, data);
+    await this.gamesService.handleSet(user, data, timeout);
   }
 
   @SubscribeMessage("select-card")

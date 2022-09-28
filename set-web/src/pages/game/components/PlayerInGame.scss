@@ -5,6 +5,29 @@
   align-items: center;
   padding-right: 1rem;
 
+  &-timer {
+    height: 2px;
+    width: 100%;
+    position: relative;
+    margin-bottom: 0.5rem;
+
+    &-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0;
+      background-color: #000;
+      transition: $darkModeTransition background-color;
+    }
+
+    &.active {
+      .game-player-timer-bar {
+        animation: timer 2.5s linear;
+      }
+    }
+  }
+
   &-avatar {
     width: 3rem;
     height: 3rem;
@@ -64,5 +87,19 @@
     &-avatar svg {
       color: #fff;
     }
+
+    &-timer-bar {
+      background-color: #fff;
+    }
+  }
+}
+
+@keyframes timer {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
   }
 }

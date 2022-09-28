@@ -196,10 +196,10 @@ export class GamesService {
     });
   }
 
-  async handleSet(user: User, set: string[]) {
+  async handleSet(user: User, set: string[], timeout: boolean) {
     const game = await this.getGameByUser(user);
 
-    if (!game || game.status !== GameStatus.IN_PROGRESS || set.length !== 3) {
+    if (!game || game.status !== GameStatus.IN_PROGRESS || !(set?.length === 3 || timeout)) {
       return;
     }
 
@@ -212,6 +212,17 @@ export class GamesService {
       },
       relations: ["game", "user"],
     });
+
+    if (timeout) {
+      points.points -= 1;
+
+      this.gamesGateway.sendToGame(game.id, "set-error", {
+        user: user.id,
+        points: points.points,
+      });
+
+      return this.pointsRepo.save(points);
+    }
 
     // check if cards are laid out
     if (!set.every((card) => game.laidOut.includes(card))) {

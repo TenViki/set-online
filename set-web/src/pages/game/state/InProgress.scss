@@ -38,6 +38,11 @@
     border-color: #ddd;
   }
 
+  &.disabled .card {
+    opacity: 0.5;
+    cursor: default;
+  }
+
   &:active,
   &.active {
     border-color: #bbb;
