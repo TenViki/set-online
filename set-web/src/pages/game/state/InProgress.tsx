@@ -175,8 +175,10 @@ const InProgress = () => {
 
         if (selectedCards.includes(card)) {
           setSelectedCards((prev) => prev.filter((c) => c !== card));
+          socket?.emit("unselect-card", { card });
         } else {
           setSelectedCards((prev) => [...prev, card]);
+          socket?.emit("select-card", { card });
         }
       } else {
         console.log(e.key);
