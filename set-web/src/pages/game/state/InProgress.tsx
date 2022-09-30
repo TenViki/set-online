@@ -1,9 +1,12 @@
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
+import { FiChevronRight } from "react-icons/fi";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { voteForNoSet } from "../../../api/game";
+import { kickPlayerRequest, voteForNoSet } from "../../../api/game";
 import Button from "../../../components/button/Button";
 import CardRenderer from "../../../components/card-renderer/CardRenderer";
+import Modal, { useModal } from "../../../components/modal/Modal";
+import ModalButtons from "../../../components/modal/ModalButtons";
 import { UserLowType } from "../../../types/Game.type";
 import { idToCard, transformPoints, wait } from "../../../utils/deck.util";
 import { useGame } from "../../../utils/useGame";
@@ -61,6 +64,20 @@ const InProgress = () => {
   const { game, setGame, socket } = useGame();
   const { addLog, log } = useGameLog();
   const user = useUser();
+
+  const { isOpen, toggle } = useModal();
+  const [playerToKick, setPlayerToKick] = React.useState<UserLowType | null>(null);
+
+  const handleUserClick = (user: UserLowType) => {
+    setPlayerToKick(user);
+    toggle(true);
+  };
+
+  const kickUserMutation = useMutation(kickPlayerRequest, {
+    onSuccess: () => {
+      toggle(false);
+    },
+  });
 
   const { trigger, running, id, setId, cancel, endedOnTime, timerId } = useTimer(SET_TIME_OUT);
 
@@ -428,6 +445,7 @@ const InProgress = () => {
                 playerSlots.current[player.id] = ref;
               }}
               hasVoted={voteData.voted.includes(player.id)}
+              onKick={handleUserClick}
             />
           ))}
 
@@ -449,6 +467,20 @@ const InProgress = () => {
       </div>
 
       <VotePopup remainingCards={remainingCards} voteData={voteData} />
+
+      <Modal isOpen={isOpen} toggle={toggle} title={`Kick ${playerToKick?.username}?`}>
+        <p>Are you sure you want to kick {playerToKick?.username}?</p>
+        <ModalButtons>
+          <Button color="gray" text="Cancel" onClick={() => toggle()} />
+          <Button
+            color="danger"
+            text="Kick"
+            rightIcon={FiChevronRight}
+            onClick={() => playerToKick && kickUserMutation.mutate(playerToKick.id)}
+            loading={kickUserMutation.isLoading}
+          />
+        </ModalButtons>
+      </Modal>
     </div>
   );
 };
