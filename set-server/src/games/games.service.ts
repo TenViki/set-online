@@ -131,6 +131,7 @@ export class GamesService {
 
     // remove user from game
     game.players = game.players.filter((player) => player.id !== user.id);
+    await this.pointsRepo.delete({ game, user });
 
     if (user.id === game.host.id) {
       this.gameRepo.delete(game.id);
@@ -152,6 +153,7 @@ export class GamesService {
 
     // remove user from game
     game.players = game.players.filter((player) => player.id !== id);
+    await this.pointsRepo.delete({ game, user });
 
     // save game
     this.gameRepo.save(game);

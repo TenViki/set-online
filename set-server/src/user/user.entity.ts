@@ -46,4 +46,7 @@ export class User {
 
   @OneToMany(() => Points, (points) => points.user)
   points: Points[];
+
+  @Column({ default: 1000 })
+  elo: number;
 }
