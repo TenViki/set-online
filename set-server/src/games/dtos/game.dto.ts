@@ -51,4 +51,7 @@ export class GameDto {
   @Expose()
   @Type(() => PointsDto)
   points: PointsDto[];
+
+  @Expose()
+  cardsRemaining: number;
 }

@@ -74,7 +74,7 @@ export class GamesService {
       relations: ["players", "host", "points", "points.user"],
     });
 
-    return game;
+    return { ...game, cardsRemaining: game.deck.split(",").length };
   }
 
   async join(user: User, joinDto: JoinGameDto) {
@@ -195,6 +195,7 @@ export class GamesService {
 
     this.gamesGateway.sendToGame(game.id, "start", {
       laidOut: laidOut,
+      remaining: deck.length,
     });
   }
 

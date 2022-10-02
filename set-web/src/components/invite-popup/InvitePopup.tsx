@@ -71,8 +71,8 @@ const InvitePopup = () => {
         />
       </div>
 
-      <Modal isOpen={isModalOpen} toggle={toggleModal} title={`${game?.host.id === user.id ? "Delete" : "Leave"} game?`}>
-        Do you really want to {game?.host.id === user.id ? "delete" : "leave"} the game?
+      <Modal isOpen={isModalOpen} toggle={toggleModal} title={`${game?.host?.id === user.id ? "Delete" : "Leave"} game?`}>
+        Do you really want to {game?.host?.id === user.id ? "delete" : "leave"} the game?
         <ModalButtons>
           <Button
             color="gray"

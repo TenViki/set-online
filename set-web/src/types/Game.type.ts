@@ -15,6 +15,7 @@ export interface GameType {
     user: UserLowType;
     points: number;
   }[];
+  cardsRemaining: number;
 }
 export interface UserLowType {
   id: string;
